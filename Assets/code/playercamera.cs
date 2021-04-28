@@ -41,6 +41,9 @@ public class playercamera : MonoBehaviour
     }
     void Update()
     {
+        if(bound)
+            if(transform.position.x>5f)
+                bound=false;
         if (SHAKEtimeremaining > 0)
         {
             SHAKEtimeremaining -= Time.deltaTime;

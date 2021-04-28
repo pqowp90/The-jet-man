@@ -9,6 +9,8 @@ public class playerMove : MonoBehaviour
     [SerializeField]
     private Animator gunAnimator;
     [SerializeField]
+    private GameObject playerCamera;
+    [SerializeField]
     private GameObject bulletPrefab;
     [SerializeField]
     private GameObject barSsaPos;
@@ -64,6 +66,9 @@ public class playerMove : MonoBehaviour
             gunAnimator.SetInteger("GunSet",GunSet);
         }
 
+    }
+    private IEnumerator Opening(){
+        yield return new WaitForSeconds(0.2f);
     }
     private IEnumerator PistolCooltime(){
         yield return new WaitForSeconds(0.15f);
