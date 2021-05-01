@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class playerMove : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class playerMove : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField]
     private Animator gunAnimator;
+    [SerializeField]
+    private Animator animator;
     [SerializeField]
     private GameObject playerCamera;
     [SerializeField]
@@ -18,14 +21,26 @@ public class playerMove : MonoBehaviour
     private Vector3 oPosition,target;
     private bool pistolCoolTime=true;
     private int GunSet=0;
+    private bool No=true;
     void Start()
     {
+        animator=gameObject.GetComponent<Animator>();
+        animator.SetBool("NoNo",true);
         myrigidbody=GetComponent<Rigidbody2D>();
         spriteRenderer=GetComponent<SpriteRenderer>();
     }
-
     void Update()
     {
+        if(No){//StartAni
+            myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
+            if(transform.position.x>5.7f){
+                myrigidbody.AddForce(new Vector3(100f,200f));
+                No=false;
+                animator.SetBool("NoNo",false);
+            }
+            return;
+        }
+        //-----------------------------------------------------------------------------------------
         oPosition = transform.position;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         rotateDegree = Mathf.Atan2(target.y - oPosition.y, target.x - oPosition.x)*Mathf.Rad2Deg;
@@ -42,15 +57,17 @@ public class playerMove : MonoBehaviour
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
         if(Input.GetMouseButtonDown(0)) {
-            if(!pistolCoolTime)return;
-            pistolCoolTime=false;
-            StartCoroutine(PistolCooltime());
-            GameObject bullet;
-            bullet = Instantiate(bulletPrefab);
-            bullet.transform.position=barSsaPos.transform.position;
-            bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
-            gunAnimator.SetTrigger("Shot");
-            myrigidbody.AddForce(new Vector3(-x,-y,0f));//Rebound
+            if(!EventSystem.current.IsPointerOverGameObject()){
+                if(!pistolCoolTime)return;
+                pistolCoolTime=false;
+                StartCoroutine(PistolCooltime());
+                GameObject bullet;
+                bullet = Instantiate(bulletPrefab);
+                bullet.transform.position=barSsaPos.transform.position;
+                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
+                gunAnimator.SetTrigger("Shot");
+                myrigidbody.AddForce(new Vector3(-x,-y,0f));//Rebound
+            }
         }
         //-----------------------------------------------------------------------------------------
         //this.transform.position =  new Vector2(x, y);
@@ -65,12 +82,20 @@ public class playerMove : MonoBehaviour
                 GunSet--;
             gunAnimator.SetInteger("GunSet",GunSet);
         }
-
+        
+        
     }
-    private IEnumerator Opening(){
-        yield return new WaitForSeconds(0.2f);
+    private void enabledAE(){
+        animator.enabled=false;
     }
-    private IEnumerator PistolCooltime(){
+    void OnTriggerEnter2D(Collider2D other){
+        if(other.tag=="Laser"){
+            Time.timeScale=0f;
+            Debug.Log("die!!");
+        }
+    }
+    private IEnumerator PistolCooltime()
+    {
         yield return new WaitForSeconds(0.15f);
         pistolCoolTime=true;
     }

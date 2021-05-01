@@ -42,8 +42,11 @@ public class playercamera : MonoBehaviour
     void Update()
     {
         if(bound)
-            if(transform.position.x>5f)
+            if(transform.position.x>3.5f){
                 bound=false;
+                hihi = GameObject.Find("startLaser");
+                StartCoroutine(StartLaser());
+            }
         if (SHAKEtimeremaining > 0)
         {
             SHAKEtimeremaining -= Time.deltaTime;
@@ -61,6 +64,10 @@ public class playercamera : MonoBehaviour
         }
         else GetComponent<Camera>().orthographicSize = fstzoom;
 
+    }
+    private IEnumerator StartLaser(){
+        yield return new WaitForSeconds(0.1f);
+        hihi.GetComponent<Animator>().SetTrigger("barrsa");
     }
     public void startshake(float length, float power)
     {
