@@ -17,13 +17,18 @@ public class playerMove : MonoBehaviour
     private GameObject bulletPrefab;
     [SerializeField]
     private GameObject barSsaPos;
+    [SerializeField]
+    private GameObject hiLaser;
     private float rotateDegree,headRotate,radian,x,y;
     private Vector3 oPosition,target;
     private bool pistolCoolTime=true;
     private int GunSet=0;
     private bool No=true;
+    private bool NoNo=true;
     void Start()
     {
+        hiLaser=GameObject.Find("HiLaser");
+        hiLaser.SetActive(false);
         animator=gameObject.GetComponent<Animator>();
         animator.SetBool("NoNo",true);
         myrigidbody=GetComponent<Rigidbody2D>();
@@ -33,13 +38,21 @@ public class playerMove : MonoBehaviour
     {
         if(No){//StartAni
             myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
-            if(transform.position.x>5.7f){
+            if(transform.position.x>5.65f){
                 myrigidbody.AddForce(new Vector3(100f,200f));
                 No=false;
                 animator.SetBool("NoNo",false);
             }
             return;
         }
+        if(NoNo){
+            if(transform.position.x>12f){
+                NoNo=false;
+                hiLaser.SetActive(true);
+                hiLaser.GetComponent<Animator>().SetTrigger("hihi");
+            }
+        }
+        else hiLaser.transform.position = new Vector3(hiLaser.transform.position.x+(100*Time.deltaTime),hiLaser.transform.position.y,0);
         //-----------------------------------------------------------------------------------------
         oPosition = transform.position;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -51,8 +64,8 @@ public class playerMove : MonoBehaviour
         transform.GetChild(1).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate);//HeadRotation
         //-----------------------------------------------------------------------------------------
         radian = rotateDegree*Mathf.PI/180f;
-        x = 160 * Mathf.Cos(radian);
-        y = 260 * Mathf.Sin(radian);
+        x = 80 * Mathf.Cos(radian);
+        y = 200 * Mathf.Sin(radian);
         if(y>0)y/=2;
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));

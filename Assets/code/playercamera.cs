@@ -67,6 +67,7 @@ public class playercamera : MonoBehaviour
     }
     private IEnumerator StartLaser(){
         yield return new WaitForSeconds(0.1f);
+        GameObject.Find("startLaser1").GetComponent<Animator>().SetTrigger("barrsa");
         hihi.GetComponent<Animator>().SetTrigger("barrsa");
     }
     public void startshake(float length, float power)
