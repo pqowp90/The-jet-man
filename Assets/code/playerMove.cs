@@ -50,9 +50,10 @@ public class playerMove : MonoBehaviour
                 NoNo=false;
                 hiLaser.SetActive(true);
                 hiLaser.GetComponent<Animator>().SetTrigger("hihi");
+                StartCoroutine(Laser());
             }
         }
-        else hiLaser.transform.position = new Vector3(hiLaser.transform.position.x+(100*Time.deltaTime),hiLaser.transform.position.y,0);
+        else hiLaser.transform.position = new Vector3(hiLaser.transform.position.x+(1*Time.deltaTime),hiLaser.transform.position.y,0);
         //-----------------------------------------------------------------------------------------
         oPosition = transform.position;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -71,22 +72,30 @@ public class playerMove : MonoBehaviour
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
         if(Input.GetMouseButtonDown(0)) {
             if(!EventSystem.current.IsPointerOverGameObject()){
+                gunAnimator.SetBool("Shoting",true);
+                gunAnimator.SetTrigger("Shot");
                 if(!pistolCoolTime)return;
                 pistolCoolTime=false;
                 StartCoroutine(PistolCooltime());
-                GameObject bullet;
-                bullet = Instantiate(bulletPrefab);
-                bullet.transform.position=barSsaPos.transform.position;
-                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
-                gunAnimator.SetTrigger("Shot");
-                myrigidbody.AddForce(new Vector3(-x,-y,0f));//Rebound
+                switch(GunSet){
+                    case 0:
+                    Shoting(0);
+                    break;
+                    case 2:
+                    Shoting(0);
+                    break;
+                }
+                
             }
         }
+        if(Input.GetMouseButtonUp(0)){
+            gunAnimator.SetBool("Shoting",false);
+        } 
         //-----------------------------------------------------------------------------------------
         //this.transform.position =  new Vector2(x, y);
         float wheelInput = Input.GetAxis("Mouse ScrollWheel");
         if(wheelInput>0){
-            if(GunSet<2)
+            if(GunSet<1)
                 GunSet++;
             gunAnimator.SetInteger("GunSet",GunSet);
         }
@@ -95,11 +104,33 @@ public class playerMove : MonoBehaviour
                 GunSet--;
             gunAnimator.SetInteger("GunSet",GunSet);
         }
+        if(wheelInput!=0){
+            switch(GunSet){
+                case 0:
+                barSsaPos = GameObject.Find("PistolShotingPos");
+                break;
+                case 1:
+                barSsaPos = GameObject.Find("RifleShotingPos");
+                break;
+                case 2:
+                barSsaPos = GameObject.Find("RifleShotingPos");
+                break;
+            }
+        }
         
         
     }
     private void enabledAE(){
         animator.enabled=false;
+    }
+    public void Shoting(int a){
+        GameObject bullet;
+        bullet = Instantiate(bulletPrefab);
+        bullet.transform.position=barSsaPos.transform.position;
+        bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
+        if(a==1)
+            myrigidbody.AddForce(new Vector3(-x/2,-y/2,0f));
+        else myrigidbody.AddForce(new Vector3(-x,-y,0f));//Rebound
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){
@@ -111,5 +142,10 @@ public class playerMove : MonoBehaviour
     {
         yield return new WaitForSeconds(0.15f);
         pistolCoolTime=true;
+    }
+    private IEnumerator Laser()
+    {
+        yield return new WaitForSeconds(2.2f);
+        hiLaser.GetComponent<Animator>().enabled=false;
     }
 }
