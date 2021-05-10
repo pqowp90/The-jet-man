@@ -39,14 +39,14 @@ public class playerMove : MonoBehaviour
         if(No){//StartAni
             myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
             if(transform.position.x>5.65f){
-                myrigidbody.AddForce(new Vector3(100f,200f));
+                myrigidbody.AddForce(new Vector3(100f,170));
                 No=false;
                 animator.SetBool("NoNo",false);
             }
             return;
         }
         if(NoNo){
-            if(transform.position.x>12f){
+            if(transform.position.x>10f){
                 NoNo=false;
                 hiLaser.SetActive(true);
                 hiLaser.GetComponent<Animator>().SetTrigger("hihi");
@@ -95,7 +95,7 @@ public class playerMove : MonoBehaviour
         //this.transform.position =  new Vector2(x, y);
         float wheelInput = Input.GetAxis("Mouse ScrollWheel");
         if(wheelInput>0){
-            if(GunSet<1)
+            if(GunSet<2)
                 GunSet++;
             gunAnimator.SetInteger("GunSet",GunSet);
         }
@@ -113,7 +113,7 @@ public class playerMove : MonoBehaviour
                 barSsaPos = GameObject.Find("RifleShotingPos");
                 break;
                 case 2:
-                barSsaPos = GameObject.Find("RifleShotingPos");
+                barSsaPos = GameObject.Find("ShotGunShotingPos");
                 break;
             }
         }
