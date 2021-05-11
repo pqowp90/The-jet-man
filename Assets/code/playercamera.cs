@@ -9,8 +9,11 @@ public class playercamera : MonoBehaviour
     public float zoom, speed, fstzoom;
     private Vector2 velocity;
     public GameObject player;
-    public GameObject hihi;
+    [SerializeField]
+    public GameObject hihi,hiLaser;
     public bool bound;
+    public bool hello=true;
+
     private Vector3 target;
     public Vector2 minPos, maxPos;
     private Vector2 targerPosition;
@@ -41,9 +44,10 @@ public class playercamera : MonoBehaviour
     }
     void Update()
     {
-        if(bound)
+        if(hello)
             if(transform.position.x>3.5f){
-                bound=false;
+                hello=false;
+                minPos.y=-5;
                 hihi = GameObject.Find("startLaser");
                 StartCoroutine(StartLaser());
             }
@@ -68,6 +72,8 @@ public class playercamera : MonoBehaviour
     private IEnumerator StartLaser(){
         yield return new WaitForSeconds(0.1f);
         hihi.GetComponent<Animator>().SetTrigger("barrsa");
+        yield return new WaitForSeconds(0.5f);
+        hiLaser.SetActive(true);
     }
     public void startshake(float length, float power)
     {

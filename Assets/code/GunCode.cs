@@ -12,6 +12,6 @@ public class GunCode : MonoBehaviour
     }
 
     public void BarSsaChong(){
-        playerMove.Shoting(1);
+        playerMove.Shoting(2f);
     }
 }

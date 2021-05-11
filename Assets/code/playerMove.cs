@@ -19,7 +19,7 @@ public class playerMove : MonoBehaviour
     private GameObject barSsaPos;
     [SerializeField]
     private GameObject hiLaser;
-    private float rotateDegree,headRotate,radian,x,y;
+    private float rotateDegree,headRotate,radian,x,y,coolTime;
     private Vector3 oPosition,target;
     private bool pistolCoolTime=true;
     private int GunSet=0;
@@ -36,6 +36,8 @@ public class playerMove : MonoBehaviour
     }
     void Update()
     {
+        if(coolTime>0)
+            coolTime-=Time.deltaTime;
         if(No){//StartAni
             myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
             if(transform.position.x>5.65f){
@@ -71,7 +73,7 @@ public class playerMove : MonoBehaviour
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
         if(Input.GetMouseButtonDown(0)) {
-            if(!EventSystem.current.IsPointerOverGameObject()){
+            if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
                 gunAnimator.SetBool("Shoting",true);
                 gunAnimator.SetTrigger("Shot");
                 if(!pistolCoolTime)return;
@@ -79,10 +81,15 @@ public class playerMove : MonoBehaviour
                 StartCoroutine(PistolCooltime());
                 switch(GunSet){
                     case 0:
-                    Shoting(0);
+                    Shoting(1f);
+                    coolTime = 0.1f;
+                    break;
+                    case 1:
+                    coolTime = 0.1f;
                     break;
                     case 2:
-                    Shoting(0);
+                    Shoting(0.5f);
+                    coolTime = 0.1f;
                     break;
                 }
                 
@@ -90,7 +97,7 @@ public class playerMove : MonoBehaviour
         }
         if(Input.GetMouseButtonUp(0)){
             gunAnimator.SetBool("Shoting",false);
-        } 
+        }
         //-----------------------------------------------------------------------------------------
         //this.transform.position =  new Vector2(x, y);
         float wheelInput = Input.GetAxis("Mouse ScrollWheel");
@@ -123,14 +130,12 @@ public class playerMove : MonoBehaviour
     private void enabledAE(){
         animator.enabled=false;
     }
-    public void Shoting(int a){
+    public void Shoting(float a){
         GameObject bullet;
         bullet = Instantiate(bulletPrefab);
         bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
-        if(a==1)
-            myrigidbody.AddForce(new Vector3(-x/2,-y/2,0f));
-        else myrigidbody.AddForce(new Vector3(-x,-y,0f));//Rebound
+        myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){

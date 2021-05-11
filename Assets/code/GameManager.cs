@@ -58,10 +58,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timeSpeed;
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
         yield return new WaitForSeconds(0.1f);
+        playerCamera.GetComponent<playercamera>().hihi = null;
         timeSpeed = 1f;
         Time.timeScale = timeSpeed;
         black.SetActive(false);
-        playerCamera.GetComponent<playercamera>().hihi = null;
     }
     // void Quit(){
     //     Application.Quit();
