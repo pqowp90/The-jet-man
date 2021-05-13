@@ -12,21 +12,25 @@ public class playerMove : MonoBehaviour
     [SerializeField]
     private Animator animator;
     [SerializeField]
-    private GameObject playerCamera;
+    private playercamera playerCamera;
     [SerializeField]
     private GameObject bulletPrefab;
+    [SerializeField]
+    private GameObject shotGunBulletPrefab;
     [SerializeField]
     private GameObject barSsaPos;
     [SerializeField]
     private GameObject hiLaser;
-    private float rotateDegree,headRotate,radian,x,y,coolTime;
+    private float rotateDegree,headRotate,radian,x,y,coolTime,goTime;
     private Vector3 oPosition,target;
-    private bool pistolCoolTime=true;
     private int GunSet=0;
     private bool No=true;
     private bool NoNo=true;
+    GameObject bullet;
+
     void Start()
     {
+        playerCamera=FindObjectOfType<playercamera>();
         hiLaser=GameObject.Find("HiLaser");
         hiLaser.SetActive(false);
         animator=gameObject.GetComponent<Animator>();
@@ -55,7 +59,11 @@ public class playerMove : MonoBehaviour
                 StartCoroutine(Laser());
             }
         }
-        else hiLaser.transform.position = new Vector3(hiLaser.transform.position.x+(1*Time.deltaTime),hiLaser.transform.position.y,0);
+        else {
+            goTime = hiLaser.transform.position.x+(0.8f*Time.deltaTime);
+            hiLaser.transform.position = new Vector3(goTime,hiLaser.transform.position.y,0);
+            playerCamera.maxPos = new Vector2(goTime,playerCamera.maxPos.y);
+        }
         //-----------------------------------------------------------------------------------------
         oPosition = transform.position;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -76,20 +84,17 @@ public class playerMove : MonoBehaviour
             if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
                 gunAnimator.SetBool("Shoting",true);
                 gunAnimator.SetTrigger("Shot");
-                if(!pistolCoolTime)return;
-                pistolCoolTime=false;
-                StartCoroutine(PistolCooltime());
                 switch(GunSet){
                     case 0:
                     Shoting(1f);
-                    coolTime = 0.1f;
+                    coolTime = 0.15f;
                     break;
                     case 1:
                     coolTime = 0.1f;
                     break;
                     case 2:
-                    Shoting(0.5f);
-                    coolTime = 0.1f;
+                    Shoting(0.4f);
+                    coolTime = 0.7f;
                     break;
                 }
                 
@@ -131,22 +136,34 @@ public class playerMove : MonoBehaviour
         animator.enabled=false;
     }
     public void Shoting(float a){
-        GameObject bullet;
+        myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
+        if(GunSet==2){
+            for(int i=0;i<2;i++){
+                bullet = Instantiate(shotGunBulletPrefab);
+                bullet.transform.position=barSsaPos.transform.position;
+                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(7,20f));
+            }
+            for(int i=0;i<2;i++){
+                bullet = Instantiate(shotGunBulletPrefab);
+                bullet.transform.position=barSsaPos.transform.position;
+                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-7,7));
+            }
+            for(int i=0;i<2;i++){
+                bullet = Instantiate(shotGunBulletPrefab);
+                bullet.transform.position=barSsaPos.transform.position;
+                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20,-7));
+            }
+            return;
+        }
         bullet = Instantiate(bulletPrefab);
         bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
-        myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){
             Time.timeScale=0f;
             Debug.Log("die!!");
         }
-    }
-    private IEnumerator PistolCooltime()
-    {
-        yield return new WaitForSeconds(0.15f);
-        pistolCoolTime=true;
     }
     private IEnumerator Laser()
     {

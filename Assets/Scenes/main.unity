@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 131023916}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PistolShotingPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 255676902}
   - component: {fileID: 255676903}
   - component: {fileID: 255676904}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,8 +233,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunAnimator: {fileID: 428485609}
   animator: {fileID: 0}
-  playerCamera: {fileID: 2145733450}
+  playerCamera: {fileID: 0}
   bulletPrefab: {fileID: 1188847188480042844, guid: e5554bb9708efd449aff87ff7611c449, type: 3}
+  shotGunBulletPrefab: {fileID: 475063506302951357, guid: 6d561abcbfd7f6a42bb8a0fd8a0d4ee7, type: 3}
   barSsaPos: {fileID: 131023915}
   hiLaser: {fileID: 0}
 --- !u!212 &255676899
@@ -296,7 +297,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 255676897}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.786, y: -1.186, z: 0}
+  m_LocalPosition: {x: -0.799, y: -1.208, z: 0}
   m_LocalScale: {x: 0.64487404, y: 0.64487404, z: 0.64487404}
   m_Children:
   - {fileID: 1877544321}
@@ -3659,7 +3660,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 37.12167, y: 3.209233}
+  m_Offset: {x: 28.79929, y: 3.209233}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -3670,7 +3671,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 62.55091, y: 1.3499675}
+  m_Size: {x: 79.19567, y: 1.3499675}
   m_EdgeRadius: 0
 --- !u!1 &428485607
 GameObject:
@@ -3684,7 +3685,7 @@ GameObject:
   - component: {fileID: 428485610}
   - component: {fileID: 428485609}
   - component: {fileID: 428485611}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3800,7 +3801,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 485294656}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RifleShotingPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4686,7 +4687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1153361647}
   - component: {fileID: 1153361648}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4844,7 +4845,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1203744675}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShotGunShotingPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4858,8 +4859,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1203744674}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.188, y: 0.013, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.14, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 428485608}
@@ -5964,7 +5965,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1375845782}
   - component: {fileID: 1375845784}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: '[FULL]PistolV1.01_0 (1)'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11145,7 +11146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1574330724}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11682,6 +11683,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   playerCamera: {fileID: 0}
   bulletPrefab: {fileID: 0}
+  shotGunBulletPrefab: {fileID: 0}
   barSsaPos: {fileID: 0}
   hiLaser: {fileID: 0}
 --- !u!58 &1732845512
@@ -11788,7 +11790,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1877544321}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HeadPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12014,7 +12016,7 @@ GameObject:
   - component: {fileID: 2145733451}
   - component: {fileID: 2145733455}
   - component: {fileID: 2145733454}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
