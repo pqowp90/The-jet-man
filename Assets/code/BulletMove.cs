@@ -6,21 +6,30 @@ public class BulletMove : MonoBehaviour
 {
     [SerializeField]
     private float speed=10;
-    GameManager gameManager;
     public ParticleSystem ps;
-    void Start(){
-        ps = GetComponentInChildren<ParticleSystem>();
-        gameManager=GameManager.instance;
+    [SerializeField]
+    private bool isPull;
+    private Animator animator;
+    public int bulletSet;
+    public void Awake(){
+        animator = GetComponent<Animator>();
     }
-    void Update()
+    public void StartDeley(){
+        Invoke("DestroyBullet",3f);
+    }
+    private void Update()
     {
+        if(animator!=null)
+            animator.SetInteger("BulletSet",bulletSet);
         if(ps!=null){//잔상회전
             ParticleSystem.MainModule main = ps.main;
             if(main.startRotation.mode == ParticleSystemCurveMode.Constant)
                 main.startRotation = -transform.eulerAngles.z*Mathf.Deg2Rad;
         }
         //-----------------------------------------------------------------------------------------
-        Destroy(gameObject,3);
         transform.Translate(Vector2.right*speed*Time.deltaTime);
+    }
+    private void DestroyBullet(){
+        ObjectPulling.ReturnObject(this);
     }
 }

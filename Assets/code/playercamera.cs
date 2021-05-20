@@ -10,7 +10,7 @@ public class playercamera : MonoBehaviour
     private Vector2 velocity;
     public GameObject player;
     [SerializeField]
-    public GameObject hihi,hiLaser;
+    public GameObject hihi,hiLaser,hellohi;
     public bool bound;
     public bool hello=true;
 
@@ -37,7 +37,7 @@ public class playercamera : MonoBehaviour
         transform.position = new Vector3(posX, posY, transform.position.z);
         if (bound)
         {
-            transform.position = new Vector3(transform.position.x,
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, minPos.x, maxPos.x),
                 Mathf.Clamp(transform.position.y, minPos.y, maxPos.y),transform.position.z
             );
         }
@@ -66,7 +66,7 @@ public class playercamera : MonoBehaviour
         {
             GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, zoom, speed);
         }
-        else GetComponent<Camera>().orthographicSize = fstzoom;
+        else GetComponent<Camera>().orthographicSize = Mathf.Lerp(GetComponent<Camera>().orthographicSize, fstzoom, speed);
 
     }
     private IEnumerator StartLaser(){
@@ -74,6 +74,8 @@ public class playercamera : MonoBehaviour
         hihi.GetComponent<Animator>().SetTrigger("barrsa");
         yield return new WaitForSeconds(0.5f);
         hiLaser.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        hellohi.SetActive(true);
     }
     public void startshake(float length, float power)
     {

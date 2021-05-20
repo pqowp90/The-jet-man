@@ -8,28 +8,30 @@ public class playerMove : MonoBehaviour
     private Rigidbody2D myrigidbody;
     private SpriteRenderer spriteRenderer;
     [SerializeField]
+    private AudioClip[] audioClip;
+    [SerializeField]
     private Animator gunAnimator;
     [SerializeField]
     private Animator animator;
     [SerializeField]
     private playercamera playerCamera;
     [SerializeField]
-    private GameObject bulletPrefab;
-    [SerializeField]
-    private GameObject shotGunBulletPrefab;
-    [SerializeField]
     private GameObject barSsaPos;
     [SerializeField]
     private GameObject hiLaser;
+    private AudioSource audioSource;
     private float rotateDegree,headRotate,radian,x,y,coolTime,goTime;
     private Vector3 oPosition,target;
     private int GunSet=0;
     private bool No=true;
     private bool NoNo=true;
-    GameObject bullet;
+    float cameraWidth;
 
     void Start()
     {
+        GameManager gameManager = GameManager.instance;
+        audioSource=GetComponent<AudioSource>();
+        cameraWidth=Camera.main.orthographicSize*Camera.main.aspect;
         playerCamera=FindObjectOfType<playercamera>();
         hiLaser=GameObject.Find("HiLaser");
         hiLaser.SetActive(false);
@@ -62,7 +64,7 @@ public class playerMove : MonoBehaviour
         else {
             goTime = hiLaser.transform.position.x+(0.8f*Time.deltaTime);
             hiLaser.transform.position = new Vector3(goTime,hiLaser.transform.position.y,0);
-            playerCamera.maxPos = new Vector2(goTime,playerCamera.maxPos.y);
+            playerCamera.maxPos = new Vector2(goTime+cameraWidth,playerCamera.maxPos.y);
         }
         //-----------------------------------------------------------------------------------------
         oPosition = transform.position;
@@ -84,13 +86,16 @@ public class playerMove : MonoBehaviour
             if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
                 gunAnimator.SetBool("Shoting",true);
                 gunAnimator.SetTrigger("Shot");
+                // audioSource.clip = audioClip[GunSet];
+                // audioSource.time = 0;
+                // audioSource.Play();
                 switch(GunSet){
                     case 0:
                     Shoting(1f);
                     coolTime = 0.15f;
                     break;
                     case 1:
-                    coolTime = 0.1f;
+                    coolTime = 0.2f;
                     break;
                     case 2:
                     Shoting(0.4f);
@@ -105,28 +110,30 @@ public class playerMove : MonoBehaviour
         }
         //-----------------------------------------------------------------------------------------
         //this.transform.position =  new Vector2(x, y);
-        float wheelInput = Input.GetAxis("Mouse ScrollWheel");
-        if(wheelInput>0){
-            if(GunSet<2)
-                GunSet++;
-            gunAnimator.SetInteger("GunSet",GunSet);
-        }
-        if(wheelInput<0){
-            if(GunSet>0)
-                GunSet--;
-            gunAnimator.SetInteger("GunSet",GunSet);
-        }
-        if(wheelInput!=0){
-            switch(GunSet){
-                case 0:
-                barSsaPos = GameObject.Find("PistolShotingPos");
-                break;
-                case 1:
-                barSsaPos = GameObject.Find("RifleShotingPos");
-                break;
-                case 2:
-                barSsaPos = GameObject.Find("ShotGunShotingPos");
-                break;
+        if(!gunAnimator.GetBool("Shoting")){
+            float wheelInput = Input.GetAxis("Mouse ScrollWheel");
+            if(wheelInput>0){
+                if(GunSet<2)
+                    GunSet++;
+                gunAnimator.SetInteger("GunSet",GunSet);
+            }
+            else if(wheelInput<0){
+                if(GunSet>0)
+                    GunSet--;
+                gunAnimator.SetInteger("GunSet",GunSet);
+            }
+            if(wheelInput!=0){
+                switch(GunSet){
+                    case 0:
+                    barSsaPos = GameObject.Find("PistolShotingPos");
+                    break;
+                    case 1:
+                    barSsaPos = GameObject.Find("RifleShotingPos");
+                    break;
+                    case 2:
+                    barSsaPos = GameObject.Find("ShotGunShotingPos");
+                    break;
+                }
             }
         }
         
@@ -139,25 +146,29 @@ public class playerMove : MonoBehaviour
         myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
         if(GunSet==2){
             for(int i=0;i<2;i++){
-                bullet = Instantiate(shotGunBulletPrefab);
-                bullet.transform.position=barSsaPos.transform.position;
-                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(7,20f));
+                var sBullet = ObjectPulling.GetObject();
+                sBullet.transform.position=barSsaPos.transform.position;
+                sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(7,20f));
+                sBullet.bulletSet = 1;
             }
             for(int i=0;i<2;i++){
-                bullet = Instantiate(shotGunBulletPrefab);
-                bullet.transform.position=barSsaPos.transform.position;
-                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-7,7));
+                var sBullet = ObjectPulling.GetObject();
+                sBullet.transform.position=barSsaPos.transform.position;
+                sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-7,7));
+                sBullet.bulletSet = 1;
             }
             for(int i=0;i<2;i++){
-                bullet = Instantiate(shotGunBulletPrefab);
-                bullet.transform.position=barSsaPos.transform.position;
-                bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20,-7));
+                var sBullet = ObjectPulling.GetObject();
+                sBullet.transform.position=barSsaPos.transform.position;
+                sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20,-7));
+                sBullet.bulletSet = 1;
             }
             return;
         }
-        bullet = Instantiate(bulletPrefab);
+        var bullet = ObjectPulling.GetObject();
         bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
+        bullet.bulletSet = 0;
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){

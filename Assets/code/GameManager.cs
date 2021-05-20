@@ -5,10 +5,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
+    private GameObject focusPoint;
+    [SerializeField]
     private Camera playerCamera;
     private GameObject black;
     private GameObject ESC;
-    private float timeSpeed=0f;
+    private float timeSpeed=1f;
     private bool ESCON=false;
     private static GameManager _instance;
     public static GameManager instance
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
+        focusPoint = GameObject.Find("FocusPoint");
         playerCamera = FindObjectOfType<Camera>();
         black = GameObject.Find("Canvas").transform.GetChild(0).gameObject;
         ESC = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
@@ -47,14 +51,14 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator Opening(){
         yield return new WaitForSeconds(0.95f);
-        timeSpeed = 0.15f;
+        timeSpeed = 0.2f;
         Time.timeScale = timeSpeed;
         yield return new WaitForSeconds(0.25f);
         timeSpeed = 1f;
         Time.timeScale = timeSpeed;
         yield return new WaitForSeconds(1.7f);
         black.SetActive(true);
-        timeSpeed = 0.15f;
+        timeSpeed = 0.2f;
         Time.timeScale = timeSpeed;
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
         yield return new WaitForSeconds(0.1f);
@@ -62,6 +66,8 @@ public class GameManager : MonoBehaviour
         timeSpeed = 1f;
         Time.timeScale = timeSpeed;
         black.SetActive(false);
+        yield return new WaitForSeconds(2f);
+        playerCamera.GetComponent<playercamera>().hihi = focusPoint;
     }
     // void Quit(){
     //     Application.Quit();
