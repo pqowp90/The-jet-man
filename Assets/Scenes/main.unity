@@ -12375,7 +12375,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3.1437507
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -12449,7 +12449,7 @@ MonoBehaviour:
   rotationmultiplier: 15
   zoom: 0
   speed: 0.2
-  fstzoom: 1
+  fstzoom: 3.143751
   player: {fileID: 255676897}
   hihi: {fileID: 0}
   hiLaser: {fileID: 693534910}

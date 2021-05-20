@@ -20,7 +20,8 @@ public class playercamera : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        fstzoom = GetComponent<Camera>().orthographicSize;
+        if(!hello)
+            fstzoom = GetComponent<Camera>().orthographicSize;
     }
 
     void FixedUpdate()
