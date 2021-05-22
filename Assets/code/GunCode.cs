@@ -26,7 +26,7 @@ public class GunCode : MonoBehaviour
     private void DadaSound(){
         audioSource.clip = audioClip[1];
         audioSource.pitch=1f;
-        audioSource.volume = 0.5f;
+        audioSource.volume = 1f;
         Play();
     }
     

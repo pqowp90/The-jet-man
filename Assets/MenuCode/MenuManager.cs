@@ -8,6 +8,10 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField]
     private Camera maincamera;
+    [SerializeField]
+    private Animator cameraAnimator;
+    [SerializeField]
+    private Animator gunAnimator;
     public int sceneNum;
     [SerializeField]
     private Animator animator;
@@ -28,6 +32,12 @@ public class MenuManager : MonoBehaviour
     }
     public void StartGame(){
         SceneManager.LoadScene("main");
+    }
+    public void StartClick(){
+        FindObjectOfType<Canvas>().enabled = false;
+        cameraAnimator.enabled = true;
+        maincamera.GetComponent<AudioSource>().enabled = true;
+        gunAnimator.SetTrigger("MenuPlayerGo");
     }
     public void StoreClick(){
         maincamera.GetComponent<playercamera>().zoom=1f;

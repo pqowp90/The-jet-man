@@ -82,7 +82,7 @@ public class playerMove : MonoBehaviour
         if(y>0)y/=2;
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
-        if(Input.GetMouseButtonDown(0)) {
+        if(Input.GetMouseButtonDown(0)&&!EventSystem.current.IsPointerOverGameObject()) {
             if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
                 gunAnimator.SetBool("Shoting",true);
                 gunAnimator.SetTrigger("Shot");
@@ -116,11 +116,13 @@ public class playerMove : MonoBehaviour
                 if(GunSet<2)
                     GunSet++;
                 gunAnimator.SetInteger("GunSet",GunSet);
+                coolTime=0.1f;
             }
             else if(wheelInput<0){
                 if(GunSet>0)
                     GunSet--;
                 gunAnimator.SetInteger("GunSet",GunSet);
+                coolTime=0.1f;
             }
             if(wheelInput!=0){
                 switch(GunSet){

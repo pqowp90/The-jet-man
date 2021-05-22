@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class playercamera : MonoBehaviour
 {
     private float SHAKEtimeremaining, shakepower, shakefadetime, shakerotation;
@@ -87,5 +87,7 @@ public class playercamera : MonoBehaviour
 
         shakerotation = power * rotationmultiplier;
     }
-
+    public void StartGame(){
+        SceneManager.LoadScene("main");
+    }
 }
