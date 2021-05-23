@@ -8,8 +8,6 @@ public class playerMove : MonoBehaviour
     private Rigidbody2D myrigidbody;
     private SpriteRenderer spriteRenderer;
     [SerializeField]
-    private AudioClip[] audioClip;
-    [SerializeField]
     private Animator gunAnimator;
     [SerializeField]
     private Animator animator;
@@ -19,8 +17,9 @@ public class playerMove : MonoBehaviour
     private GameObject barSsaPos;
     [SerializeField]
     private GameObject hiLaser;
-    private AudioSource audioSource;
-    private float rotateDegree,headRotate,radian,x,y,coolTime,goTime;
+    private float rotateDegree,headRotate,radian,x,y,goTime;
+    [SerializeField]
+    private float coolTime;
     private Vector3 oPosition,target;
     private int GunSet=0;
     private bool No=true;
@@ -30,7 +29,6 @@ public class playerMove : MonoBehaviour
     void Start()
     {
         GameManager gameManager = GameManager.instance;
-        audioSource=GetComponent<AudioSource>();
         cameraWidth=Camera.main.orthographicSize*Camera.main.aspect;
         playerCamera=FindObjectOfType<playercamera>();
         hiLaser=GameObject.Find("HiLaser");
@@ -47,7 +45,7 @@ public class playerMove : MonoBehaviour
         if(No){//StartAni
             myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
             if(transform.position.x>5.65f){
-                myrigidbody.AddForce(new Vector3(100f,170));
+                myrigidbody.AddForce(new Vector3(100f,200f));
                 No=false;
                 animator.SetBool("NoNo",false);
             }

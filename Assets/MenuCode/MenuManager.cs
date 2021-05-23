@@ -44,6 +44,11 @@ public class MenuManager : MonoBehaviour
         sceneNum=1;
         UpdateUi();
     }
+    public void SettingClick(){
+        maincamera.GetComponent<playercamera>().zoom=3f;
+        sceneNum=2;
+        UpdateUi();
+    }
     public void Back(){
         maincamera.GetComponent<playercamera>().zoom=0f;
         sceneNum=0;
