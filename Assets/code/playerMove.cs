@@ -17,7 +17,7 @@ public class playerMove : MonoBehaviour
     private GameObject barSsaPos;
     [SerializeField]
     private GameObject hiLaser;
-    private float rotateDegree,headRotate,radian,x,y,goTime;
+    private float rotateDegree,headRotate,radian,x,y,goTime,wheelInput;
     [SerializeField]
     private float coolTime;
     private Vector3 oPosition,target;
@@ -109,7 +109,7 @@ public class playerMove : MonoBehaviour
         //-----------------------------------------------------------------------------------------
         //this.transform.position =  new Vector2(x, y);
         if(!gunAnimator.GetBool("Shoting")){
-            float wheelInput = Input.GetAxis("Mouse ScrollWheel");
+            wheelInput = Input.GetAxis("Mouse ScrollWheel");
             if(wheelInput>0){
                 if(GunSet<2)
                     GunSet++;

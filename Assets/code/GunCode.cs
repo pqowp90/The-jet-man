@@ -33,7 +33,7 @@ public class GunCode : MonoBehaviour
     private void PpangSound(){
         audioSource.clip = audioClip[2];
         audioSource.pitch=1.2f;
-        audioSource.volume = 0.2f;
+        audioSource.volume = 0.17f;
         Play();
     }
     private void Play(){
