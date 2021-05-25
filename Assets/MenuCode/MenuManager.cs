@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    public static MenuManager instance;
     [SerializeField]
     private Camera maincamera;
     [SerializeField]
@@ -17,7 +18,7 @@ public class MenuManager : MonoBehaviour
     private Animator animator;
     void Start()
     {
-
+        instance = this;
     }
     void Update()
     {

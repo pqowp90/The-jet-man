@@ -80,6 +80,10 @@ public class playerMove : MonoBehaviour
         if(y>0)y/=2;
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
+
+        if(Input.GetMouseButton(0)&&coolTime<=0f&&!EventSystem.current.IsPointerOverGameObject())
+                gunAnimator.SetBool("Shoting",true);
+
         if(Input.GetMouseButtonDown(0)&&!EventSystem.current.IsPointerOverGameObject()) {
             if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
                 gunAnimator.SetBool("Shoting",true);
