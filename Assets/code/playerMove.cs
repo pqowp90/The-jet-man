@@ -82,12 +82,13 @@ public class playerMove : MonoBehaviour
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
 
         if(Input.GetMouseButton(0)&&coolTime<=0f&&!EventSystem.current.IsPointerOverGameObject())
-                gunAnimator.SetBool("Shoting",true);
+            gunAnimator.SetBool("Shoting",true);
 
         if(Input.GetMouseButtonDown(0)&&!EventSystem.current.IsPointerOverGameObject()) {
             if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
                 gunAnimator.SetBool("Shoting",true);
-                gunAnimator.SetTrigger("Shot");
+                if(GunSet!=1)
+                    gunAnimator.SetTrigger("Shot");
                 // audioSource.clip = audioClip[GunSet];
                 // audioSource.time = 0;
                 // audioSource.Play();

@@ -6,21 +6,26 @@ using UnityEngine.UI;
 public class ScrollbarCode : MonoBehaviour
 {
     [SerializeField]
+    private float firstNum;
+    [SerializeField]
+    private string abc;
+    [SerializeField]
     private Text Num;
-    [SerializeField]
-    private int saveNum;
-    [SerializeField]
-    private string[] save;
+
+
 
     private Scrollbar scrollbar;
     void Start()
     {
         scrollbar = GetComponent<Scrollbar>();
+        scrollbar.value = GameManager.instance.GetSaveFloat(abc,firstNum);
     }
 
     void Update()
     {
         Num.text = string.Format("{0}",(int)(scrollbar.value*100));
-        //PlayerPrefs.SetFloat(save[saveNum],scrollbar.value);
+    }
+    public void Set(){
+        GameManager.instance.SetSaveFloat(abc,scrollbar.value);
     }
 }

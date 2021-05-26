@@ -15,14 +15,36 @@ public class MenuManager : MonoBehaviour
     private Animator gunAnimator;
     public int sceneNum;
     [SerializeField]
-    private Animator animator;
+    private Animator animator,mirrorballAnimator;
+    [SerializeField]
+    private ScrollbarCode[] scrollbarCode;
+    [SerializeField]
+    private float nonotime;
+    private bool nonono;
+    private Vector3 mousePosed;//마우스포지션 였던것
     void Start()
     {
         instance = this;
     }
     void Update()
     {
-
+        if(mousePosed!=Camera.main.ScreenToWorldPoint(Input.mousePosition)){
+            nonotime=0f;
+            if(nonono)
+                mirrorballAnimator.SetBool("jamsu",false);
+        }
+        else
+            if(sceneNum==0) nonotime += Time.deltaTime;
+        mousePosed = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if(!nonono){
+            if(nonotime>15f){
+                mirrorballAnimator.SetBool("jamsu",true);
+                nonono = true;
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.Escape)&&sceneNum!=0){
+            Back();
+        }
     }
     public void Change(){
         switch(sceneNum){
@@ -51,9 +73,17 @@ public class MenuManager : MonoBehaviour
         UpdateUi();
     }
     public void Back(){
+        if(sceneNum==2){
+            for(int i=0;i<2;i++){
+                scrollbarCode[i].Set();
+            }
+        }
         maincamera.GetComponent<playercamera>().zoom=0f;
         sceneNum=0;
         UpdateUi();
+    }
+    public void Quit(){
+        Application.Quit();
     }
     private void UpdateUi(){
         animator.SetInteger("Num",sceneNum);

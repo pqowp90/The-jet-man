@@ -8,10 +8,13 @@ public class GameManager : MonoBehaviour
     private GameObject focusPoint;
     [SerializeField]
     private Camera playerCamera;
-    private GameObject black;
+    private GameObject black,mouse;
     private GameObject ESC;
     private float timeSpeed=1f;
     private bool ESCON=false;
+    [SerializeField]
+    private bool menu=false;
+    public bool showMouse=false;
     private static GameManager _instance;
     public static GameManager instance
     {
@@ -30,19 +33,23 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
         focusPoint = GameObject.Find("FocusPoint");
         playerCamera = FindObjectOfType<Camera>();
         black = GameObject.Find("Canvas").transform.GetChild(0).gameObject;
         ESC = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
-        StartCoroutine(Opening());
+        if(!menu){
+            mouse = FindObjectOfType<MousePointer>().gameObject;
+            StartCoroutine(Opening());
+        }
         maxPos=new Vector2(9,9);
         minPos=new Vector2(-9,-9);
     }
     void Update()
     {
-        
-        if(Input.GetKeyDown(KeyCode.Escape)){
+        if(!menu&&!showMouse){
+            Cursor.visible = false;
+        }
+        if(Input.GetKeyDown(KeyCode.Escape)&&!menu){
             Continue();
         }
     }
@@ -72,12 +79,32 @@ public class GameManager : MonoBehaviour
     // void Quit(){
     //     Application.Quit();
     // }
+    public float GetSaveFloat(string abc,float dd){
+        return PlayerPrefs.GetFloat(abc);
+    }
+    public int GetSaveInt(string abc,int dd){
+        return PlayerPrefs.GetInt(abc);
+    }
+    public void SetSaveFloat(string abc,float dd){
+        PlayerPrefs.SetFloat(abc,dd);
+    }
+    public void SetSaveInt(string abc,int dd){
+        PlayerPrefs.SetInt(abc,dd);
+    }
     public void Continue(){
         if(!ESCON){
+            showMouse=true;
             ESC.SetActive(true);
             ESCON=true;
             Time.timeScale = 0f;
+            mouse.SetActive(false);
         }
-        else {ESC.SetActive(false);ESCON=false;Time.timeScale = timeSpeed;}
+        else {
+            ESC.SetActive(false);
+            ESCON=false;
+            Time.timeScale = timeSpeed;
+            showMouse=false;
+            mouse.SetActive(true);
+        }
     }
 }

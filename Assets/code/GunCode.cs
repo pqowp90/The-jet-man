@@ -9,9 +9,11 @@ public class GunCode : MonoBehaviour
     [SerializeField]
     private playerMove playerMove;
     private AudioSource audioSource;
+    private float gunVolume;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        gunVolume=GameManager.instance.GetSaveFloat("GunVolume",0.3f);
     }
 
     private void BarSsaChong(){
@@ -26,7 +28,7 @@ public class GunCode : MonoBehaviour
     private void DadaSound(){
         audioSource.clip = audioClip[1];
         audioSource.pitch=1f;
-        audioSource.volume = 1f;
+        audioSource.volume = 0.6f;
         Play();
     }
     
@@ -37,6 +39,7 @@ public class GunCode : MonoBehaviour
         Play();
     }
     private void Play(){
+        audioSource.volume *= gunVolume;
         audioSource.time = 0f;
         audioSource.Play();
     }
