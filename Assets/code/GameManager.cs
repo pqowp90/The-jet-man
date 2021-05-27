@@ -80,10 +80,10 @@ public class GameManager : MonoBehaviour
     //     Application.Quit();
     // }
     public float GetSaveFloat(string abc,float dd){
-        return PlayerPrefs.GetFloat(abc);
+        return PlayerPrefs.GetFloat(abc,dd);
     }
     public int GetSaveInt(string abc,int dd){
-        return PlayerPrefs.GetInt(abc);
+        return PlayerPrefs.GetInt(abc,dd);
     }
     public void SetSaveFloat(string abc,float dd){
         PlayerPrefs.SetFloat(abc,dd);

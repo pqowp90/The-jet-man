@@ -22,12 +22,42 @@ public class MenuManager : MonoBehaviour
     private float nonotime;
     private bool nonono;
     private Vector3 mousePosed;//마우스포지션 였던것
+    [SerializeField]
+    private int gunCnt;
+    private string gunYes;
+    [SerializeField]
+    public bool[] gunChk{get;private set;}
     void Start()
     {
         instance = this;
+
+        gunYes = PlayerPrefs.GetString("GunSave","0000000000");
+        for(int i=0;i<gunCnt;i++){
+            gunChk[i]=(gunYes[i]=='1')?true:false;
+        }
+    }
+    private void BuyGun(int num){
+        gunChk[num]=true;
+        gunYes="";
+        for(int i=0;i<gunCnt;i++){
+            if(gunChk[i]==true){
+                gunYes+="1";
+            }
+            else
+                gunYes+="0";
+
+        }
+        PlayerPrefs.SetString("GunSave",gunYes);
+        Debug.Log(gunYes);
     }
     void Update()
     {
+        Jamsu();
+        if(Input.GetKeyDown(KeyCode.Escape)&&sceneNum!=0){
+            Back();
+        }
+    }
+    private void Jamsu(){
         if(mousePosed!=Camera.main.ScreenToWorldPoint(Input.mousePosition)){
             nonotime=0f;
             if(nonono){
@@ -43,9 +73,6 @@ public class MenuManager : MonoBehaviour
                 mirrorballAnimator.SetBool("jamsu",true);
                 nonono = true;
             }
-        }
-        if(Input.GetKeyDown(KeyCode.Escape)&&sceneNum!=0){
-            Back();
         }
     }
     public void Change(){
@@ -85,10 +112,12 @@ public class MenuManager : MonoBehaviour
         UpdateUi();
     }
     public void Quit(){
+        PlayerPrefs.DeleteAll();
         Application.Quit();
     }
     private void UpdateUi(){
         animator.SetInteger("Num",sceneNum);
         animator.SetTrigger("Bbang");
     }
+    
 }
