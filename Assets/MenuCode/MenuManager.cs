@@ -30,8 +30,10 @@ public class MenuManager : MonoBehaviour
     {
         if(mousePosed!=Camera.main.ScreenToWorldPoint(Input.mousePosition)){
             nonotime=0f;
-            if(nonono)
+            if(nonono){
                 mirrorballAnimator.SetBool("jamsu",false);
+                nonono=false;
+            }
         }
         else
             if(sceneNum==0) nonotime += Time.deltaTime;
