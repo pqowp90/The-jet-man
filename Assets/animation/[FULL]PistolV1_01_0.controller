@@ -306,7 +306,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PistolAll
+  m_Name: PistolShot
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -889,7 +889,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: shotgunRelode
+  m_Name: shotgunShot
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1422,7 +1422,7 @@ AnimatorStateMachine:
     m_Position: {x: 410, y: -150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1286932792906023155}
-    m_Position: {x: -10, y: 110, z: 0}
+    m_Position: {x: 460, y: 260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5428721555734783135}
     m_Position: {x: 410, y: -10, z: 0}

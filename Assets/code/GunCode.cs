@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ public class GunCode : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        gunVolume=GameManager.instance.GetSaveFloat("GunVolume",0.3f);
+        gunVolume=GameManager.instance.GetSaveFloat("GunVolume",1f);
     }
 
     private void BarSsaChong(){

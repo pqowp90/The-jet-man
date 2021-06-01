@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
 public class playerMove : MonoBehaviour
@@ -177,8 +178,10 @@ public class playerMove : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){
-            Time.timeScale=0f;
+            if(FindObjectOfType<BackgroundMusic>()!=null)
+                Destroy(FindObjectOfType<BackgroundMusic>().gameObject);
             Debug.Log("die!!");
+            SceneManager.LoadScene("Menu");
         }
     }
     private IEnumerator Laser()

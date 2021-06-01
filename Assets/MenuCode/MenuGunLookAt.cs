@@ -28,7 +28,7 @@ public class MenuGunLookAt : MonoBehaviour
         //-----------------------------------------------------------------------------------------
         wheelInput = Input.GetAxis("Mouse ScrollWheel");
         if(wheelInput>0){
-                if(GunSet<1)
+                if(GunSet<2)
                     GunSet++;
                 gunAnimator.SetInteger("GunSet",GunSet);
             }
