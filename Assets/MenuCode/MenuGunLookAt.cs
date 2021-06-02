@@ -26,7 +26,8 @@ public class MenuGunLookAt : MonoBehaviour
         transform.GetChild(0).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate/3f);
         transform.GetChild(1).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate);//HeadRotation
         //-----------------------------------------------------------------------------------------
-        wheelInput = Input.GetAxis("Mouse ScrollWheel");
+        //if(MenuManager.instance.sceneNum==0)
+            wheelInput = Input.GetAxis("Mouse ScrollWheel");
         if(wheelInput>0){
                 if(GunSet<2)
                     GunSet++;

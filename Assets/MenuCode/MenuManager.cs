@@ -17,7 +17,7 @@ public class MenuManager : MonoBehaviour
     private Animator gunAnimator;
     public int sceneNum;
     [SerializeField]
-    private Animator animator,mirrorballAnimator;
+    private Animator animator,mirrorballAnimator,storeAnimator;
     [SerializeField]
     private ScrollbarCode[] scrollbarCode;
     [SerializeField]
@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour
     private float nonotime;
     [SerializeField]
     private playercamera playerCamera;
+    private AudioSource audioSource;
     private bool nonono;
     private Vector3 mousePosed;//마우스포지션 였던것
     [SerializeField]
@@ -38,30 +39,49 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     public int[,] gunChk=new int[3,2];
     public int money;
+    [SerializeField]
+    private AudioClip[] audioClip;
+    public int gunNewSelect=-1;
+    public StoreGuns[] gunNewThis;
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         instance = this;
+        money = PlayerPrefs.GetInt("MONEY",10000);
         LoadGunSave();
-        money = PlayerPrefs.GetInt("MONEY",1000);
         UpdateUI();
     }
     public void LoadGunSave(){
         
         gunYes = PlayerPrefs.GetString("GunSave","0000000000");
         for(int i=0;i<gunCnt;i++){
-            gunChk[i,0]=(gunYes[i]=='1')?1:0;
+            gunChk[i,0]=(gunYes[i]=='0')?0:((gunYes[i]=='1')?1:2);
         }
         for(int i=0;i<gunCnt;i++){
             gunChk[i,1]=(int)char.GetNumericValue(gunYes[gunCnt+i]);;
         }
-        Debug.Log(gunYes);
     }
-    public void BuyGun(int num){
-        gunChk[num,0]=1;
+    public void cantBuy(){
+        audioSource.clip = audioClip[1];
+        audioSource.volume = 1f;
+        audioSource.time = 0f;
+        audioSource.Play();
+        
+    }
+    public void BuySound(){
+        audioSource.clip = audioClip[0];
+        audioSource.volume = 0.5f;
+        audioSource.time = 0.1f;
+        audioSource.Play();
+    }
+    public void BuyGun(){
+        
         gunYes="";
         for(int i=0;i<gunCnt;i++){
             if(gunChk[i,0]==1){
                 gunYes+='1';
+            }else if(gunChk[i,0]==2){
+                gunYes+='2';
             }
             else
                 gunYes+='0';
@@ -99,6 +119,25 @@ public class MenuManager : MonoBehaviour
                 nonono = true;
             }
         }
+    }
+    public void SelectGun(bool hi){
+        storeAnimator.SetBool("Select",false);
+        if(hi){
+            PlayerPrefs.SetInt("Select1",gunNewSelect);
+            if(PlayerPrefs.GetInt("Select2")==gunNewSelect)
+                PlayerPrefs.SetInt("Select2",-1);//1번을 했는데 2번이랑 같은거면 2번지우고 1번으로
+        }
+        else{
+            if(PlayerPrefs.GetInt("Select1",-1)==gunNewSelect)//2번을 했는데 1번에 있으면 취소
+                return;
+            if(PlayerPrefs.GetInt("Select1",-1)!=-1)//1번이 비어있지 않으면 넣어줌
+                PlayerPrefs.SetInt("Select2",gunNewSelect);
+        }
+        for(int i=0;i<gunCnt;i++)
+            gunNewThis[i].UpdateSelect();
+    }
+    public void SelectClick(){
+        storeAnimator.SetBool("Select",true);
     }
     public void Change(){
         switch(sceneNum){
