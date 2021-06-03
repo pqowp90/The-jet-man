@@ -152,26 +152,26 @@ public class playerMove : MonoBehaviour
         myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
         if(GunSet==2){
             for(int i=0;i<2;i++){
-                var sBullet = ObjectPulling.GetObject();
+                var sBullet = ObjectPoolling.GetObject();
                 sBullet.transform.position=barSsaPos.transform.position;
                 sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(7,20f));
                 sBullet.bulletSet = 1;
             }
             for(int i=0;i<2;i++){
-                var sBullet = ObjectPulling.GetObject();
+                var sBullet = ObjectPoolling.GetObject();
                 sBullet.transform.position=barSsaPos.transform.position;
                 sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-7,7));
                 sBullet.bulletSet = 1;
             }
             for(int i=0;i<2;i++){
-                var sBullet = ObjectPulling.GetObject();
+                var sBullet = ObjectPoolling.GetObject();
                 sBullet.transform.position=barSsaPos.transform.position;
                 sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20,-7));
                 sBullet.bulletSet = 1;
             }
             return;
         }
-        var bullet = ObjectPulling.GetObject();
+        var bullet = ObjectPoolling.GetObject();
         bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
         bullet.bulletSet = 0;

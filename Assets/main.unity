@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 166264581}
   - component: {fileID: 166264580}
   m_Layer: 0
-  m_Name: ObjectPulling
+  m_Name: ObjectPoolling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

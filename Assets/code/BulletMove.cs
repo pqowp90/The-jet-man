@@ -30,6 +30,6 @@ public class BulletMove : MonoBehaviour
         transform.Translate(Vector2.right*speed*Time.deltaTime);
     }
     private void DestroyBullet(){
-        ObjectPulling.ReturnObject(this);
+        ObjectPoolling.ReturnObject(this);
     }
 }

@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPulling : MonoBehaviour
+public class ObjectPoolling : MonoBehaviour
 {
     [SerializeField]
     private GameObject poolingObjectPrefab;
     [SerializeField]
     private Queue<BulletMove> pooliongObjectQueue = new Queue<BulletMove>();
     
-    public static ObjectPulling instance;
+    public static ObjectPoolling instance;
     private void Awake()
     {
         instance = this;
