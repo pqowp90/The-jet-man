@@ -26,6 +26,7 @@ public class playerMove : MonoBehaviour
     private bool No=true;
     private bool NoNo=true;
     float cameraWidth;
+    private int[] gunset=new int[2];
 
     void Start()
     {
@@ -38,6 +39,14 @@ public class playerMove : MonoBehaviour
         animator.SetBool("NoNo",true);
         myrigidbody=GetComponent<Rigidbody2D>();
         spriteRenderer=GetComponent<SpriteRenderer>();
+        LoadGunSet();
+        GunSet=gunset[0];
+        gunAnimator.SetInteger("GunSet",gunset[0]);
+        shotPosSet();
+    }
+    public void LoadGunSet(){
+        gunset[0]=PlayerPrefs.GetInt("Select1");
+        gunset[1]=PlayerPrefs.GetInt("Select2");
     }
     void Update()
     {
@@ -117,33 +126,34 @@ public class playerMove : MonoBehaviour
         if(!gunAnimator.GetBool("Shoting")){
             wheelInput = Input.GetAxis("Mouse ScrollWheel");
             if(wheelInput>0){
-                if(GunSet<2)
-                    GunSet++;
-                gunAnimator.SetInteger("GunSet",GunSet);
-                coolTime=0.1f;
+                GunSet=gunset[0];
+                gunAnimator.SetInteger("GunSet",gunset[0]);
+                coolTime = 0.1f;
             }
-            else if(wheelInput<0){
-                if(GunSet>0)
-                    GunSet--;
-                gunAnimator.SetInteger("GunSet",GunSet);
-                coolTime=0.1f;
+            else if(wheelInput<0&&gunset[1]!=-1){
+                GunSet=gunset[1];
+                gunAnimator.SetInteger("GunSet",gunset[1]);
+                coolTime = 0.1f;
             }
             if(wheelInput!=0){
-                switch(GunSet){
-                    case 0:
-                    barSsaPos = GameObject.Find("PistolShotingPos");
-                    break;
-                    case 1:
-                    barSsaPos = GameObject.Find("RifleShotingPos");
-                    break;
-                    case 2:
-                    barSsaPos = GameObject.Find("ShotGunShotingPos");
-                    break;
-                }
+                shotPosSet();
             }
         }
         
         
+    }
+    private void shotPosSet(){
+        switch(GunSet){
+            case 0:
+            barSsaPos = GameObject.Find("PistolShotingPos");
+            break;
+            case 1:
+            barSsaPos = GameObject.Find("RifleShotingPos");
+            break;
+            case 2:
+            barSsaPos = GameObject.Find("ShotGunShotingPos");
+            break;            
+        }
     }
     private void enabledAE(){
         animator.enabled=false;

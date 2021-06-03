@@ -56,7 +56,7 @@ public class StoreGuns : MonoBehaviour
         buy.SetActive(menuManager.gunChk[myGunSet,0]==0);
         upgread.SetActive(menuManager.gunChk[myGunSet,0]>0);
 
-        if(menuManager.gunChk[myGunSet,1]==max){
+        if(menuManager.gunChk[myGunSet,0]==2){
             upgread.transform.GetChild(0).GetComponent<Text>().text="MAX";
         }
 
@@ -96,6 +96,5 @@ public class StoreGuns : MonoBehaviour
         menuManager.BuyGun();
         PlayerPrefs.SetInt("MONEY",menuManager.money);
         menuManager.UpdateUI();
-        UpdateButten();
     }
 }

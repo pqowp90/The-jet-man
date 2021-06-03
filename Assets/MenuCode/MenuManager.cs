@@ -43,11 +43,13 @@ public class MenuManager : MonoBehaviour
     private AudioClip[] audioClip;
     public int gunNewSelect=-1;
     public StoreGuns[] gunNewThis;
-    void Start()
+    void Awake()
     {
+        PlayerPrefs.GetInt("Select1",-1);
+        PlayerPrefs.GetInt("Select2",-1);
         audioSource = GetComponent<AudioSource>();
         instance = this;
-        money = PlayerPrefs.GetInt("MONEY",10000);
+        money = PlayerPrefs.GetInt("MONEY",1000);
         LoadGunSave();
         UpdateUI();
     }
@@ -58,8 +60,9 @@ public class MenuManager : MonoBehaviour
             gunChk[i,0]=(gunYes[i]=='0')?0:((gunYes[i]=='1')?1:2);
         }
         for(int i=0;i<gunCnt;i++){
-            gunChk[i,1]=(int)char.GetNumericValue(gunYes[gunCnt+i]);;
+            gunChk[i,1]=(int)char.GetNumericValue(gunYes[gunCnt+i]);
         }
+        Debug.Log(gunYes);
     }
     public void cantBuy(){
         audioSource.clip = audioClip[1];
@@ -91,6 +94,7 @@ public class MenuManager : MonoBehaviour
             gunYes+=gunChk[i,1].ToString();
         }
         PlayerPrefs.SetString("GunSave",gunYes);
+        ResetStore();
     }
     void Update()
     {
@@ -133,11 +137,17 @@ public class MenuManager : MonoBehaviour
             if(PlayerPrefs.GetInt("Select1",-1)!=-1)//1번이 비어있지 않으면 넣어줌
                 PlayerPrefs.SetInt("Select2",gunNewSelect);
         }
-        for(int i=0;i<gunCnt;i++)
+        ResetStore();
+    }
+    void ResetStore(){
+        for(int i=0;i<gunCnt;i++){
             gunNewThis[i].UpdateSelect();
+            gunNewThis[i].UpdateButten();
+        }
     }
     public void SelectClick(){
         storeAnimator.SetBool("Select",true);
+        
     }
     public void Change(){
         switch(sceneNum){
@@ -150,11 +160,17 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("main");
     }
     public void StartClick(){
-        backgroundMusic.FaidOut();
-        FindObjectOfType<Canvas>().enabled = false;
-        cameraAnimator.enabled = true;
-        maincamera.GetComponent<AudioSource>().enabled = true;
-        gunAnimator.SetTrigger("MenuPlayerGo");
+        if(PlayerPrefs.GetInt("Select1")<0||PlayerPrefs.GetInt("Select2")<0){
+            backgroundMusic.FaidOut();
+            FindObjectOfType<Canvas>().enabled = false;
+            cameraAnimator.enabled = true;
+            maincamera.GetComponent<AudioSource>().enabled = true;
+            gunAnimator.SetTrigger("MenuPlayerGo");
+        }
+        else{
+            Debug.Log("총을 최소 하나 이상 선택하세요");
+        }
+        
     }
     public void StoreClick(){
         LoadGunSave();
