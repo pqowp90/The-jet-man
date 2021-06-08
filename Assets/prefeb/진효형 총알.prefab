@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3366559743010617330}
   - component: {fileID: 4552825674050777412}
   - component: {fileID: 8547395816057683738}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "\uC9C4\uD6A8\uD615 \uCD1D\uC54C"
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 2716697884432688278}
   - component: {fileID: 5366187910717026065}
   - component: {fileID: 67878639582543135}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "\uADF8\uB0E5"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4965,7 +4965,7 @@ GameObject:
   - component: {fileID: 5183757105596508368}
   - component: {fileID: 2898988520882201431}
   - component: {fileID: 7112000238250996057}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "\uC0F7\uAC74"
   m_TagString: Untagged
   m_Icon: {fileID: 0}

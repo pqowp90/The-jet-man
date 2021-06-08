@@ -30,8 +30,10 @@ public class GameManager : MonoBehaviour
     }
     public Vector2 maxPos{get;private set;}
     public Vector2 minPos{get;private set;}
+    public Vector2 spawnMaxPos{get;private set;}
+    public Vector2 spawnMinPos{get;private set;}
 
-    void Start()
+    void Awake()
     {
         focusPoint = GameObject.Find("FocusPoint");
         playerCamera = FindObjectOfType<Camera>();
@@ -41,11 +43,16 @@ public class GameManager : MonoBehaviour
             mouse = FindObjectOfType<MousePointer>().gameObject;
             StartCoroutine(Opening());
         }
-        maxPos=new Vector2(9,9);
-        minPos=new Vector2(-9,-9);
+        maxPos=new Vector2(9f,9f);
+        minPos=new Vector2(-9f,-9f);
+        spawnMaxPos=new Vector2(playerCamera.transform.position.x+7f,2.36f);
+        spawnMinPos=new Vector2(playerCamera.transform.position.x+5f,-2.15f);
+        
     }
     void Update()
     {
+        spawnMaxPos=new Vector2(playerCamera.transform.position.x+7f,2.36f);
+        spawnMinPos=new Vector2(playerCamera.transform.position.x+5f,-2.15f);
         if(!menu&&!showMouse){
             Cursor.visible = false;
         }
@@ -54,7 +61,7 @@ public class GameManager : MonoBehaviour
         }
     }
     private IEnumerator LaserBbang(){
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
     }
     private IEnumerator Opening(){
         yield return new WaitForSeconds(0.95f);

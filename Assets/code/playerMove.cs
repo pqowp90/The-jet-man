@@ -191,6 +191,7 @@ public class playerMove : MonoBehaviour
             if(FindObjectOfType<BackgroundMusic>()!=null)
                 Destroy(FindObjectOfType<BackgroundMusic>().gameObject);
             Debug.Log("die!!");
+            Time.timeScale = 1f;
             SceneManager.LoadScene("Menu");
         }
     }

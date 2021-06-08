@@ -12,9 +12,11 @@ public class BulletMove : MonoBehaviour
     private Animator animator;
     public int bulletSet;
     public void Awake(){
+        
         animator = GetComponent<Animator>();
     }
     public void StartDeley(){
+        CancelInvoke();
         Invoke("DestroyBullet",3f);
     }
     private void Update()
@@ -29,7 +31,8 @@ public class BulletMove : MonoBehaviour
         //-----------------------------------------------------------------------------------------
         transform.Translate(Vector2.right*speed*Time.deltaTime);
     }
-    private void DestroyBullet(){
+    public void DestroyBullet(){
+        
         ObjectPoolling.ReturnObject(this);
     }
 }
