@@ -10,7 +10,10 @@ public class GameManager : MonoBehaviour
     private Camera playerCamera;
     private GameObject black,mouse;
     private GameObject ESC;
+    [SerializeField]
+    private GameObject dronePrefab;
     private float timeSpeed=1f;
+    public float recoilResistance{get;private set;}
     private bool ESCON=false;
     [SerializeField]
     private bool menu=false;
@@ -32,9 +35,15 @@ public class GameManager : MonoBehaviour
     public Vector2 minPos{get;private set;}
     public Vector2 spawnMaxPos{get;private set;}
     public Vector2 spawnMinPos{get;private set;}
+    [SerializeField]
+    private Transform spawnGoMin;
+    [SerializeField]
+    private Transform spawnGoMax;
+    public float speedenemy;
 
     void Awake()
     {
+        recoilResistance=0.8f;
         focusPoint = GameObject.Find("FocusPoint");
         playerCamera = FindObjectOfType<Camera>();
         black = GameObject.Find("Canvas").transform.GetChild(0).gameObject;
@@ -60,6 +69,21 @@ public class GameManager : MonoBehaviour
             Continue();
         }
     }
+    private IEnumerator SpawnDrone(){
+        while(true){
+            
+            float spawnDeley = 0f;
+            spawnDeley = Random.Range(8f,10f);
+            float RandomY = Random.Range(spawnGoMin.position.y,spawnGoMax.position.y);
+            float RandomX = Random.Range(spawnGoMin.position.x,spawnGoMax.position.x);
+
+            for(int i=0;i<3;i++){
+                yield return new WaitForSeconds(0.2f);
+                Instantiate(dronePrefab, new Vector2(RandomX,RandomY),Quaternion.identity);
+            }
+            yield return new WaitForSeconds(spawnDeley);
+        }
+    }
     private IEnumerator LaserBbang(){
         yield return new WaitForSeconds(2f);
     }
@@ -82,6 +106,7 @@ public class GameManager : MonoBehaviour
         black.SetActive(false);
         yield return new WaitForSeconds(2f);
         playerCamera.GetComponent<playercamera>().hihi = focusPoint;
+        StartCoroutine(SpawnDrone());
     }
     // void Quit(){
     //     Application.Quit();

@@ -27,6 +27,8 @@ public class playerMove : MonoBehaviour
     private bool NoNo=true;
     float cameraWidth;
     private int[] gunset=new int[2];
+    [SerializeField]
+    private int[] gunDamage = new int[10];
 
     void Start()
     {
@@ -87,7 +89,8 @@ public class playerMove : MonoBehaviour
         radian = rotateDegree*Mathf.PI/180f;
         x = 80 * Mathf.Cos(radian);
         y = 200 * Mathf.Sin(radian);
-        if(y>0)y/=2;
+        if(y>0)y*=0.5f;
+        if(x>0)x*=GameManager.instance.recoilResistance;
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
 
@@ -161,23 +164,14 @@ public class playerMove : MonoBehaviour
     public void Shoting(float a){
         myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
         if(GunSet==2){
-            for(int i=0;i<2;i++){
-                var sBullet = ObjectPoolling.GetObject();
-                sBullet.transform.position=barSsaPos.transform.position;
-                sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(7,20f));
-                sBullet.bulletSet = 1;
-            }
-            for(int i=0;i<2;i++){
-                var sBullet = ObjectPoolling.GetObject();
-                sBullet.transform.position=barSsaPos.transform.position;
-                sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-7,7));
-                sBullet.bulletSet = 1;
-            }
-            for(int i=0;i<2;i++){
-                var sBullet = ObjectPoolling.GetObject();
-                sBullet.transform.position=barSsaPos.transform.position;
-                sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20,-7));
-                sBullet.bulletSet = 1;
+            for(int i=0;i<3;i++){
+                for(int j=0;j<2;j++){
+                    var sBullet = ObjectPoolling.GetObject();
+                    sBullet.transform.position=barSsaPos.transform.position;
+                    sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20+(13*i),-20+(13*(i+1))));
+                    sBullet.bulletSet = 1;
+                    sBullet.bulletDagage = gunDamage[GunSet];
+                }
             }
             return;
         }
@@ -185,6 +179,7 @@ public class playerMove : MonoBehaviour
         bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
         bullet.bulletSet = 0;
+        bullet.bulletDagage = gunDamage[GunSet];
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){

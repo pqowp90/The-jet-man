@@ -9,9 +9,14 @@ public class EnemyMove : MonoBehaviour
     GameManager gameManager;
     private Rigidbody2D myrigidbody;
     private SpriteRenderer spriteRenderer;
+    private HpBar hpBar;
+    public int maxHp=60;
+    public int hp=0;
     public float stun=200f;
-    void Start()
+    void Awake()
     {
+        hpBar = GetComponentInChildren<HpBar>();
+        hp = maxHp;
         spriteRenderer = GetComponent<SpriteRenderer>();
         myrigidbody = GetComponent<Rigidbody2D>();
         gameManager = GameManager.instance;
@@ -19,7 +24,7 @@ public class EnemyMove : MonoBehaviour
     }
     void Update()
     {
-        
+        myrigidbody.AddForce(new Vector2(gameManager.speedenemy*Time.deltaTime,0f));
     }
     private void MoveStart(){
         transform.DOMove(new Vector3(Random.Range(gameManager.spawnMinPos.x,gameManager.spawnMaxPos.x)
@@ -30,23 +35,28 @@ public class EnemyMove : MonoBehaviour
             StartCoroutine(Damaged());
             rotateDegree=other.gameObject.transform.eulerAngles.z;
             radian = rotateDegree*Mathf.PI/180f;
-            Debug.Log(rotateDegree);
             x = stun*Mathf.Cos(radian);
             y = stun*Mathf.Sin(radian);
             myrigidbody.AddForce(new Vector3(x,y,0f));
-            if(other.gameObject.activeSelf == true)
+            if(other.gameObject.activeSelf == true){
+                hp -= other.gameObject.GetComponent<BulletMove>().bulletDagage;
+                hpBar.sethealth(hp,maxHp);
                 other.gameObject.GetComponent<BulletMove>().DestroyBullet();
+            }
         }
     }
     private IEnumerator Damaged(){
-        spriteRenderer.color = new Color(1f,0.5f,0.5f,1f);
-        for(int i=0;i<transform.childCount;i++){
-            transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(1f,0.4f,0.4f,1f);
-        }
+        spriteRenderer.color = new Color(0.5f,0.5f,0.5f,1f);
+        SetColor(new Color(0.5f,0.5f,0.5f,1f));
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = new Color(1f,1f,1f,1f);
+        SetColor(new Color(1f,1f,1f,1f));
+    }
+    private void SetColor(Color color){
         for(int i=0;i<transform.childCount;i++){
-            transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,1f);
+            if(transform.GetChild(i).GetComponent<SpriteRenderer>()!=null)
+                transform.GetChild(i).GetComponent<SpriteRenderer>().color = color;
         }
     }
+    
 }

@@ -11,6 +11,7 @@ public class BulletMove : MonoBehaviour
     private bool isPull;
     private Animator animator;
     public int bulletSet;
+    public int bulletDagage;
     public void Awake(){
         
         animator = GetComponent<Animator>();
@@ -32,7 +33,7 @@ public class BulletMove : MonoBehaviour
         transform.Translate(Vector2.right*speed*Time.deltaTime);
     }
     public void DestroyBullet(){
-        
+        CancelInvoke();
         ObjectPoolling.ReturnObject(this);
     }
 }
