@@ -16,15 +16,12 @@ public class playerMove : MonoBehaviour
     private playercamera playerCamera;
     [SerializeField]
     private GameObject barSsaPos;
-    [SerializeField]
-    private GameObject hiLaser;
     private float rotateDegree,headRotate,radian,x,y,goTime,wheelInput;
     [SerializeField]
     private float coolTime;
     private Vector3 oPosition,target;
     private int GunSet=0;
     private bool No=true;
-    private bool NoNo=true;
     float cameraWidth;
     private int[] gunset=new int[2];
     [SerializeField]
@@ -35,8 +32,6 @@ public class playerMove : MonoBehaviour
         GameManager gameManager = GameManager.instance;
         cameraWidth=Camera.main.orthographicSize*Camera.main.aspect;
         playerCamera=FindObjectOfType<playercamera>();
-        hiLaser=GameObject.Find("HiLaser");
-        hiLaser.SetActive(false);
         animator=gameObject.GetComponent<Animator>();
         animator.SetBool("NoNo",true);
         myrigidbody=GetComponent<Rigidbody2D>();
@@ -63,29 +58,7 @@ public class playerMove : MonoBehaviour
             }
             return;
         }
-        if(NoNo){
-            if(transform.position.x>10f){
-                NoNo=false;
-                hiLaser.SetActive(true);
-                hiLaser.GetComponent<Animator>().SetTrigger("hihi");
-                StartCoroutine(Laser());
-            }
-        }
-        else {
-            goTime = hiLaser.transform.position.x+(0.8f*Time.deltaTime);
-            hiLaser.transform.position = new Vector3(goTime,hiLaser.transform.position.y,0);
-            playerCamera.maxPos = new Vector2(goTime+cameraWidth,playerCamera.maxPos.y);
-        }
-        //-----------------------------------------------------------------------------------------
-        oPosition = transform.position;
-        target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        rotateDegree = Mathf.Atan2(target.y - oPosition.y, target.x - oPosition.x)*Mathf.Rad2Deg;
-        headRotate = Mathf.Atan2(target.y - oPosition.y, Mathf.Abs(target.x - oPosition.x))*Mathf.Rad2Deg;
-        //spriteRenderer.flipX=(rotateDegree<90&&rotateDegree>-90)?true:false;
-        transform.rotation=new Quaternion(0f,(rotateDegree<90&&rotateDegree>-90)?0f:180f,0f,0f);
-        transform.GetChild(0).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate/3f);
-        transform.GetChild(1).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate);//HeadRotation
-        //-----------------------------------------------------------------------------------------
+        HeadRotation();
         radian = rotateDegree*Mathf.PI/180f;
         x = 80 * Mathf.Cos(radian);
         y = 200 * Mathf.Sin(radian);
@@ -145,6 +118,16 @@ public class playerMove : MonoBehaviour
         
         
     }
+    private void HeadRotation(){
+        oPosition = transform.position;
+        target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        rotateDegree = Mathf.Atan2(target.y - oPosition.y, target.x - oPosition.x)*Mathf.Rad2Deg;
+        headRotate = Mathf.Atan2(target.y - oPosition.y, Mathf.Abs(target.x - oPosition.x))*Mathf.Rad2Deg;
+        //spriteRenderer.flipX=(rotateDegree<90&&rotateDegree>-90)?true:false;
+        transform.rotation=new Quaternion(0f,(rotateDegree<90&&rotateDegree>-90)?0f:180f,0f,0f);
+        transform.GetChild(0).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate/3f);
+        transform.GetChild(1).transform.rotation = Quaternion.Euler (0f, (rotateDegree<90&&rotateDegree>-90)?0f:180f,headRotate);//HeadRotation
+    }
     private void shotPosSet(){
         switch(GunSet){
             case 0:
@@ -190,9 +173,5 @@ public class playerMove : MonoBehaviour
             SceneManager.LoadScene("Menu");
         }
     }
-    private IEnumerator Laser()
-    {
-        yield return new WaitForSeconds(2.2f);
-        hiLaser.GetComponent<Animator>().enabled=false;
-    }
+
 }

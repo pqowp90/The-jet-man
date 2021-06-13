@@ -17,7 +17,7 @@ public class HpBar : MonoBehaviour
         slider.value = health;
         //CancelInvoke();
         //Invoke("nono",5);
-        if (health<0)
+        if (health<=0)
             slider.gameObject.SetActive(false);
     }
     void nono(){

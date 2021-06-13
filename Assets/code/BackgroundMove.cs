@@ -13,13 +13,15 @@ public class BackgroundMove : MonoBehaviour
     private Sprite[] sprite;
     [SerializeField]
     private bool hello=false;
+    [SerializeField]
+    private GameObject leftWall;
     
     void Start()
     {
         spriteRenderer1.sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
         spriteRenderer2.sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
-        startPos = transform.position.x;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        startPos = transform.position.y;
+        length = GetComponent<SpriteRenderer>().bounds.size.y;
     }
 
     void Update()
@@ -27,10 +29,10 @@ public class BackgroundMove : MonoBehaviour
         
         if(hello)
             return;
-        temp = cam.transform.position.x;
-        transform.position = new Vector3(startPos, transform.position.y, transform.position.z);
+        temp = cam.transform.position.y;
+        transform.position = new Vector3(transform.position.x, startPos, transform.position.z);
 
-        if(temp >  startPos + length) startPos += length;
+        if(temp >  startPos + length) {startPos += length;leftWall.SetActive(true);}
         else if(temp <  startPos - length) startPos -= length;
     }
     public void UpdateUi(){

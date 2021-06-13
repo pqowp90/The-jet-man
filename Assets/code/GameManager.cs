@@ -1,17 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject focusPoint;
     [SerializeField]
+    private GameObject startWall;
+    [SerializeField]
     private Camera playerCamera;
     private GameObject black,mouse;
     private GameObject ESC;
     [SerializeField]
     private GameObject dronePrefab;
+    [SerializeField]
+    private Animator startLaser2;
     private float timeSpeed=1f;
     public float recoilResistance{get;private set;}
     private bool ESCON=false;
@@ -33,13 +39,14 @@ public class GameManager : MonoBehaviour
     }
     public Vector2 maxPos{get;private set;}
     public Vector2 minPos{get;private set;}
-    public Vector2 spawnMaxPos{get;private set;}
-    public Vector2 spawnMinPos{get;private set;}
     [SerializeField]
     private Transform spawnGoMin;
     [SerializeField]
     private Transform spawnGoMax;
+    public Transform GoMin;
+    public Transform GoMax;
     public float speedenemy;
+    private bool goUp=false;
 
     void Awake()
     {
@@ -54,20 +61,22 @@ public class GameManager : MonoBehaviour
         }
         maxPos=new Vector2(9f,9f);
         minPos=new Vector2(-9f,-9f);
-        spawnMaxPos=new Vector2(playerCamera.transform.position.x+7f,2.36f);
-        spawnMinPos=new Vector2(playerCamera.transform.position.x+5f,-2.15f);
+        
         
     }
     void Update()
     {
-        spawnMaxPos=new Vector2(playerCamera.transform.position.x+7f,2.36f);
-        spawnMinPos=new Vector2(playerCamera.transform.position.x+5f,-2.15f);
+        if(goUp&&!menu){
+            playerCamera.GetComponent<playercamera>().maxPos.y += Time.deltaTime;
+        }
+        
         if(!menu&&!showMouse){
-            Cursor.visible = false;
+            //Cursor.visible = false;
         }
         if(Input.GetKeyDown(KeyCode.Escape)&&!menu){
             Continue();
         }
+
     }
     private IEnumerator SpawnDrone(){
         while(true){
@@ -98,14 +107,24 @@ public class GameManager : MonoBehaviour
         black.SetActive(true);
         timeSpeed = 0.2f;
         Time.timeScale = timeSpeed;
+        startWall.transform.DOMoveY(0.13f,3);
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
         yield return new WaitForSeconds(0.1f);
         playerCamera.GetComponent<playercamera>().hihi = null;
         timeSpeed = 1f;
         Time.timeScale = timeSpeed;
         black.SetActive(false);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.7f);
+        playerCamera.GetComponent<playercamera>().minPos.x = 7.65f;
         playerCamera.GetComponent<playercamera>().hihi = focusPoint;
+        startLaser2.SetTrigger("barrsa");
+        playerCamera.GetComponent<playercamera>().maxPos.y = playerCamera.transform.position.y;
+        goUp = true;
+        
+        
+        
+        
+        //playerCamera.GetComponent<playercamera>().hihi = focusPoint;
         StartCoroutine(SpawnDrone());
     }
     // void Quit(){
@@ -125,7 +144,7 @@ public class GameManager : MonoBehaviour
     }
     public void Continue(){
         if(!ESCON){
-            showMouse=true;
+            //showMouse=true;
             ESC.SetActive(true);
             ESCON=true;
             Time.timeScale = 0f;
@@ -135,7 +154,7 @@ public class GameManager : MonoBehaviour
             ESC.SetActive(false);
             ESCON=false;
             Time.timeScale = timeSpeed;
-            showMouse=false;
+            //showMouse=false;
             mouse.SetActive(true);
         }
     }

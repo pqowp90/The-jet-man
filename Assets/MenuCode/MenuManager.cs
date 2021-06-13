@@ -49,7 +49,7 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.GetInt("Select2",-1);
         audioSource = GetComponent<AudioSource>();
         instance = this;
-        money = PlayerPrefs.GetInt("MONEY",1000);
+        money = PlayerPrefs.GetInt("MONEY",10000);
         LoadGunSave();
         UpdateUI();
     }
@@ -160,7 +160,7 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("main");
     }
     public void StartClick(){
-        if(PlayerPrefs.GetInt("Select1")<0||PlayerPrefs.GetInt("Select2")<0){
+        if(PlayerPrefs.GetInt("Select1")>-1||PlayerPrefs.GetInt("Select2")>-1){
             backgroundMusic.FaidOut();
             FindObjectOfType<Canvas>().enabled = false;
             cameraAnimator.enabled = true;
@@ -174,7 +174,7 @@ public class MenuManager : MonoBehaviour
     }
     public void StoreClick(){
         LoadGunSave();
-        maincamera.GetComponent<playercamera>().zoom=1f;
+        maincamera.GetComponent<playercamera>().zoom=1.3f;
         sceneNum=1;
         UpdateMenu();
     }

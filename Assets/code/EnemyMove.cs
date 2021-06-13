@@ -24,11 +24,13 @@ public class EnemyMove : MonoBehaviour
     }
     void Update()
     {
-        myrigidbody.AddForce(new Vector2(gameManager.speedenemy*Time.deltaTime,0f));
+        myrigidbody.AddForce(new Vector2(0f,gameManager.speedenemy*Time.deltaTime));
+        if(gameManager.GoMin.position.y-1>transform.position.y)
+            MoveStart();
     }
     private void MoveStart(){
-        transform.DOMove(new Vector3(Random.Range(gameManager.spawnMinPos.x,gameManager.spawnMaxPos.x)
-        ,Random.Range(gameManager.spawnMinPos.y,gameManager.spawnMaxPos.y),0f),2f);
+        transform.DOMove(new Vector3(Random.Range(gameManager.GoMin.position.x,gameManager.GoMax.position.x)
+        ,Random.Range(gameManager.GoMin.position.y+2f,gameManager.GoMax.position.y+2f),0f),2f);
     }
     private void OnTriggerEnter2D(Collider2D other){
         if(other.CompareTag("Bullet")){

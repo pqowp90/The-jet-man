@@ -71,10 +71,10 @@ public class playercamera : MonoBehaviour
 
     }
     private IEnumerator StartLaser(){
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.4f);
         hihi.GetComponent<Animator>().SetTrigger("barrsa");
         yield return new WaitForSeconds(0.5f);
-        hiLaser.SetActive(true);
+        //hiLaser.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         hellohi.SetActive(true);
     }
