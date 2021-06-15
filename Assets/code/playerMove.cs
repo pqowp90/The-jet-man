@@ -27,6 +27,8 @@ public class playerMove : MonoBehaviour
     [SerializeField]
     private int[] gunDamage = new int[10];
 
+    [SerializeField]
+    private int[] gunStun = new int[10];
     void Start()
     {
         GameManager gameManager = GameManager.instance;
@@ -63,7 +65,7 @@ public class playerMove : MonoBehaviour
         x = 80 * Mathf.Cos(radian);
         y = 200 * Mathf.Sin(radian);
         if(y>0)y*=0.5f;
-        if(x>0)x*=GameManager.instance.recoilResistance;
+        
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
 
@@ -87,7 +89,7 @@ public class playerMove : MonoBehaviour
                     coolTime = 0.2f;
                     break;
                     case 2:
-                    Shoting(0.4f);
+                    Shoting(0.5f);
                     coolTime = 0.7f;
                     break;
                 }
@@ -154,6 +156,7 @@ public class playerMove : MonoBehaviour
                     sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20+(13*i),-20+(13*(i+1))));
                     sBullet.bulletSet = 1;
                     sBullet.bulletDagage = gunDamage[GunSet];
+                    sBullet.stun = gunStun[GunSet];
                 }
             }
             return;
@@ -163,6 +166,7 @@ public class playerMove : MonoBehaviour
         bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
         bullet.bulletSet = 0;
         bullet.bulletDagage = gunDamage[GunSet];
+        bullet.stun = gunStun[GunSet];
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){

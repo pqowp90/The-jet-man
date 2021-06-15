@@ -12,14 +12,26 @@ public class EnemyMove : MonoBehaviour
     private HpBar hpBar;
     public int maxHp=60;
     public int hp=0;
-    public float stun=200f;
+    private GameObject bullet;
+    private AllPooler allPooler;
+    
     void Awake()
     {
+        allPooler = GetComponent<AllPooler>();
         hpBar = GetComponentInChildren<HpBar>();
         hp = maxHp;
         spriteRenderer = GetComponent<SpriteRenderer>();
         myrigidbody = GetComponent<Rigidbody2D>();
         gameManager = GameManager.instance;
+        MoveStart();
+    }
+    private void OnEnable(){
+        spriteRenderer.color = new Color(1f,1f,1f,1f);
+        SetColor(new Color(1f,1f,1f,1f));
+        hp = maxHp;
+    }
+    private void EnemyReset(){
+        hp = maxHp;
         MoveStart();
     }
     void Update()
@@ -33,21 +45,39 @@ public class EnemyMove : MonoBehaviour
         ,Random.Range(gameManager.GoMin.position.y+2f,gameManager.GoMax.position.y+2f),0f),2f);
     }
     private void OnTriggerEnter2D(Collider2D other){
-        if(other.CompareTag("Bullet")){
+        if(other.CompareTag("Bullet")&&gameObject.activeSelf == true){
+            bullet = gameManager.allPoolManager.GetPool(0);
+            bullet.transform.position = (other.transform.position+transform.position)/2;
+            bullet.SetActive(true);
+            BulletMove bulletMove = other.GetComponent<BulletMove>();
             StartCoroutine(Damaged());
             rotateDegree=other.gameObject.transform.eulerAngles.z;
             radian = rotateDegree*Mathf.PI/180f;
-            x = stun*Mathf.Cos(radian);
-            y = stun*Mathf.Sin(radian);
+            x = bulletMove.stun*Mathf.Cos(radian);
+            y = bulletMove.stun*Mathf.Sin(radian);
             myrigidbody.AddForce(new Vector3(x,y,0f));
             if(other.gameObject.activeSelf == true){
-                hp -= other.gameObject.GetComponent<BulletMove>().bulletDagage;
+                hp -= bulletMove.bulletDagage;
+                if(hp<=0){
+                    bullet = gameManager.allPoolManager.GetPool(2);
+                    bullet.transform.position = transform.position;
+                    bullet.SetActive(true);
+                    bullet = gameManager.allPoolManager.GetPool(0);
+                    bullet.transform.position = (other.transform.position+transform.position)/2;
+                    bullet.SetActive(true);
+                    allPooler.Dispown();
+                    
+                }
                 hpBar.sethealth(hp,maxHp);
-                other.gameObject.GetComponent<BulletMove>().DestroyBullet();
+                bulletMove.DestroyBullet();
             }
+        }
+        if(other.gameObject.layer==12){
+            transform.DOKill();
         }
     }
     private IEnumerator Damaged(){
+        transform.DOKill();
         spriteRenderer.color = new Color(0.5f,0.5f,0.5f,1f);
         SetColor(new Color(0.5f,0.5f,0.5f,1f));
         yield return new WaitForSeconds(0.1f);
@@ -60,5 +90,8 @@ public class EnemyMove : MonoBehaviour
                 transform.GetChild(i).GetComponent<SpriteRenderer>().color = color;
         }
     }
-    
+    private void Die(){
+        transform.DOKill();
+
+    }
 }

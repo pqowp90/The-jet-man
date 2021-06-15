@@ -12,6 +12,7 @@ public class BulletMove : MonoBehaviour
     private Animator animator;
     public int bulletSet;
     public int bulletDagage;
+    public float stun=200f;
     public void Awake(){
         
         animator = GetComponent<Animator>();

@@ -124,6 +124,7 @@ public class MenuManager : MonoBehaviour
             }
         }
     }
+    
     public void SelectGun(bool hi){
         storeAnimator.SetBool("Select",false);
         if(hi){
@@ -160,9 +161,11 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("main");
     }
     public void StartClick(){
-        if(PlayerPrefs.GetInt("Select1")>-1||PlayerPrefs.GetInt("Select2")>-1){
+        if(PlayerPrefs.GetInt("Select1")>0||PlayerPrefs.GetInt("Select2")>0){
+            
             backgroundMusic.FaidOut();
             FindObjectOfType<Canvas>().enabled = false;
+            FindObjectOfType<Canvas>().gameObject.SetActive(false);
             cameraAnimator.enabled = true;
             maincamera.GetComponent<AudioSource>().enabled = true;
             gunAnimator.SetTrigger("MenuPlayerGo");
@@ -184,6 +187,7 @@ public class MenuManager : MonoBehaviour
         UpdateMenu();
     }
     public void Back(){
+        storeAnimator.SetBool("Select",false);
         if(sceneNum==2){
             for(int i=0;i<2;i++){
                 scrollbarCode[i].Set();

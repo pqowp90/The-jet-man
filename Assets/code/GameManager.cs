@@ -41,15 +41,18 @@ public class GameManager : MonoBehaviour
     public Vector2 minPos{get;private set;}
     [SerializeField]
     private Transform spawnGoMin;
+    private GameObject drone;
     [SerializeField]
     private Transform spawnGoMax;
     public Transform GoMin;
     public Transform GoMax;
     public float speedenemy;
     private bool goUp=false;
+    public AllPoolManager allPoolManager{get; private set;}
 
     void Awake()
     {
+        allPoolManager = FindObjectOfType<AllPoolManager>();
         recoilResistance=0.8f;
         focusPoint = GameObject.Find("FocusPoint");
         playerCamera = FindObjectOfType<Camera>();
@@ -88,7 +91,9 @@ public class GameManager : MonoBehaviour
 
             for(int i=0;i<3;i++){
                 yield return new WaitForSeconds(0.2f);
-                Instantiate(dronePrefab, new Vector2(RandomX,RandomY),Quaternion.identity);
+                drone = GameManager.instance.allPoolManager.GetPool(1);
+                drone.transform.position = new Vector3(RandomX,RandomY,0f);
+                drone.SetActive(true);
             }
             yield return new WaitForSeconds(spawnDeley);
         }
