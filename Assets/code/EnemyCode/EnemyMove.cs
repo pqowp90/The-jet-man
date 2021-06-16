@@ -14,9 +14,11 @@ public class EnemyMove : MonoBehaviour
     public int hp=0;
     private GameObject bullet;
     private AllPooler allPooler;
+    private playercamera playerCamera;
     
     void Awake()
     {
+        playerCamera  = GameManager.instance.playerCamera.GetComponent<playercamera>();;
         allPooler = GetComponent<AllPooler>();
         hpBar = GetComponentInChildren<HpBar>();
         hp = maxHp;
@@ -36,8 +38,8 @@ public class EnemyMove : MonoBehaviour
     }
     void Update()
     {
-        myrigidbody.AddForce(new Vector2(0f,gameManager.speedenemy*Time.deltaTime));
-        if(gameManager.GoMin.position.y-1>transform.position.y)
+        myrigidbody.AddForce(new Vector2(0f,gameManager.speedenemy*Time.deltaTime*1.3f));
+        if(gameManager.GoMin.position.y-0.75f>transform.position.y)
             MoveStart();
     }
     private void MoveStart(){
@@ -46,6 +48,7 @@ public class EnemyMove : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other){
         if(other.CompareTag("Bullet")&&gameObject.activeSelf == true){
+            
             bullet = gameManager.allPoolManager.GetPool(0);
             bullet.transform.position = (other.transform.position+transform.position)/2;
             bullet.SetActive(true);
@@ -59,6 +62,7 @@ public class EnemyMove : MonoBehaviour
             if(other.gameObject.activeSelf == true){
                 hp -= bulletMove.bulletDagage;
                 if(hp<=0){
+                    playerCamera.startshake(0.1f,0.3f);
                     bullet = gameManager.allPoolManager.GetPool(2);
                     bullet.transform.position = transform.position;
                     bullet.SetActive(true);

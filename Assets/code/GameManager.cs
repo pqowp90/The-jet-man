@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject startWall;
     [SerializeField]
-    private Camera playerCamera;
+    public Camera playerCamera;
     private GameObject black,mouse;
     private GameObject ESC;
     [SerializeField]

@@ -3744,7 +3744,7 @@ GameObject:
   - component: {fileID: 328874628}
   - component: {fileID: 328874627}
   m_Layer: 0
-  m_Name: rifle
+  m_Name: shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3761,7 +3761,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1028122707}
+  - {fileID: 1881612938}
   - {fileID: 1451601034}
   - {fileID: 184468056}
   - {fileID: 272904595}
@@ -3787,7 +3787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95935ab3e889a19408c4915b4fe635d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myGunSet: 1
+  myGunSet: 2
   select: {fileID: 272904594}
   buy: {fileID: 1451601030}
   upgread: {fileID: 184468052}
@@ -6904,12 +6904,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.8790382, y: 1.0699999, z: 1.0699999}
   m_Children: []
-  m_Father: {fileID: 328874626}
+  m_Father: {fileID: 1822619455}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 68, y: -2}
+  m_AnchoredPosition: {x: 68, y: -5}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1028122708
@@ -15352,7 +15352,7 @@ GameObject:
   - component: {fileID: 1822619457}
   - component: {fileID: 1822619456}
   m_Layer: 0
-  m_Name: shotgun
+  m_Name: rifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15369,7 +15369,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1881612938}
+  - {fileID: 1028122707}
   - {fileID: 917181887}
   - {fileID: 1024598052}
   - {fileID: 1261130424}
@@ -15395,7 +15395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95935ab3e889a19408c4915b4fe635d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myGunSet: 2
+  myGunSet: 1
   select: {fileID: 1261130423}
   buy: {fileID: 917181883}
   upgread: {fileID: 1024598048}
@@ -15556,12 +15556,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.79999995, y: 0.79999995, z: 0.79999995}
   m_Children: []
-  m_Father: {fileID: 1822619455}
+  m_Father: {fileID: 328874626}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 45.300034, y: 8.7}
+  m_AnchoredPosition: {x: 45.300034, y: 3}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1881612939
