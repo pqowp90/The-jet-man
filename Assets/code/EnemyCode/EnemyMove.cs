@@ -8,13 +8,14 @@ public class EnemyMove : MonoBehaviour
     private float radian,x,y,rotateDegree;
     GameManager gameManager;
     private Rigidbody2D myrigidbody;
-    private SpriteRenderer spriteRenderer;
+    protected SpriteRenderer spriteRenderer;
     private HpBar hpBar;
     public int maxHp=60;
     public int hp=0;
     private GameObject bullet;
     private AllPooler allPooler;
     private playercamera playerCamera;
+    private Tween tween;
     
     void Awake()
     {
@@ -27,24 +28,29 @@ public class EnemyMove : MonoBehaviour
         gameManager = GameManager.instance;
         MoveStart();
     }
-    private void OnEnable(){
+    protected void Reset(){
         spriteRenderer.color = new Color(1f,1f,1f,1f);
         SetColor(new Color(1f,1f,1f,1f));
         hp = maxHp;
     }
-    private void EnemyReset(){
-        hp = maxHp;
-        MoveStart();
-    }
-    void Update()
+    private void Update()
     {
+        Move();
+    }
+    protected virtual void Move(){
         myrigidbody.AddForce(new Vector2(0f,gameManager.speedenemy*Time.deltaTime*1.3f));
         if(gameManager.GoMin.position.y-0.75f>transform.position.y)
             MoveStart();
     }
     private void MoveStart(){
-        transform.DOMove(new Vector3(Random.Range(gameManager.GoMin.position.x,gameManager.GoMax.position.x)
+        if(tween!=null)
+            if(tween.active) return;
+        tween = transform.DOMove(new Vector3(Random.Range(gameManager.GoMin.position.x,gameManager.GoMax.position.x)
         ,Random.Range(gameManager.GoMin.position.y+2f,gameManager.GoMax.position.y+2f),0f),2f);
+        Invoke("NoNodOtWeen",2f);
+    }
+    private void NoNodOtWeen(){
+        tween.Kill();
     }
     private void OnTriggerEnter2D(Collider2D other){
         if(other.CompareTag("Bullet")&&gameObject.activeSelf == true){
@@ -69,6 +75,13 @@ public class EnemyMove : MonoBehaviour
                     bullet = gameManager.allPoolManager.GetPool(0);
                     bullet.transform.position = (other.transform.position+transform.position)/2;
                     bullet.SetActive(true);
+                    for(int i=0;i<3;i++){
+                        bullet = gameManager.allPoolManager.GetPool(3);
+                        bullet.transform.position = transform.position;
+                        bullet.SetActive(true);
+                        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-60f,60f),Random.Range(50f,200f)));
+                    }
+                    Reset();
                     allPooler.Dispown();
                     
                 }
@@ -82,13 +95,14 @@ public class EnemyMove : MonoBehaviour
     }
     private IEnumerator Damaged(){
         transform.DOKill();
+
         spriteRenderer.color = new Color(0.5f,0.5f,0.5f,1f);
         SetColor(new Color(0.5f,0.5f,0.5f,1f));
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = new Color(1f,1f,1f,1f);
         SetColor(new Color(1f,1f,1f,1f));
     }
-    private void SetColor(Color color){
+    protected void SetColor(Color color){
         for(int i=0;i<transform.childCount;i++){
             if(transform.GetChild(i).GetComponent<SpriteRenderer>()!=null)
                 transform.GetChild(i).GetComponent<SpriteRenderer>().color = color;

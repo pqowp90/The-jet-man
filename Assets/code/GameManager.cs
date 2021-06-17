@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private Animator startLaser2;
     private float timeSpeed=1f;
     public float recoilResistance{get;private set;}
+    public GameObject player{get; private set;}
     private bool ESCON=false;
     [SerializeField]
     private bool menu=false;
@@ -52,6 +53,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if(!menu)
+            player = FindObjectOfType<playerMove>().gameObject;
         allPoolManager = FindObjectOfType<AllPoolManager>();
         recoilResistance=0.8f;
         focusPoint = GameObject.Find("FocusPoint");
@@ -85,7 +88,7 @@ public class GameManager : MonoBehaviour
         while(true){
             
             float spawnDeley = 0f;
-            spawnDeley = Random.Range(8f,10f);
+            spawnDeley = Random.Range(2f,5f);
             float RandomY = Random.Range(spawnGoMin.position.y,spawnGoMax.position.y);
             float RandomX = Random.Range(spawnGoMin.position.x,spawnGoMax.position.x);
 
