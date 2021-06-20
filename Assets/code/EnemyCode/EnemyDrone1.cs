@@ -43,20 +43,20 @@ public class EnemyDrone1 : EnemyMove
         gunRadian = rotationZ*Mathf.PI/180f;
         gunX = 80 * Mathf.Cos(gunRadian);
         gunY = 80 * Mathf.Sin(gunRadian);
-        shotingtime+=Time.deltaTime;
     }
     private void aBarssaDeley(){
+        shotingtime+=Time.deltaTime;
         if(shotingtime>shotDeley){
             shotingtime=0f;
             Shoting();
         }
     }
     private void Shoting(){
-        myRigidbodyhi.AddForce(new Vector3(-gunX,-gunY,0f));
-
         var bullet = allPoolManager.GetPool(4).GetComponent<BulletMove>();
-        if(bullet!=null)
-            bullet.transform.position=barSsaPos.transform.position;
+        if(bullet==null)return;
+
+        myRigidbodyhi.AddForce(new Vector3(-gunX,-gunY,0f));
+        bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotationZ);
         bullet.bulletSet = 0;
         bullet.bulletDagage = gunDamage;

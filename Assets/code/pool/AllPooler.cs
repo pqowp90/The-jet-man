@@ -11,7 +11,7 @@ public class AllPooler : MonoBehaviour
     private void Start(){
         index = setIndex;
     }
-    public void Dispown(){
+    public void Despawn(){
         transform.SetParent(GameManager.instance.allPoolManager.transform);
         gameObject.SetActive(false);
     }

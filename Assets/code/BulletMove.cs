@@ -15,6 +15,8 @@ public class BulletMove : MonoBehaviour
     public float stun=200f;
     [SerializeField]
     private bool enemy;
+    [SerializeField]
+    private Sprite[] sprite;
     public void Awake(){
         
         animator = GetComponent<Animator>();
@@ -22,7 +24,9 @@ public class BulletMove : MonoBehaviour
     public void StartDeley(){
         CancelInvoke();
         Invoke("DestroyBullet",3f);
+        
     }
+
     private void Update()
     {
         if(!enemy){
@@ -35,6 +39,16 @@ public class BulletMove : MonoBehaviour
             }
         }
         transform.Translate(Vector2.right*speed*Time.deltaTime);
+    }
+    public void BulletSet(){
+        switch(bulletSet){
+            case 0:
+            animator.Play("PulseAnimation");
+            break;
+            case 1:
+            animator.Play("BoltAnimation");
+            break;
+        }
     }
     public void DestroyBullet(){
         CancelInvoke();

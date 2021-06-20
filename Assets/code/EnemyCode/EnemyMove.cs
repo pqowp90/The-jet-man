@@ -68,28 +68,31 @@ public class EnemyMove : MonoBehaviour
             if(other.gameObject.activeSelf == true){
                 hp -= bulletMove.bulletDagage;
                 if(hp<=0){
-                    playerCamera.startshake(0.1f,0.3f);
-                    bullet = gameManager.allPoolManager.GetPool(2);
-                    bullet.transform.position = transform.position;
-                    bullet.SetActive(true);
-                    bullet = gameManager.allPoolManager.GetPool(0);
-                    bullet.transform.position = (other.transform.position+transform.position)/2;
-                    bullet.SetActive(true);
-                    for(int i=0;i<3;i++){
-                        bullet = gameManager.allPoolManager.GetPool(3);
-                        bullet.transform.position = transform.position;
-                        bullet.SetActive(true);
-                        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-60f,60f),Random.Range(50f,200f)));
-                    }
-                    Reset();
-                    allPooler.Dispown();
-                    
+                    Die(other);
                 }
                 hpBar.sethealth(hp,maxHp);
                 bulletMove.DestroyBullet();
             }
         }
         
+    }
+    protected void Die(Collider2D other){
+        playerCamera.startshake(0.1f,0.3f);
+        bullet = gameManager.allPoolManager.GetPool(2);
+        bullet.transform.position = transform.position;
+        bullet.SetActive(true);
+        bullet = gameManager.allPoolManager.GetPool(0);
+        bullet.transform.position = (other.transform.position+transform.position)/2;
+        bullet.SetActive(true);
+        for(int i=0;i<3;i++){
+            bullet = gameManager.allPoolManager.GetPool(3);
+            bullet.transform.position = transform.position;
+            bullet.SetActive(true);
+            bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-60f,60f),Random.Range(50f,200f)));
+        }
+        Reset();
+        allPooler.Despawn();
+                    
     }
     protected void OnTriggerStay2D(Collider2D other){
         if(other.gameObject.layer==12){

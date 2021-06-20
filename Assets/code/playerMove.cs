@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.Rendering.Universal;
+using DG.Tweening;
 
 public class playerMove : MonoBehaviour
 {
     private Rigidbody2D myrigidbody;
     private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private SpriteRenderer[] childSpriteRenderers;
     [SerializeField]
     private Animator gunAnimator;
     [SerializeField]
@@ -19,6 +23,8 @@ public class playerMove : MonoBehaviour
     private float rotateDegree,headRotate,radian,x,y,goTime,wheelInput;
     [SerializeField]
     private float coolTime;
+    public int maxHp=60;
+    public int hp=0;
     private Vector3 oPosition,target;
     private int GunSet=0;
     private bool No=true;
@@ -29,8 +35,16 @@ public class playerMove : MonoBehaviour
 
     [SerializeField]
     private int[] gunStun = new int[10];
+    private HpBar hpBar;
+    [SerializeField]
+    private Light2D light2D;
+    private Collider2D myHitBox;
     void Start()
     {
+        myHitBox = GetComponentInChildren<Collider2D>();
+        light2D = GetComponentInChildren<Light2D>();
+        hpBar = transform.GetComponentInChildren<HpBar>();
+        hp = maxHp;
         GameManager gameManager = GameManager.instance;
         cameraWidth=Camera.main.orthographicSize*Camera.main.aspect;
         playerCamera=FindObjectOfType<playercamera>();
@@ -177,7 +191,33 @@ public class playerMove : MonoBehaviour
             SceneManager.LoadScene("Menu");
         }
         if(other.gameObject.layer==14){
-            Debug.Log("dddddddddddddddddddddddddddddddddddddddddddd");
+            BulletMove bulletMove = other.transform.parent.GetComponent<BulletMove>();
+            hp -= bulletMove.bulletDagage;
+            hpBar.sethealth(hp,maxHp);
+            StartCoroutine(Hit());
+        }
+    }
+    private IEnumerator Hit(){
+        myHitBox.enabled = false;
+        playerCamera.startshake(0.2f,0.3f);
+        spriteRenderer.color = new Color(1f,1f,1f,1f);
+        DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,0.4849057f,0.4849057f,1f),0.1f);
+        //light2D.color = new Color(1f,0.4849057f,0.4849057f,1f);
+        yield return new WaitForSeconds(0.1f);
+        DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,1f,1f,1f),0.2f);
+        //light2D.color = new Color(1f,1f,1f,1f);
+        for(int i=0;i<10;i++){
+            SetColor(new Color(0.5f,0.5f,0.5f,1f));
+            yield return new WaitForSeconds(0.05f);
+            SetColor(new Color(1f,1f,1f,1f));
+            yield return new WaitForSeconds(0.05f);
+        }
+        myHitBox.enabled = true;
+    }
+    private void SetColor(Color color){
+        for(int i=0;i<childSpriteRenderers.Length;i++){
+            spriteRenderer.color = color;
+            childSpriteRenderers[i].color = color;
         }
     }
 

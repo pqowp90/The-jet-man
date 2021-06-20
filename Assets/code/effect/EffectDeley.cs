@@ -15,6 +15,6 @@ public class EffectDeley : MonoBehaviour
         Invoke("GoIn",deley);
     }
     private void GoIn(){
-        allPooler.Dispown();
+        allPooler.Despawn();
     }
 }
