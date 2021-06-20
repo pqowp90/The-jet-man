@@ -148,11 +148,11 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.97
-  m_Color: {r: 0.2396226, g: 0.51693684, b: 1, a: 1}
-  m_Intensity: 1.5
+  m_Color: {r: 0.15690638, g: 0.38259804, b: 0.7735849, a: 1}
+  m_Intensity: 1.8
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
-  m_LightCookieSprite: {fileID: 21300000, guid: 19cfa9baac6934475bac9a34a71dc532, type: 3}
+  m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
   m_AlphaBlendOnOverlap: 0

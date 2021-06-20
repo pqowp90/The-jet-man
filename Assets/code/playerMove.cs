@@ -176,6 +176,9 @@ public class playerMove : MonoBehaviour
             Time.timeScale = 1f;
             SceneManager.LoadScene("Menu");
         }
+        if(other.gameObject.layer==14){
+            Debug.Log("dddddddddddddddddddddddddddddddddddddddddddd");
+        }
     }
 
 }

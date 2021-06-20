@@ -13,6 +13,8 @@ public class BulletMove : MonoBehaviour
     public int bulletSet;
     public int bulletDagage;
     public float stun=200f;
+    [SerializeField]
+    private bool enemy;
     public void Awake(){
         
         animator = GetComponent<Animator>();
@@ -23,18 +25,20 @@ public class BulletMove : MonoBehaviour
     }
     private void Update()
     {
-        if(animator!=null)
+        if(!enemy){
+            if(animator!=null)
             animator.SetInteger("BulletSet",bulletSet);
-        if(ps!=null){//잔상회전
-            ParticleSystem.MainModule main = ps.main;
-            if(main.startRotation.mode == ParticleSystemCurveMode.Constant)
-                main.startRotation = -transform.eulerAngles.z*Mathf.Deg2Rad;
+            if(ps!=null){//잔상회전
+                ParticleSystem.MainModule main = ps.main;
+                if(main.startRotation.mode == ParticleSystemCurveMode.Constant)
+                    main.startRotation = -transform.eulerAngles.z*Mathf.Deg2Rad;
+            }
         }
-        //-----------------------------------------------------------------------------------------
         transform.Translate(Vector2.right*speed*Time.deltaTime);
     }
     public void DestroyBullet(){
         CancelInvoke();
         ObjectPoolling.ReturnObject(this);
     }
+    
 }

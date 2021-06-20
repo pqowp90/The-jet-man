@@ -8,9 +8,12 @@ public class JogakJogak : MonoBehaviour
     private Sprite[] sprite;
     private GameObject jogak;
     private SpriteRenderer spriteRenderer;
-    void Start()
+    void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = sprite[Random.Range(0,3)];
+    }
+    private void OnEnable(){
         spriteRenderer.sprite = sprite[Random.Range(0,3)];
     }
 

@@ -7,7 +7,7 @@ public class EnemyMove : MonoBehaviour
 {
     private float radian,x,y,rotateDegree;
     GameManager gameManager;
-    private Rigidbody2D myrigidbody;
+    protected Rigidbody2D myRigidbodyhi;
     protected SpriteRenderer spriteRenderer;
     private HpBar hpBar;
     public int maxHp=60;
@@ -24,11 +24,11 @@ public class EnemyMove : MonoBehaviour
         hpBar = GetComponentInChildren<HpBar>();
         hp = maxHp;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        myrigidbody = GetComponent<Rigidbody2D>();
+        myRigidbodyhi = GetComponent<Rigidbody2D>();
         gameManager = GameManager.instance;
         MoveStart();
     }
-    protected void Reset(){
+    protected virtual void Reset(){
         spriteRenderer.color = new Color(1f,1f,1f,1f);
         SetColor(new Color(1f,1f,1f,1f));
         hp = maxHp;
@@ -38,7 +38,7 @@ public class EnemyMove : MonoBehaviour
         Move();
     }
     protected virtual void Move(){
-        myrigidbody.AddForce(new Vector2(0f,gameManager.speedenemy*Time.deltaTime*1.3f));
+        myRigidbodyhi.AddForce(new Vector2(0f,gameManager.speedenemy*Time.deltaTime*1.3f));
         if(gameManager.GoMin.position.y-0.75f>transform.position.y)
             MoveStart();
     }
@@ -52,7 +52,7 @@ public class EnemyMove : MonoBehaviour
     private void NoNodOtWeen(){
         tween.Kill();
     }
-    private void OnTriggerEnter2D(Collider2D other){
+    protected void OnTriggerEnter2D(Collider2D other){
         if(other.CompareTag("Bullet")&&gameObject.activeSelf == true){
             
             bullet = gameManager.allPoolManager.GetPool(0);
@@ -64,7 +64,7 @@ public class EnemyMove : MonoBehaviour
             radian = rotateDegree*Mathf.PI/180f;
             x = bulletMove.stun*Mathf.Cos(radian);
             y = bulletMove.stun*Mathf.Sin(radian);
-            myrigidbody.AddForce(new Vector3(x,y,0f));
+            myRigidbodyhi.AddForce(new Vector3(x,y,0f));
             if(other.gameObject.activeSelf == true){
                 hp -= bulletMove.bulletDagage;
                 if(hp<=0){
@@ -89,6 +89,9 @@ public class EnemyMove : MonoBehaviour
                 bulletMove.DestroyBullet();
             }
         }
+        
+    }
+    protected void OnTriggerStay2D(Collider2D other){
         if(other.gameObject.layer==12){
             transform.DOKill();
         }
@@ -108,6 +111,7 @@ public class EnemyMove : MonoBehaviour
                 transform.GetChild(i).GetComponent<SpriteRenderer>().color = color;
         }
     }
+    
     private void Die(){
         transform.DOKill();
 

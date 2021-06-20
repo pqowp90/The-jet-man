@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class EnemyDrone1 : EnemyMove
+public class EnemyDrone2 : EnemyMove
 {
     private Vector3 diff;
     private float rotationZ;
@@ -55,7 +55,7 @@ public class EnemyDrone1 : EnemyMove
         myRigidbodyhi.AddForce(new Vector3(-gunX,-gunY,0f));
 
         var bullet = allPoolManager.GetPool(4).GetComponent<BulletMove>();
-        if(bullet!=null)
+        if(barSsaPos!=null)
             bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotationZ);
         bullet.bulletSet = 0;
@@ -64,11 +64,4 @@ public class EnemyDrone1 : EnemyMove
         bullet.gameObject.SetActive(true);
         transform.DOKill();
     }
-
-
-    protected override void Reset(){
-        base.Reset();
-        Debug.Log("dd");
-    }
-    
 }

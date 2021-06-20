@@ -50,7 +50,8 @@ public class GameManager : MonoBehaviour
     public float speedenemy;
     private bool goUp=false;
     public AllPoolManager allPoolManager{get; private set;}
-
+    [SerializeField]
+    private float spawnDeley;
     void Awake()
     {
         if(!menu)
@@ -85,12 +86,14 @@ public class GameManager : MonoBehaviour
 
     }
     private IEnumerator SpawnDrone(){
+        float RandomY;
+        float RandomX;
+        
         while(true){
             
-            float spawnDeley = 0f;
-            spawnDeley = Random.Range(2f,5f);
-            float RandomY = Random.Range(spawnGoMin.position.y,spawnGoMax.position.y);
-            float RandomX = Random.Range(spawnGoMin.position.x,spawnGoMax.position.x);
+            spawnDeley = Random.Range(5f,7f);
+            RandomY = Random.Range(spawnGoMin.position.y,spawnGoMax.position.y);
+            RandomX = Random.Range(spawnGoMin.position.x,spawnGoMax.position.x);
 
             for(int i=0;i<3;i++){
                 yield return new WaitForSeconds(0.2f);
