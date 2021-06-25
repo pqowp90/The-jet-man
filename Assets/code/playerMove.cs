@@ -20,6 +20,9 @@ public class playerMove : MonoBehaviour
     private playercamera playerCamera;
     [SerializeField]
     private GameObject barSsaPos;
+    [SerializeField]
+    private AudioClip[] audioClip;
+    private AudioSource audioSource;
     private float rotateDegree,headRotate,radian,x,y,goTime,wheelInput;
     [SerializeField]
     private float coolTime;
@@ -38,10 +41,17 @@ public class playerMove : MonoBehaviour
     private HpBar hpBar;
     [SerializeField]
     private Light2D light2D;
+    [SerializeField]
     private Collider2D myHitBox;
+    private bool isdead=false;
+    private bool damaged=false;
+    [SerializeField]
+    private GameObject ending;
     void Start()
     {
-        myHitBox = GetComponentInChildren<Collider2D>();
+        
+        GameManager.instance.isdead = false;
+        audioSource = GetComponent<AudioSource>();
         light2D = GetComponentInChildren<Light2D>();
         hpBar = transform.GetComponentInChildren<HpBar>();
         hp = maxHp;
@@ -58,11 +68,15 @@ public class playerMove : MonoBehaviour
         shotPosSet();
     }
     public void LoadGunSet(){
-        gunset[0]=PlayerPrefs.GetInt("Select1");
-        gunset[1]=PlayerPrefs.GetInt("Select2");
+        gunset[0]=PlayerPrefs.GetInt("Select1",-1);
+        gunset[1]=PlayerPrefs.GetInt("Select2",-1);
+        gunDamage[gunset[0]]+=PlayerPrefs.GetInt("S1UP")*3;
+        if(gunset[1]!=-1)
+            gunDamage[gunset[1]]+=PlayerPrefs.GetInt("S2UP")*3;
     }
     void Update()
     {
+        if(isdead)return;
         if(coolTime>0)
             coolTime-=Time.deltaTime;
         if(No){//StartAni
@@ -91,9 +105,7 @@ public class playerMove : MonoBehaviour
                 gunAnimator.SetBool("Shoting",true);
                 if(GunSet!=1)
                     gunAnimator.SetTrigger("Shot");
-                // audioSource.clip = audioClip[GunSet];
-                // audioSource.time = 0;
-                // audioSource.Play();
+                
                 switch(GunSet){
                     case 0:
                     Shoting(1f);
@@ -134,6 +146,11 @@ public class playerMove : MonoBehaviour
         
         
     }
+    public void GUNSETTING(int hi){
+        if(gunset[hi]!=-1)
+            GunSet=gunset[hi];
+            gunAnimator.SetInteger("GunSet",gunset[hi]);
+    }
     private void HeadRotation(){
         oPosition = transform.position;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -171,6 +188,7 @@ public class playerMove : MonoBehaviour
                     sBullet.bulletSet = 1;
                     sBullet.bulletDagage = gunDamage[GunSet];
                     sBullet.stun = gunStun[GunSet];
+                    sBullet.gameObject.SetActive(true);
                 }
             }
             return;
@@ -181,24 +199,74 @@ public class playerMove : MonoBehaviour
         bullet.bulletSet = 0;
         bullet.bulletDagage = gunDamage[GunSet];
         bullet.stun = gunStun[GunSet];
+        bullet.gameObject.SetActive(true);
+
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){
             if(FindObjectOfType<BackgroundMusic>()!=null)
                 Destroy(FindObjectOfType<BackgroundMusic>().gameObject);
-            Debug.Log("die!!");
-            Time.timeScale = 1f;
-            SceneManager.LoadScene("Menu");
+            hp = 0;
+            StartCoroutine(DieManNONO());
+            return; 
         }
         if(other.gameObject.layer==14){
             BulletMove bulletMove = other.transform.parent.GetComponent<BulletMove>();
+            if(damaged){
+                bulletMove.DespawnBullet();
+                return;
+            }
             hp -= bulletMove.bulletDagage;
+            bulletMove.DespawnBullet();
             hpBar.sethealth(hp,maxHp);
+            if(hp <= 0){
+                if(FindObjectOfType<BackgroundMusic>()!=null)
+                    Destroy(FindObjectOfType<BackgroundMusic>().gameObject);
+                StartCoroutine(DieManNONO());
+                return; 
+            }
             StartCoroutine(Hit());
         }
     }
-    private IEnumerator Hit(){
+    private IEnumerator DieManNONO(){
+        gunAnimator.SetBool("Shoting",false);
+        childSpriteRenderers[1].transform.parent.transform.DOLocalMove(new Vector3(Random.Range(-0.2f,0.2f),-1.1f,0f),1.2f);
+        childSpriteRenderers[1].transform.parent.transform.DOLocalRotate(new Vector3(Random.Range(-50f,50f),0f,0f),1.2f);
+        //animator.enabled=true;
+        //animator.Play("playerdie");
+        myrigidbody.velocity=Vector2.zero;
         myHitBox.enabled = false;
+        var bullet = GameManager.instance.allPoolManager.GetPool(0);
+        ParticleSystem.MainModule parmain = bullet.GetComponent<ParticleSystem>().main;
+        parmain.startColor=new Color(0.6603774f,0.2143111f,0.2143111f,1f);
+        bullet.transform.position = transform.position;
+        bullet.SetActive(true);
+        isdead=true;
+        GameManager.instance.isdead = true;
+        //childSpriteRenderers[1].transform.SetParent(null);
+        audioSource.clip = audioClip[1];
+        audioSource.time = 0;
+        audioSource.Play();
+        Time.timeScale = 0.1f;
+        playerCamera.zoom = 2f;
+        playerCamera.hihi = null;
+        playerCamera.bound=false;
+        GameManager.instance.SaveAddMoney();
+        yield return new WaitForSeconds(0.2f);
+        ending.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        
+        playerCamera.zoom = 0f;
+        yield return new WaitForSeconds(0.1f);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Menu");
+    }
+    private IEnumerator Hit(){
+        audioSource.clip = audioClip[0];
+        audioSource.time = 0;
+        audioSource.Play();
+        damaged = true;
+        //myHitBox.enabled = false;
         playerCamera.startshake(0.2f,0.3f);
         spriteRenderer.color = new Color(1f,1f,1f,1f);
         DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,0.4849057f,0.4849057f,1f),0.1f);
@@ -212,7 +280,8 @@ public class playerMove : MonoBehaviour
             SetColor(new Color(1f,1f,1f,1f));
             yield return new WaitForSeconds(0.05f);
         }
-        myHitBox.enabled = true;
+        damaged = false;
+        //myHitBox.enabled = true;
     }
     private void SetColor(Color color){
         for(int i=0;i<childSpriteRenderers.Length;i++){
@@ -220,5 +289,6 @@ public class playerMove : MonoBehaviour
             childSpriteRenderers[i].color = color;
         }
     }
+    
 
 }

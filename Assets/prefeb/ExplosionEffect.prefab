@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2421355913727374297}
   - component: {fileID: 1217090549704452113}
   - component: {fileID: -6599846613546516858}
-  - component: {fileID: 208617293352029072}
+  - component: {fileID: 7356149580123143556}
   m_Layer: 0
   m_Name: ExplosionEffect
   m_TagString: Untagged
@@ -270,7 +270,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &208617293352029072
+--- !u!114 &7356149580123143556
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,3 +282,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9230b6c181fd1d44c9b395741afa1110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveName: EffectVolume

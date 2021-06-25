@@ -16,10 +16,15 @@ public class EnemyMove : MonoBehaviour
     private AllPooler allPooler;
     private playercamera playerCamera;
     private Tween tween;
+    [SerializeField]
+    private float stunLess=1f;
+    [SerializeField]
+    private int cost;
+    
     
     void Awake()
     {
-        playerCamera  = GameManager.instance.playerCamera.GetComponent<playercamera>();;
+        playerCamera  = GameManager.instance.playerCamera.GetComponent<playercamera>();
         allPooler = GetComponent<AllPooler>();
         hpBar = GetComponentInChildren<HpBar>();
         hp = maxHp;
@@ -62,8 +67,8 @@ public class EnemyMove : MonoBehaviour
             StartCoroutine(Damaged());
             rotateDegree=other.gameObject.transform.eulerAngles.z;
             radian = rotateDegree*Mathf.PI/180f;
-            x = bulletMove.stun*Mathf.Cos(radian);
-            y = bulletMove.stun*Mathf.Sin(radian);
+            x = bulletMove.stun*Mathf.Cos(radian)*stunLess;
+            y = bulletMove.stun*Mathf.Sin(radian)*stunLess;
             myRigidbodyhi.AddForce(new Vector3(x,y,0f));
             if(other.gameObject.activeSelf == true){
                 hp -= bulletMove.bulletDagage;
@@ -76,7 +81,9 @@ public class EnemyMove : MonoBehaviour
         }
         
     }
-    protected void Die(Collider2D other){
+    protected virtual void Die(Collider2D other){
+        //GameManager.instance.nowMoney+=cost;
+        GameManager.instance.AddMoney(cost);
         playerCamera.startshake(0.1f,0.3f);
         bullet = gameManager.allPoolManager.GetPool(2);
         bullet.transform.position = transform.position;
@@ -94,8 +101,9 @@ public class EnemyMove : MonoBehaviour
         allPooler.Despawn();
                     
     }
-    protected void OnTriggerStay2D(Collider2D other){
+    private void OnTriggerStay2D(Collider2D other){
         if(other.gameObject.layer==12){
+            transform.position+=Vector3.right/100;
             transform.DOKill();
         }
     }
@@ -108,14 +116,14 @@ public class EnemyMove : MonoBehaviour
         spriteRenderer.color = new Color(1f,1f,1f,1f);
         SetColor(new Color(1f,1f,1f,1f));
     }
-    protected void SetColor(Color color){
+    private void SetColor(Color color){
         for(int i=0;i<transform.childCount;i++){
             if(transform.GetChild(i).GetComponent<SpriteRenderer>()!=null)
                 transform.GetChild(i).GetComponent<SpriteRenderer>().color = color;
         }
     }
     
-    private void Die(){
+    void Die(){
         transform.DOKill();
 
     }

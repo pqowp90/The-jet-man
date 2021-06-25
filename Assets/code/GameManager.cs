@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
+using UnityEngine.Experimental.Rendering.Universal;
 
 
 public class GameManager : MonoBehaviour
@@ -21,10 +23,13 @@ public class GameManager : MonoBehaviour
     private float timeSpeed=1f;
     public float recoilResistance{get;private set;}
     public GameObject player{get; private set;}
+    private Light2D playerLight;
     private bool ESCON=false;
     [SerializeField]
     private bool menu=false;
     public bool showMouse=false;
+    public float gameTime{get; private set;}
+    private int BEST;
     private static GameManager _instance;
     public static GameManager instance
     {
@@ -52,10 +57,26 @@ public class GameManager : MonoBehaviour
     public AllPoolManager allPoolManager{get; private set;}
     [SerializeField]
     private float spawnDeley;
+    public bool isdead=false;
+    public int chkEnemy=0;
+    public int nowMoney;
+    [SerializeField]
+    private Text moneyText;
+    [SerializeField]
+    private Slider progressSlider;
+    [SerializeField]
+    private Slider progressSliderBEST;
+    private int moneySum;
+    [SerializeField]
+    private GameObject WWWWW;
+    
     void Awake()
     {
+        
+        moneySum = PlayerPrefs.GetInt("MONEY",1000);
         if(!menu)
             player = FindObjectOfType<playerMove>().gameObject;
+            playerLight = player.GetComponentInChildren<Light2D>();
         allPoolManager = FindObjectOfType<AllPoolManager>();
         recoilResistance=0.8f;
         focusPoint = GameObject.Find("FocusPoint");
@@ -68,11 +89,20 @@ public class GameManager : MonoBehaviour
         }
         maxPos=new Vector2(9f,9f);
         minPos=new Vector2(-9f,-9f);
+        BEST = PlayerPrefs.GetInt("BEST",0);
         
-        
+    }
+    public void AddMoney(int money){
+        nowMoney+=money;
+        moneyText.text = string.Format("{0}$",nowMoney);
+    }
+    public void SaveAddMoney(){
+        PlayerPrefs.SetInt("MONEY",moneySum+nowMoney);
+        PlayerPrefs.SetInt("BEST",BEST);
     }
     void Update()
     {
+        gameTime+=Time.deltaTime;
         if(goUp&&!menu){
             playerCamera.GetComponent<playercamera>().maxPos.y += Time.deltaTime;
         }
@@ -83,7 +113,13 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape)&&!menu){
             Continue();
         }
-
+        if(!menu){
+            progressSlider.value = gameTime/360f;
+            playerLight.pointLightOuterRadius = 5.53f + (gameTime/360f)*9f;
+            if(gameTime>BEST)
+                BEST = (int)gameTime;
+            progressSliderBEST.value = BEST/360f;
+        }
     }
     private IEnumerator SpawnDrone(){
         float RandomY;
@@ -101,8 +137,30 @@ public class GameManager : MonoBehaviour
                 drone.transform.position = new Vector3(RandomX,RandomY,0f);
                 drone.SetActive(true);
             }
+            if(Random.Range(0,2)==0&&gameTime>20){
+                drone = GameManager.instance.allPoolManager.GetPool(6);
+                drone.transform.position = new Vector3(RandomX,RandomY,0f);
+                drone.SetActive(true);
+            }
+            if(Random.Range(0,3)==0&&gameTime>0){
+                StartCoroutine(MisailBarssa());
+            }
             yield return new WaitForSeconds(spawnDeley);
         }
+    }
+    private IEnumerator MisailBarssa(){
+        yield return new WaitForSeconds(Random.Range(4,8));
+        Vector3 save=new Vector3(GameManager.instance.player.transform.position.x,GameManager.instance.player.transform.position.y-4f,0f);
+        WWWWW.transform.position = GameManager.instance.player.transform.position;
+        for(int i=0;i<3;i++){
+            WWWWW.SetActive(true);
+            yield return new WaitForSeconds(0.3f);
+            WWWWW.SetActive(false);
+            yield return new WaitForSeconds(0.3f);
+        }
+        drone = GameManager.instance.allPoolManager.GetPool(7);
+        drone.transform.position = save;
+        drone.SetActive(true);
     }
     private IEnumerator LaserBbang(){
         yield return new WaitForSeconds(2f);

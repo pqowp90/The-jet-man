@@ -544,6 +544,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 60
   hp: 0
+  stunLess: 1
+  cost: 30
 --- !u!50 &-4642065325585651144
 Rigidbody2D:
   serializedVersion: 4
@@ -649,6 +651,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 60
   hp: 0
+  stunLess: 1
+  cost: 20
   barSsaPos: {fileID: 3988693966256077005}
   gunDamage: 5
   gunStun: 5

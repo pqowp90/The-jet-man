@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1451367520951296482}
   - component: {fileID: -2378150320399497374}
   - component: {fileID: -1137840490924388993}
-  - component: {fileID: -4326160899366372488}
+  - component: {fileID: 6107392097110994062}
+  - component: {fileID: 4010616458019608245}
   m_Layer: 14
   m_Name: DroneBullet
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8362746705596669516}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.4593334, y: 1.5173225, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5170323, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9204614939019723038}
@@ -124,12 +125,10 @@ MonoBehaviour:
   ps: {fileID: 0}
   isPull: 0
   bulletSet: 0
-  bulletDagage: 0
+  bulletDagage: 5
   stun: 200
   enemy: 1
-  sprite:
-  - {fileID: 0}
-  - {fileID: 0}
+  DesEffect: {fileID: 0}
 --- !u!114 &-2378150320399497374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,19 +183,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setIndex: 4
---- !u!114 &-4326160899366372488
+--- !u!50 &6107392097110994062
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362746705596669516}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!114 &4010616458019608245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8362746705596669516}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d49ae9d02b3daf4591a6e81f1018531, type: 3}
+  m_Script: {fileID: 11500000, guid: 92a1a3a646d2c884b9bc020fe2fd1d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deley: 6
+  speed: 2
+  ps: {fileID: 0}
+  isPull: 0
+  bulletSet: 0
+  bulletDagage: 5
+  stun: 200
+  enemy: 1
+  DesEffect: {fileID: 0}
+  myRotationZ: 0
 --- !u!1 &8389279495153709858
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,9 +269,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.12577343, y: 0}
+  m_Offset: {x: -0.0004951954, y: 0}
   serializedVersion: 2
-  m_Radius: 0.092077255
+  m_Radius: 0.09353995
 --- !u!1 &9110149660415942595
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +316,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.19538283, y: -0.009943485}
+  m_Offset: {x: -0.008007914, y: -0.002143085}
   serializedVersion: 2
-  m_Radius: 0.059940934
+  m_Radius: 0.06113997

@@ -8,17 +8,18 @@ public class BulletMove : MonoBehaviour
     private float speed=10;
     public ParticleSystem ps;
     [SerializeField]
-    private bool isPull;
+    private bool isUdo;
     private Animator animator;
     public int bulletSet;
     public int bulletDagage;
     public float stun=200f;
     [SerializeField]
     private bool enemy;
+    private AllPooler allPooler;
     [SerializeField]
-    private Sprite[] sprite;
+    private GameObject DesEffect;
     public void Awake(){
-        
+        allPooler = GetComponent<AllPooler>();
         animator = GetComponent<Animator>();
     }
     public void StartDeley(){
@@ -27,7 +28,7 @@ public class BulletMove : MonoBehaviour
         
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if(!enemy){
             if(animator!=null)
@@ -40,6 +41,14 @@ public class BulletMove : MonoBehaviour
         }
         transform.Translate(Vector2.right*speed*Time.deltaTime);
     }
+    protected void OnTriggerEnter2D(Collider2D other){
+        if(other.gameObject.layer == 11||other.CompareTag("Laser")||other.gameObject.layer == 9){
+            if(other.CompareTag("MainCamera")) return;
+            if(enemy)
+                DespawnBullet();
+            //else DestroyBullet();
+        }
+    }
     public void BulletSet(){
         switch(bulletSet){
             case 0:
@@ -49,6 +58,12 @@ public class BulletMove : MonoBehaviour
             animator.Play("BoltAnimation");
             break;
         }
+    }
+    public void DespawnBullet(){
+        DesEffect = GameManager.instance.allPoolManager.GetPool(5);
+        DesEffect.transform.position = transform.position;
+        DesEffect.SetActive(true);
+        allPooler.Despawn();
     }
     public void DestroyBullet(){
         CancelInvoke();

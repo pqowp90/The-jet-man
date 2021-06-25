@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class MenuManager : MonoBehaviour
 {
@@ -43,13 +44,15 @@ public class MenuManager : MonoBehaviour
     private AudioClip[] audioClip;
     public int gunNewSelect=-1;
     public StoreGuns[] gunNewThis;
+    [SerializeField]
+    private Text selectGun;
     void Awake()
     {
         PlayerPrefs.GetInt("Select1",-1);
         PlayerPrefs.GetInt("Select2",-1);
         audioSource = GetComponent<AudioSource>();
         instance = this;
-        money = PlayerPrefs.GetInt("MONEY",10000);
+        money = PlayerPrefs.GetInt("MONEY",1000);
         LoadGunSave();
         UpdateUI();
     }
@@ -62,7 +65,7 @@ public class MenuManager : MonoBehaviour
         for(int i=0;i<gunCnt;i++){
             gunChk[i,1]=(int)char.GetNumericValue(gunYes[gunCnt+i]);
         }
-        Debug.Log(gunYes);
+        //Debug.Log(gunYes);
     }
     public void cantBuy(){
         audioSource.clip = audioClip[1];
@@ -126,16 +129,19 @@ public class MenuManager : MonoBehaviour
     }
     
     public void SelectGun(bool hi){
+        int s1,s2;
+        s1 = PlayerPrefs.GetInt("Select1",-1);
+        s2 = PlayerPrefs.GetInt("Select2",-1);
         storeAnimator.SetBool("Select",false);
         if(hi){
             PlayerPrefs.SetInt("Select1",gunNewSelect);
-            if(PlayerPrefs.GetInt("Select2")==gunNewSelect)
+            if(s2==gunNewSelect)
                 PlayerPrefs.SetInt("Select2",-1);//1번을 했는데 2번이랑 같은거면 2번지우고 1번으로
         }
         else{
-            if(PlayerPrefs.GetInt("Select1",-1)==gunNewSelect)//2번을 했는데 1번에 있으면 취소
+            if(s1==gunNewSelect)//2번을 했는데 1번에 있으면 취소
                 return;
-            if(PlayerPrefs.GetInt("Select1",-1)!=-1)//1번이 비어있지 않으면 넣어줌
+            if(s1!=-1)//1번이 비어있지 않으면 넣어줌
                 PlayerPrefs.SetInt("Select2",gunNewSelect);
         }
         ResetStore();
@@ -161,8 +167,10 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("main");
     }
     public void StartClick(){
-        if(PlayerPrefs.GetInt("Select1")>0||PlayerPrefs.GetInt("Select2")>0){
-            
+        if(PlayerPrefs.GetInt("Select1",-1)>=0){
+            PlayerPrefs.SetInt("S1UP",gunChk[PlayerPrefs.GetInt("Select1"),1]);
+            if(PlayerPrefs.GetInt("Select2")!=-1)
+                PlayerPrefs.SetInt("S2UP",gunChk[PlayerPrefs.GetInt("Select2"),1]);
             backgroundMusic.FaidOut();
             FindObjectOfType<Canvas>().enabled = false;
             FindObjectOfType<Canvas>().gameObject.SetActive(false);
@@ -172,8 +180,14 @@ public class MenuManager : MonoBehaviour
         }
         else{
             Debug.Log("총을 최소 하나 이상 선택하세요");
+            StartCoroutine(SelectGunNow());
         }
         
+    }
+    private IEnumerator SelectGunNow(){
+        DOTween.To(()=>selectGun.color,colorL=>selectGun.color=colorL,new Color(0.8207547f,0.8207547f,0.8207547f,1f),0.2f);
+        yield return new WaitForSeconds(2f); 
+        DOTween.To(()=>selectGun.color,colorL=>selectGun.color=colorL,new Color(0.8207547f,0.8207547f,0.8207547f,0f),0.2f);
     }
     public void StoreClick(){
         LoadGunSave();
@@ -189,7 +203,7 @@ public class MenuManager : MonoBehaviour
     public void Back(){
         storeAnimator.SetBool("Select",false);
         if(sceneNum==2){
-            for(int i=0;i<2;i++){
+            for(int i=0;i<3;i++){
                 scrollbarCode[i].Set();
             }
         }
@@ -198,7 +212,6 @@ public class MenuManager : MonoBehaviour
         UpdateMenu();
     }
     public void Quit(){
-        PlayerPrefs.DeleteAll();
         Application.Quit();
     }
     private void UpdateMenu(){

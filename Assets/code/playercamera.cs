@@ -26,7 +26,7 @@ public class playercamera : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+        if(!hello)return;
         if (hihi != null)
         {
             target = (player.transform.position + hihi.transform.position) / 2;
@@ -42,9 +42,11 @@ public class playercamera : MonoBehaviour
                 Mathf.Clamp(transform.position.y, minPos.y, maxPos.y),transform.position.z
             );
         }
+        
     }
     void Update()
     {
+        
         if(hello)
             if(transform.position.x>3.5f){
                 hello=false;
@@ -52,7 +54,23 @@ public class playercamera : MonoBehaviour
                 hihi = GameObject.Find("startLaser");
                 StartCoroutine(StartLaser());
             }
-        if (SHAKEtimeremaining > 0)
+            else return;
+        if (hihi != null)
+        {
+            target = (player.transform.position + hihi.transform.position) / 2;
+        }
+		
+        else target = player.transform.position;
+        float posX = Mathf.SmoothDamp(transform.position.x, target.x, ref velocity.x, smoothTimeX);
+        float posY = Mathf.SmoothDamp(transform.position.y, target.y, ref velocity.y, smoothTimeY);
+        transform.position = new Vector3(posX, posY, transform.position.z);
+        if (bound)
+        {
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, minPos.x, maxPos.x),
+                Mathf.Clamp(transform.position.y, minPos.y, maxPos.y),transform.position.z
+            );
+        }
+        if (SHAKEtimeremaining > 0&&!GameManager.instance.isdead)
         {
             SHAKEtimeremaining -= Time.deltaTime;
             float xAmount = Random.Range(-1f, 1f) * shakepower;

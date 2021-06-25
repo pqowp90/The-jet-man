@@ -32,21 +32,19 @@ public class ObjectPoolling : MonoBehaviour
         if(instance.pooliongObjectQueue.Count > 0){
             var obj =instance.pooliongObjectQueue.Dequeue();
             obj.transform.SetParent(null);
-            obj.gameObject.SetActive(true);
             obj.GetComponent<BulletMove>().StartDeley();
             return obj;
         }
         else{
             var newObj = instance.CreatNewObject();
             newObj.transform.SetParent(null);
-            newObj.gameObject.SetActive(true);
             newObj.GetComponent<BulletMove>().StartDeley();
             return newObj;
         }
     }
     public static void ReturnObject(BulletMove bullet){
-        bullet.gameObject.SetActive(false);
         bullet.transform.SetParent(instance.transform);
+        bullet.gameObject.SetActive(false);
         instance.pooliongObjectQueue.Enqueue(bullet);
     }
     

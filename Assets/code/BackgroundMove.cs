@@ -8,7 +8,7 @@ public class BackgroundMove : MonoBehaviour
     [SerializeField]
     private GameObject cam;
     [SerializeField]
-    private SpriteRenderer spriteRenderer1,spriteRenderer2;
+    private SpriteRenderer[] spriteRenderer;
     [SerializeField]
     private Sprite[] sprite;
     [SerializeField]
@@ -18,8 +18,8 @@ public class BackgroundMove : MonoBehaviour
     
     void Start()
     {
-        spriteRenderer1.sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
-        spriteRenderer2.sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
+        for(int i=0;i<3;i++)
+            spriteRenderer[i].sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
         startPos = transform.position.y;
         length = GetComponent<SpriteRenderer>().bounds.size.y;
     }
@@ -36,7 +36,7 @@ public class BackgroundMove : MonoBehaviour
         else if(temp <  startPos - length) startPos -= length;
     }
     public void UpdateUi(){
-        spriteRenderer1.sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
-        spriteRenderer2.sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
+        for(int i=0;i<3;i++)
+            spriteRenderer[i].sprite = sprite[GameManager.instance.GetSaveInt("Background",0)];
     }
 }

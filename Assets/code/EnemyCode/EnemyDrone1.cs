@@ -52,9 +52,11 @@ public class EnemyDrone1 : EnemyMove
         }
     }
     private void Shoting(){
+        if(Random.Range(0,2)==0)return;
+        transform.DOKill();
         var bullet = allPoolManager.GetPool(4).GetComponent<BulletMove>();
         if(bullet==null)return;
-
+        
         myRigidbodyhi.AddForce(new Vector3(-gunX,-gunY,0f));
         bullet.transform.position=barSsaPos.transform.position;
         bullet.transform.rotation = Quaternion.Euler(0,0,rotationZ);
@@ -62,13 +64,6 @@ public class EnemyDrone1 : EnemyMove
         bullet.bulletDagage = gunDamage;
         bullet.stun = gunStun;
         bullet.gameObject.SetActive(true);
-        transform.DOKill();
+        bullet.GetComponent<Animator>().SetBool("Bolt",false);
     }
-
-
-    protected override void Reset(){
-        base.Reset();
-        Debug.Log("dd");
-    }
-    
 }
