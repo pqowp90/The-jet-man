@@ -237,6 +237,7 @@ MonoBehaviour:
   stun: 200
   enemy: 1
   DesEffect: {fileID: 0}
+  misa: 1
 --- !u!114 &8484078328442190758
 MonoBehaviour:
   m_ObjectHideFlags: 0

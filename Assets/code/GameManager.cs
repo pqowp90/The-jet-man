@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
                 drone.transform.position = new Vector3(RandomX,RandomY,0f);
                 drone.SetActive(true);
             }
-            if(Random.Range(0,3)==0&&gameTime>0){
+            if(Random.Range(0,3)==0&&gameTime>60){
                 StartCoroutine(MisailBarssa());
             }
             yield return new WaitForSeconds(spawnDeley);

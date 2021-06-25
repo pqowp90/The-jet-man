@@ -18,6 +18,8 @@ public class BulletMove : MonoBehaviour
     private AllPooler allPooler;
     [SerializeField]
     private GameObject DesEffect;
+    [SerializeField]
+    private bool misa;
     public void Awake(){
         allPooler = GetComponent<AllPooler>();
         animator = GetComponent<Animator>();
@@ -42,7 +44,7 @@ public class BulletMove : MonoBehaviour
         transform.Translate(Vector2.right*speed*Time.deltaTime);
     }
     protected void OnTriggerEnter2D(Collider2D other){
-        if(other.gameObject.layer == 11||other.CompareTag("Laser")||other.gameObject.layer == 9){
+        if(other.gameObject.layer == 11||(misa)?true:other.CompareTag("Laser")||other.gameObject.layer == 9){
             if(other.CompareTag("MainCamera")) return;
             if(enemy)
                 DespawnBullet();
