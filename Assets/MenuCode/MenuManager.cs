@@ -220,7 +220,6 @@ public class MenuManager : MonoBehaviour
     }
     public void Quit(){
         PlayerPrefs.DeleteAll();
-        Application.Quit();
     }
     private void UpdateMenu(){
         animator.SetInteger("Num",sceneNum);
