@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool menu=false;
     public bool showMouse=false;
-    public float gameTime{get; private set;}
+    public float gameTime;
     private int BEST;
     private static GameManager _instance;
     public static GameManager instance
@@ -69,14 +70,22 @@ public class GameManager : MonoBehaviour
     private int moneySum;
     [SerializeField]
     private GameObject WWWWW;
+    [SerializeField]
+    private int clearTime;
+    public bool isEnding;
+    [SerializeField]
+    private GameObject sky,white;
+    [SerializeField]
+    private Text endingText;
     
     void Awake()
     {
         
         moneySum = PlayerPrefs.GetInt("MONEY",1000);
-        if(!menu)
+        if(!menu){
             player = FindObjectOfType<playerMove>().gameObject;
             playerLight = player.GetComponentInChildren<Light2D>();
+        }
         allPoolManager = FindObjectOfType<AllPoolManager>();
         recoilResistance=0.8f;
         focusPoint = GameObject.Find("FocusPoint");
@@ -89,7 +98,7 @@ public class GameManager : MonoBehaviour
         }
         maxPos=new Vector2(9f,9f);
         minPos=new Vector2(-9f,-9f);
-        BEST = PlayerPrefs.GetInt("BEST",0);
+        
         
     }
     public void AddMoney(int money){
@@ -102,7 +111,8 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        gameTime+=Time.deltaTime;
+        
+
         if(goUp&&!menu){
             playerCamera.GetComponent<playercamera>().maxPos.y += Time.deltaTime;
         }
@@ -114,12 +124,43 @@ public class GameManager : MonoBehaviour
             Continue();
         }
         if(!menu){
-            progressSlider.value = gameTime/360f;
-            playerLight.pointLightOuterRadius = 5.53f + (gameTime/360f)*9f;
+            gameTime+=Time.deltaTime;
+            progressSlider.value = gameTime/clearTime;
+            if(!isEnding)
+                playerLight.pointLightOuterRadius = 5.53f + (gameTime/clearTime)*9f;
             if(gameTime>BEST)
                 BEST = (int)gameTime;
-            progressSliderBEST.value = BEST/360f;
+            progressSliderBEST.value = (float)BEST/(float)clearTime;
+            if(gameTime>clearTime&&!isEnding){
+                
+                
+                StartCoroutine(Ending());
+            }
         }
+        
+    }
+    private IEnumerator Ending(){
+        DOTween.To(()=>playerLight.intensity,inten=>playerLight.intensity=inten,13f,2f);
+        yield return new WaitForSeconds(2f);
+        
+        sky.SetActive(true);
+        isEnding=true;
+        yield return new WaitForSeconds(0.3f);
+        // player.GetComponent<SpriteRenderer>().sortingLayerName = "1";
+        // playerMove playerMove = player.GetComponent<playerMove>();
+        // for(int i=0;i<playerMove.childSpriteRenderers.Length;i++){
+        //     playerMove.childSpriteRenderers[i].sortingLayerName = "1";
+        // }
+        
+        DOTween.To(()=>white.GetComponent<SpriteRenderer>().color,colorL=>white.GetComponent<SpriteRenderer>().color=colorL,new Color(1f,1f,1f,0f),0.2f);
+        DOTween.To(()=>playerLight.intensity,inten=>playerLight.intensity=inten,1f,3f);
+        yield return new WaitForSeconds(2f);
+        //player.transform.DOMoveY(player.transform.position.y+10,20f);
+        yield return new WaitForSeconds(1f);
+        endingText.DOText("Well done secret agent I knew you could do it",6f);
+        yield return new WaitForSeconds(13f);
+        SceneManager.LoadScene("Menu");
+
     }
     private IEnumerator SpawnDrone(){
         float RandomY;
@@ -133,33 +174,33 @@ public class GameManager : MonoBehaviour
 
             for(int i=0;i<3;i++){
                 yield return new WaitForSeconds(0.2f);
-                drone = GameManager.instance.allPoolManager.GetPool(1);
+                drone = allPoolManager.GetPool(1);
                 drone.transform.position = new Vector3(RandomX,RandomY,0f);
                 drone.SetActive(true);
             }
-            if(Random.Range(0,2)==0&&gameTime>20){
-                drone = GameManager.instance.allPoolManager.GetPool(6);
+            if(Random.Range(0,2)==0&&gameTime>20f){
+                drone = allPoolManager.GetPool(6);
                 drone.transform.position = new Vector3(RandomX,RandomY,0f);
                 drone.SetActive(true);
             }
-            if(Random.Range(0,3)==0&&gameTime>60){
+            if(Random.Range(0,3)==0&&gameTime>60f){
                 StartCoroutine(MisailBarssa());
             }
-            yield return new WaitForSeconds(spawnDeley);
+            yield return new WaitForSeconds(spawnDeley-gameTime/200f);
         }
     }
     private IEnumerator MisailBarssa(){
         yield return new WaitForSeconds(Random.Range(4,8));
-        Vector3 save=new Vector3(GameManager.instance.player.transform.position.x,GameManager.instance.player.transform.position.y-4f,0f);
-        WWWWW.transform.position = GameManager.instance.player.transform.position;
+        float saveX=player.transform.position.x;
+        WWWWW.transform.position = player.transform.position;
         for(int i=0;i<3;i++){
             WWWWW.SetActive(true);
             yield return new WaitForSeconds(0.3f);
             WWWWW.SetActive(false);
             yield return new WaitForSeconds(0.3f);
         }
-        drone = GameManager.instance.allPoolManager.GetPool(7);
-        drone.transform.position = save;
+        drone = allPoolManager.GetPool(7);
+        drone.transform.position = new Vector3(saveX,playerCamera.transform.position.y-4f,0f);
         drone.SetActive(true);
     }
     private IEnumerator LaserBbang(){

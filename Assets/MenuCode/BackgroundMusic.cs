@@ -15,10 +15,6 @@ public class BackgroundMusic : MonoBehaviour
         audioSource=GetComponent<AudioSource>();
         audioSource.volume = PlayerPrefs.GetFloat("MusicVolume",0.3f);
     }
-    void Update()
-    {
-        
-    }
     public void FaidOut(){
         StartCoroutine(Restart());
     }

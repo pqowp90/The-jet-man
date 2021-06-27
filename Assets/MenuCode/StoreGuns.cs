@@ -32,10 +32,6 @@ public class StoreGuns : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void UpdateSelect(){
         if(PlayerPrefs.GetInt("Select1",-1)==myGunSet)
             select.transform.GetChild(0).GetComponent<Text>().text = "Selected 1";

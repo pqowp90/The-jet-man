@@ -26,7 +26,8 @@ public class BackgroundMove : MonoBehaviour
 
     void Update()
     {
-        
+        if(GameManager.instance.isEnding)
+            gameObject.SetActive(false);
         if(hello)
             return;
         temp = cam.transform.position.y;

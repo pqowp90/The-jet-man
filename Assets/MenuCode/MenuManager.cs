@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager instance;
     [SerializeField]
+    private GameObject backgroundMusicPrefab;
     private BackgroundMusic backgroundMusic;
     [SerializeField]
     private Camera maincamera;
@@ -48,6 +49,12 @@ public class MenuManager : MonoBehaviour
     private Text selectGun;
     void Awake()
     {
+        if (FindObjectOfType<BackgroundMusic>()==null)
+            backgroundMusic = Instantiate(backgroundMusicPrefab).GetComponent<BackgroundMusic>();
+        else 
+            backgroundMusic = FindObjectOfType<BackgroundMusic>();
+        backgroundMusic.GetComponent<AudioSource>().time = 0;
+        backgroundMusic.GetComponent<AudioSource>().Play();
         PlayerPrefs.GetInt("Select1",-1);
         PlayerPrefs.GetInt("Select2",-1);
         audioSource = GetComponent<AudioSource>();
@@ -168,9 +175,9 @@ public class MenuManager : MonoBehaviour
     }
     public void StartClick(){
         if(PlayerPrefs.GetInt("Select1",-1)>=0){
-            PlayerPrefs.SetInt("S1UP",gunChk[PlayerPrefs.GetInt("Select1"),1]);
-            if(PlayerPrefs.GetInt("Select2")!=-1)
-                PlayerPrefs.SetInt("S2UP",gunChk[PlayerPrefs.GetInt("Select2"),1]);
+            PlayerPrefs.SetInt("S1UP",gunChk[PlayerPrefs.GetInt("Select1",-1),1]);
+            if(PlayerPrefs.GetInt("Select2",-1)!=-1)
+                PlayerPrefs.SetInt("S2UP",gunChk[PlayerPrefs.GetInt("Select2",-1),1]);
             backgroundMusic.FaidOut();
             FindObjectOfType<Canvas>().enabled = false;
             FindObjectOfType<Canvas>().gameObject.SetActive(false);
@@ -212,6 +219,7 @@ public class MenuManager : MonoBehaviour
         UpdateMenu();
     }
     public void Quit(){
+        PlayerPrefs.DeleteAll();
         Application.Quit();
     }
     private void UpdateMenu(){

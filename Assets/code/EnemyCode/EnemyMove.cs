@@ -40,6 +40,8 @@ public class EnemyMove : MonoBehaviour
     }
     private void Update()
     {
+        if(GameManager.instance.isEnding)
+            Destroy(gameObject);
         Move();
     }
     protected virtual void Move(){

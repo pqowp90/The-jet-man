@@ -10,8 +10,7 @@ public class playerMove : MonoBehaviour
 {
     private Rigidbody2D myrigidbody;
     private SpriteRenderer spriteRenderer;
-    [SerializeField]
-    private SpriteRenderer[] childSpriteRenderers;
+    public SpriteRenderer[] childSpriteRenderers;
     [SerializeField]
     private Animator gunAnimator;
     [SerializeField]
@@ -32,6 +31,7 @@ public class playerMove : MonoBehaviour
     private int GunSet=0;
     private bool No=true;
     float cameraWidth;
+    [SerializeField]
     private int[] gunset=new int[2];
     [SerializeField]
     private int[] gunDamage = new int[10];
@@ -47,9 +47,11 @@ public class playerMove : MonoBehaviour
     private bool damaged=false;
     [SerializeField]
     private GameObject ending;
+    private AudioSource backgroundMusic;
     void Start()
     {
-        
+        if(FindObjectOfType<BackgroundMusic>()!=null)
+            backgroundMusic = FindObjectOfType<BackgroundMusic>().GetComponent<AudioSource>();
         GameManager.instance.isdead = false;
         audioSource = GetComponent<AudioSource>();
         light2D = GetComponentInChildren<Light2D>();
@@ -147,9 +149,11 @@ public class playerMove : MonoBehaviour
         
     }
     public void GUNSETTING(int hi){
-        if(gunset[hi]!=-1)
+        if(gunset[hi]>=0){
             GunSet=gunset[hi];
             gunAnimator.SetInteger("GunSet",gunset[hi]);
+            shotPosSet();
+        }
     }
     private void HeadRotation(){
         oPosition = transform.position;
@@ -204,8 +208,7 @@ public class playerMove : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other){
         if(other.tag=="Laser"){
-            if(FindObjectOfType<BackgroundMusic>()!=null)
-                Destroy(FindObjectOfType<BackgroundMusic>().gameObject);
+            
             hp = 0;
             StartCoroutine(DieManNONO());
             return; 
@@ -220,8 +223,6 @@ public class playerMove : MonoBehaviour
             bulletMove.DespawnBullet();
             hpBar.sethealth(hp,maxHp);
             if(hp <= 0){
-                if(FindObjectOfType<BackgroundMusic>()!=null)
-                    Destroy(FindObjectOfType<BackgroundMusic>().gameObject);
                 StartCoroutine(DieManNONO());
                 return; 
             }
@@ -229,6 +230,8 @@ public class playerMove : MonoBehaviour
         }
     }
     private IEnumerator DieManNONO(){
+        if(backgroundMusic!=null)
+            backgroundMusic.Stop();
         gunAnimator.SetBool("Shoting",false);
         childSpriteRenderers[1].transform.parent.transform.DOLocalMove(new Vector3(Random.Range(-0.2f,0.2f),-1.1f,0f),1.2f);
         childSpriteRenderers[1].transform.parent.transform.DOLocalRotate(new Vector3(Random.Range(-50f,50f),0f,0f),1.2f);

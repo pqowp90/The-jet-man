@@ -32,6 +32,8 @@ public class BulletMove : MonoBehaviour
 
     protected virtual void Update()
     {
+        if(GameManager.instance.isEnding)
+            Destroy(gameObject);
         if(!enemy){
             if(animator!=null)
             animator.SetInteger("BulletSet",bulletSet);
