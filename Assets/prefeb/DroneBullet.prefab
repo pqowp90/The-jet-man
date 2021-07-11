@@ -123,12 +123,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   ps: {fileID: 0}
-  isPull: 0
+  isUdo: 0
   bulletSet: 0
   bulletDagage: 5
   stun: 200
   enemy: 1
   DesEffect: {fileID: 0}
+  misa: 0
 --- !u!114 &-2378150320399497374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,12 +219,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   ps: {fileID: 0}
-  isPull: 0
+  isUdo: 0
   bulletSet: 0
   bulletDagage: 5
   stun: 200
   enemy: 1
   DesEffect: {fileID: 0}
+  misa: 0
   myRotationZ: 0
 --- !u!1 &8389279495153709858
 GameObject:

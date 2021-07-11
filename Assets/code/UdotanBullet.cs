@@ -17,7 +17,7 @@ public class UdotanBullet : BulletMove
         diff = playertransform.position - transform.position;
         diff.Normalize();
         rotationZ = Mathf.Atan2(diff.y,diff.x)*Mathf.Rad2Deg;
-        myRotationZ+=(((myRotationZ>rotationZ)?-100:100)+Random.Range(-80f,80f))*Time.deltaTime;
+        myRotationZ+=(((myRotationZ>rotationZ)?-100:100))*Time.deltaTime;
         transform.rotation = Quaternion.Euler(transform.rotation.x,transform.rotation.y,myRotationZ);
     }
     public void Reset(){

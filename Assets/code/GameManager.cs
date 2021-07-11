@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private GameObject black,mouse;
     private GameObject ESC;
     [SerializeField]
-    private GameObject dronePrefab;
+    private GameObject dronePrefab,bossPrefab;
     [SerializeField]
     private Animator startLaser2;
     private float timeSpeed=1f;
@@ -77,11 +77,13 @@ public class GameManager : MonoBehaviour
     private GameObject sky,white;
     [SerializeField]
     private Text endingText;
+    private bool isBoss;
     
     void Awake()
     {
         
         moneySum = PlayerPrefs.GetInt("MONEY",1000);
+        BEST=PlayerPrefs.GetInt("BEST");
         if(!menu){
             player = FindObjectOfType<playerMove>().gameObject;
             playerLight = player.GetComponentInChildren<Light2D>();
@@ -132,9 +134,13 @@ public class GameManager : MonoBehaviour
                 BEST = (int)gameTime;
             progressSliderBEST.value = (float)BEST/(float)clearTime;
             if(gameTime>clearTime&&!isEnding){
-                
-                
                 StartCoroutine(Ending());
+            }
+            if(!isBoss){
+                if(gameTime>200f){
+                    isBoss=true;
+                    Instantiate(bossPrefab).transform.position = playerCamera.transform.position-new Vector3(0f,5f,0f);
+                }
             }
         }
         
@@ -159,6 +165,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         endingText.DOText("Well done secret agent I knew you could do it",6f);
         yield return new WaitForSeconds(13f);
+        GameManager.instance.SaveAddMoney();
         SceneManager.LoadScene("Menu");
 
     }
@@ -186,7 +193,7 @@ public class GameManager : MonoBehaviour
             if(Random.Range(0,3)==0&&gameTime>60f){
                 StartCoroutine(MisailBarssa());
             }
-            yield return new WaitForSeconds(spawnDeley-gameTime/200f);
+            yield return new WaitForSeconds(spawnDeley-gameTime/200f+((isBoss)?4f:0f));
         }
     }
     private IEnumerator MisailBarssa(){
@@ -235,7 +242,7 @@ public class GameManager : MonoBehaviour
         
         
         //playerCamera.GetComponent<playercamera>().hihi = focusPoint;
-        StartCoroutine(SpawnDrone());
+        StartCoroutine(SpawnDrone());//---------------------------------------------------------------------------------------------------!!!!!!!!!!
     }
     // void Quit(){
     //     Application.Quit();
