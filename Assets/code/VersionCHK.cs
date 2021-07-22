@@ -38,7 +38,7 @@ public class VersionCHK : MonoBehaviour
     {
         UnityWebRequest www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest(); // 페이지 요청
-        if (www.isNetworkError)
+        if (URL=="123")//www.isNetworkError
         {
             Debug.Log("error get page");
         }

@@ -1,25 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
+using Photon.Pun;
 public class ObjectPoolling : MonoBehaviour
 {
     [SerializeField]
     private GameObject poolingObjectPrefab;
     [SerializeField]
     private Queue<BulletMove> pooliongObjectQueue = new Queue<BulletMove>();
+    private bool isMulty;
     
     public static ObjectPoolling instance;
     private void Awake()
     {
+        isMulty = SceneManager.GetActiveScene().buildIndex==3;
         instance = this;
-        Instialize(10);
+        //Instialize(10);
     }
     private void Update(){
         //Debug.Log(instance.pooliongObjectQueue.Count);
     }
     private BulletMove CreatNewObject(){
-        var newObj = Instantiate(poolingObjectPrefab,transform).GetComponent<BulletMove>();
+        
+        var newObj = (isMulty)?PhotonNetwork.Instantiate("BulletPrefeb",transform.position,Quaternion.identity).GetComponent<BulletMove>()
+            :Instantiate(poolingObjectPrefab,transform).GetComponent<BulletMove>();
         newObj.gameObject.SetActive(false);
         return newObj;
     }

@@ -81,7 +81,11 @@ public class GameManager : MonoBehaviour
     
     void Awake()
     {
-        
+        if(SceneManager.GetActiveScene().buildIndex==3){
+
+
+            return;
+        }
         moneySum = PlayerPrefs.GetInt("MONEY",1000);
         BEST=PlayerPrefs.GetInt("BEST");
         if(!menu){
@@ -114,7 +118,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+        if(SceneManager.GetActiveScene().buildIndex==3){
 
+
+            return;
+        }
         if(goUp&&!menu){
             playerCamera.GetComponent<playercamera>().maxPos.y += Time.deltaTime;
         }

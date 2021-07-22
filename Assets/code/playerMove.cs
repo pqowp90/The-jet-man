@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.Rendering.Universal;
 using DG.Tweening;
+using Photon.Pun;
+using Photon.Realtime;
+using Cinemachine;
 
-public class playerMove : MonoBehaviour
+public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
 {
+    
     private Rigidbody2D myrigidbody;
     private SpriteRenderer spriteRenderer;
     public SpriteRenderer[] childSpriteRenderers;
@@ -48,8 +53,28 @@ public class playerMove : MonoBehaviour
     [SerializeField]
     private GameObject ending;
     private AudioSource backgroundMusic;
+    private bool isMulty;
+    public multyName multyName;
+    public PhotonView PV;
+    private Vector3 curPos;
+    private Vector3 curTarget;
+
     void Start()
     {
+        PV = GetComponent<PhotonView>();
+        Time.timeScale = 1f;
+        animator=gameObject.GetComponent<Animator>();
+        if(SceneManager.GetActiveScene().buildIndex==3){
+            isMulty = true;
+            animator.enabled = false;
+            //multyName = FindObjectOfType<multyName>();
+            var nicknameHiHi = multyName.GetComponentInChildren<nickname>().GetComponent<Text>();
+            nicknameHiHi.text = PV.IsMine? PhotonNetwork.NickName:PV.Owner.NickName ;
+            nicknameHiHi.color = PV.IsMine? Color.green:Color.red ;
+            if(PV.IsMine)
+                FindObjectOfType<CinemachineVirtualCamera>().Follow = transform;
+        }
+        //Debug.Log(SceneManager.GetActiveScene().buildIndex);
         if(FindObjectOfType<BackgroundMusic>()!=null)
             backgroundMusic = FindObjectOfType<BackgroundMusic>().GetComponent<AudioSource>();
         GameManager.instance.isdead = false;
@@ -60,8 +85,9 @@ public class playerMove : MonoBehaviour
         GameManager gameManager = GameManager.instance;
         cameraWidth=Camera.main.orthographicSize*Camera.main.aspect;
         playerCamera=FindObjectOfType<playercamera>();
-        animator=gameObject.GetComponent<Animator>();
-        animator.SetBool("NoNo",true);
+        
+        if(!isMulty)
+            animator.SetBool("NoNo",true);
         myrigidbody=GetComponent<Rigidbody2D>();
         spriteRenderer=GetComponent<SpriteRenderer>();
         LoadGunSet();
@@ -69,6 +95,7 @@ public class playerMove : MonoBehaviour
         gunAnimator.SetInteger("GunSet",gunset[0]);
         shotPosSet();
     }
+    
     public void LoadGunSet(){
         gunset[0]=PlayerPrefs.GetInt("Select1",-1);
         gunset[1]=PlayerPrefs.GetInt("Select2",-1);
@@ -78,19 +105,36 @@ public class playerMove : MonoBehaviour
     }
     void Update()
     {
+        if(isMulty){
+            HeadRotation((PV.IsMine)?Camera.main.ScreenToWorldPoint(Input.mousePosition):curTarget);
+            multyName.hp = (float)hp/maxHp;
+            multyName.transform.position = transform.position;
+
+        }
+        if(!PV.IsMine&&isMulty){
+            if((transform.position - curPos).sqrMagnitude >= 100) transform.position = curPos;
+            else transform.position = Vector3.Lerp(transform.position,curPos,Time.deltaTime * 10);
+
+            return;
+        }
         if(isdead)return;
         if(coolTime>0)
             coolTime-=Time.deltaTime;
-        if(No){//StartAni
-            myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
-            if(transform.position.x>5.65f){
-                myrigidbody.AddForce(new Vector3(100f,200f));
-                No=false;
-                animator.SetBool("NoNo",false);
+        if(!isMulty){
+            if(No){//StartAni
+                myrigidbody.velocity = new Vector2(2.5f,myrigidbody.velocity.y);
+                if(transform.position.x>5.65f){
+                    myrigidbody.AddForce(new Vector3(100f,200f));
+                    No=false;
+                    animator.SetBool("NoNo",false);
+                }
+                return;
             }
-            return;
+        }else{
+            No=false;
         }
-        HeadRotation();
+        
+        //HeadRotation();
         radian = rotateDegree*Mathf.PI/180f;
         x = 80 * Mathf.Cos(radian);
         y = 200 * Mathf.Sin(radian);
@@ -155,9 +199,8 @@ public class playerMove : MonoBehaviour
             shotPosSet();
         }
     }
-    private void HeadRotation(){
+    private void HeadRotation(Vector3 target){
         oPosition = transform.position;
-        target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         rotateDegree = Mathf.Atan2(target.y - oPosition.y, target.x - oPosition.x)*Mathf.Rad2Deg;
         headRotate = Mathf.Atan2(target.y - oPosition.y, Mathf.Abs(target.x - oPosition.x))*Mathf.Rad2Deg;
         //spriteRenderer.flipX=(rotateDegree<90&&rotateDegree>-90)?true:false;
@@ -187,40 +230,74 @@ public class playerMove : MonoBehaviour
             for(int i=0;i<3;i++){
                 for(int j=0;j<2;j++){
                     var sBullet = ObjectPoolling.GetObject();
-                    sBullet.transform.position=barSsaPos.transform.position;
-                    sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20+(13*i),-20+(13*(i+1))));
-                    sBullet.bulletSet = 1;
-                    sBullet.bulletDagage = gunDamage[GunSet];
-                    sBullet.stun = gunStun[GunSet];
-                    sBullet.gameObject.SetActive(true);
+                    if(isMulty){
+                        sBullet.GetComponent<PhotonView>().RPC("DirRPC",
+                            RpcTarget.All,barSsaPos.transform.position,
+                            Quaternion.Euler(0,0,rotateDegree+Random.Range(-20+(13*i),-20+(13*(i+1)))),
+                            1,
+                            gunDamage[GunSet],
+                            gunStun[GunSet]);
+                    }
+                    else {
+                        sBullet.transform.position=barSsaPos.transform.position;
+                        sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20+(13*i),-20+(13*(i+1))));
+                        sBullet.bulletSet = 1;
+                        sBullet.bulletDagage = gunDamage[GunSet];
+                        sBullet.stun = gunStun[GunSet];
+                        sBullet.gameObject.SetActive(true);
+                    }
+                    Itismine(sBullet.gameObject);
                 }
             }
             return;
         }
         var bullet = ObjectPoolling.GetObject();
-        bullet.transform.position=barSsaPos.transform.position;
-        bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
-        bullet.bulletSet = 0;
-        bullet.bulletDagage = gunDamage[GunSet];
-        bullet.stun = gunStun[GunSet];
-        bullet.gameObject.SetActive(true);
-
+        if(isMulty){
+            bullet.GetComponent<PhotonView>().RPC("DirRPC",
+            RpcTarget.All,barSsaPos.transform.position,
+            Quaternion.Euler(0,0,rotateDegree),
+            0,
+            gunDamage[GunSet],
+            gunStun[GunSet]);
+        }
+        else{
+            bullet.transform.position=barSsaPos.transform.position;
+            bullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree);
+            bullet.bulletSet = 0;
+            bullet.bulletDagage = gunDamage[GunSet];
+            bullet.stun = gunStun[GunSet];
+            bullet.gameObject.SetActive(true);
+        }
+        Itismine(bullet.gameObject);
+    }
+    void Itismine(GameObject bullet){
+        if(!PV.IsMine){
+            bullet.layer = 15;
+        }
     }
     void OnTriggerEnter2D(Collider2D other){
+        
         if(other.tag=="Laser"){
             
             hp = 0;
             StartCoroutine(DieManNONO());
             return; 
         }
-        if(other.gameObject.layer==14){
+        if(other.gameObject.layer==14||other.gameObject.layer==15){
             BulletMove bulletMove = other.transform.parent.GetComponent<BulletMove>();
+            bool isMultyBullet=other.gameObject.layer==15;
             if(damaged){
-                bulletMove.DespawnBullet();
+                if(isMultyBullet){
+                    bulletMove.DestroyBullet();
+                }else
+                    bulletMove.DespawnBullet(); 
                 return;
             }
             hp -= bulletMove.bulletDagage;
-            bulletMove.DespawnBullet();
+            if(isMultyBullet){
+                bulletMove.DestroyBullet();
+            }else
+                bulletMove.DespawnBullet();
             hpBar.sethealth(hp,maxHp);
             if(hp <= 0){
                 StartCoroutine(DieManNONO());
@@ -230,39 +307,49 @@ public class playerMove : MonoBehaviour
         }
     }
     private IEnumerator DieManNONO(){
-        if(backgroundMusic!=null)
-            backgroundMusic.Stop();
-        gunAnimator.SetBool("Shoting",false);
-        childSpriteRenderers[1].transform.parent.transform.DOLocalMove(new Vector3(Random.Range(-0.2f,0.2f),-1.1f,0f),1.2f);
-        childSpriteRenderers[1].transform.parent.transform.DOLocalRotate(new Vector3(Random.Range(-50f,50f),0f,0f),1.2f);
-        //animator.enabled=true;
-        //animator.Play("playerdie");
-        myrigidbody.velocity=Vector2.zero;
-        myHitBox.enabled = false;
-        var bullet = GameManager.instance.allPoolManager.GetPool(0);
-        ParticleSystem.MainModule parmain = bullet.GetComponent<ParticleSystem>().main;
-        parmain.startColor=new Color(0.6603774f,0.2143111f,0.2143111f,1f);
-        bullet.transform.position = transform.position;
-        bullet.SetActive(true);
-        isdead=true;
-        GameManager.instance.isdead = true;
-        //childSpriteRenderers[1].transform.SetParent(null);
-        audioSource.clip = audioClip[1];
-        audioSource.time = 0;
-        audioSource.Play();
-        Time.timeScale = 0.1f;
-        playerCamera.zoom = 2f;
-        playerCamera.hihi = null;
-        playerCamera.bound=false;
-        GameManager.instance.SaveAddMoney();
-        yield return new WaitForSeconds(0.2f);
-        ending.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        
-        playerCamera.zoom = 0f;
-        yield return new WaitForSeconds(0.1f);
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
+        if(isMulty){
+            Debug.Log("you lose");
+            
+            Time.timeScale = 0.1f;
+            yield return new WaitForSeconds(0.5f);
+            Time.timeScale = 1f;
+            
+        }
+        else{
+            if(backgroundMusic!=null)
+                backgroundMusic.Stop();
+            gunAnimator.SetBool("Shoting",false);
+            childSpriteRenderers[1].transform.parent.transform.DOLocalMove(new Vector3(Random.Range(-0.2f,0.2f),-1.1f,0f),1.2f);
+            childSpriteRenderers[1].transform.parent.transform.DOLocalRotate(new Vector3(Random.Range(-50f,50f),0f,0f),1.2f);
+            //animator.enabled=true;
+            //animator.Play("playerdie");
+            myrigidbody.velocity=Vector2.zero;
+            myHitBox.enabled = false;
+            var bullet = GameManager.instance.allPoolManager.GetPool(0);
+            ParticleSystem.MainModule parmain = bullet.GetComponent<ParticleSystem>().main;
+            parmain.startColor=new Color(0.6603774f,0.2143111f,0.2143111f,1f);
+            bullet.transform.position = transform.position;
+            bullet.SetActive(true);
+            isdead=true;
+            GameManager.instance.isdead = true;
+            //childSpriteRenderers[1].transform.SetParent(null);
+            audioSource.clip = audioClip[1];
+            audioSource.time = 0;
+            audioSource.Play();
+            Time.timeScale = 0.1f;
+            playerCamera.zoom = 2f;
+            playerCamera.hihi = null;
+            playerCamera.bound=false;
+            GameManager.instance.SaveAddMoney();
+            yield return new WaitForSeconds(0.2f);
+            ending.SetActive(true);
+            yield return new WaitForSeconds(0.2f);
+            
+            playerCamera.zoom = 0f;
+            yield return new WaitForSeconds(0.1f);
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("Menu");
+        }
     }
     private IEnumerator Hit(){
         audioSource.clip = audioClip[0];
@@ -292,6 +379,17 @@ public class playerMove : MonoBehaviour
             childSpriteRenderers[i].color = color;
         }
     }
-    
+    public void OnPhotonSerializeView(PhotonStream stream,PhotonMessageInfo info){
+        if(stream.IsWriting){
+            stream.SendNext(Camera.main.ScreenToWorldPoint(Input.mousePosition)) ;
+            stream.SendNext(transform.position);
+            stream.SendNext(hp);
+        }
+        else{
+            curTarget = (Vector3)stream.ReceiveNext();
+            curPos = (Vector3)stream.ReceiveNext();
+            hp = (int)stream.ReceiveNext();
+        }
+    }
 
 }

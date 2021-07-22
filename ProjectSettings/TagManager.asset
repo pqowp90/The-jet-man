@@ -22,7 +22,7 @@ TagManager:
   - EnemyBarrier
   - playerHitbox
   - enemyBullet
-  - 
+  - enemyPlayerBullet
   - 
   - 
   - 

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class BulletMove : MonoBehaviour
 {
@@ -72,6 +74,18 @@ public class BulletMove : MonoBehaviour
     public void DestroyBullet(){
         CancelInvoke();
         ObjectPoolling.ReturnObject(this);
+    }
+
+
+    [PunRPC]
+    void DirRPC(Vector3 pos,Quaternion ang, int Set, int DAM,int STN){
+        transform.position = pos;
+        transform.rotation = ang;
+        bulletSet = Set;
+        bulletDagage = DAM;
+        stun = STN;
+        gameObject.SetActive(true);
+        gameObject.layer = 15;
     }
     
 }

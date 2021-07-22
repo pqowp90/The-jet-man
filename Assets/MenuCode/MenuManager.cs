@@ -49,6 +49,8 @@ public class MenuManager : MonoBehaviour
     private Text selectGun;
     void Awake()
     {
+
+        Screen.orientation = ScreenOrientation.Portrait;
         if (FindObjectOfType<BackgroundMusic>()==null)
             backgroundMusic = Instantiate(backgroundMusicPrefab).GetComponent<BackgroundMusic>();
         else 
@@ -73,6 +75,9 @@ public class MenuManager : MonoBehaviour
             gunChk[i,1]=(int)char.GetNumericValue(gunYes[gunCnt+i]);
         }
         //Debug.Log(gunYes);
+    }
+    public void multyGo(){
+        SceneManager.LoadScene("multy");
     }
     public void cantBuy(){
         audioSource.clip = audioClip[1];
