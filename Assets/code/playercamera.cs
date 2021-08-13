@@ -29,7 +29,7 @@ public class playercamera : MonoBehaviour
         if(!hello)return;
         if (hihi != null)
         {
-            target = (player.transform.position + hihi.transform.position) / 2;
+            target = Vector3.zero;//(player.transform.position + hihi.transform.position*2f) / 3f;
         }
 		
         else target = player.transform.position;
@@ -57,7 +57,7 @@ public class playercamera : MonoBehaviour
             else return;
         if (hihi != null)
         {
-            target = (player.transform.position + hihi.transform.position) / 2;
+            target = (player.transform.position + hihi.transform.position*3f) / 4f;
         }
 		
         else target = player.transform.position;

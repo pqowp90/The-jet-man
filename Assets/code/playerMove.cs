@@ -58,13 +58,16 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
     public PhotonView PV;
     private Vector3 curPos;
     private Vector3 curTarget;
+    private NetWorkManager netWorkManager;
 
     void Start()
     {
+        netWorkManager = FindObjectOfType<NetWorkManager>();
         PV = GetComponent<PhotonView>();
         Time.timeScale = 1f;
         animator=gameObject.GetComponent<Animator>();
         if(SceneManager.GetActiveScene().buildIndex==3){
+            MultySpawn();
             isMulty = true;
             animator.enabled = false;
             //multyName = FindObjectOfType<multyName>();
@@ -105,19 +108,20 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
     }
     void Update()
     {
-        if(isMulty){
-            HeadRotation((PV.IsMine)?Camera.main.ScreenToWorldPoint(Input.mousePosition):curTarget);
-            multyName.hp = (float)hp/maxHp;
-            multyName.transform.position = transform.position;
-
-        }
-        if(!PV.IsMine&&isMulty){
-            if((transform.position - curPos).sqrMagnitude >= 100) transform.position = curPos;
-            else transform.position = Vector3.Lerp(transform.position,curPos,Time.deltaTime * 10);
-
-            return;
-        }
         if(isdead)return;
+        if(isMulty){
+            
+            HeadRotation((PV.IsMine)?Camera.main.ScreenToWorldPoint(Input.mousePosition):curTarget);
+            multyName.hp = (float)hp/(float)maxHp;
+            multyName.transform.position = transform.position;
+            if(!PV.IsMine){
+                gunAnimator.SetInteger("GunSet",GunSet);
+                if((transform.position - curPos).sqrMagnitude >= 100) transform.position = curPos;
+                else transform.position = Vector3.Lerp(transform.position,curPos,Time.deltaTime * 10);
+
+                return;
+            }
+        }else HeadRotation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         if(coolTime>0)
             coolTime-=Time.deltaTime;
         if(!isMulty){
@@ -130,8 +134,6 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                 }
                 return;
             }
-        }else{
-            No=false;
         }
         
         //HeadRotation();
@@ -237,6 +239,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                             1,
                             gunDamage[GunSet],
                             gunStun[GunSet]);
+                            Itismine(sBullet.gameObject);
                     }
                     else {
                         sBullet.transform.position=barSsaPos.transform.position;
@@ -246,7 +249,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                         sBullet.stun = gunStun[GunSet];
                         sBullet.gameObject.SetActive(true);
                     }
-                    Itismine(sBullet.gameObject);
+                    
                 }
             }
             return;
@@ -259,6 +262,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             0,
             gunDamage[GunSet],
             gunStun[GunSet]);
+            Itismine(bullet.gameObject);
         }
         else{
             bullet.transform.position=barSsaPos.transform.position;
@@ -268,15 +272,23 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             bullet.stun = gunStun[GunSet];
             bullet.gameObject.SetActive(true);
         }
-        Itismine(bullet.gameObject);
+        
+    }
+    [PunRPC]
+    void DIERPC(int score){
+        Debug.Log("hihihihihi");
+        //if(PV.IsMine)return;
+        netWorkManager.WinLose(!PV.IsMine);
     }
     void Itismine(GameObject bullet){
-        if(!PV.IsMine){
-            bullet.layer = 15;
+        if(PV.IsMine){
+            bullet.layer = 9;
         }
+        gunAnimator.SetTrigger("Shot");
     }
     void OnTriggerEnter2D(Collider2D other){
-        
+        if(isdead)return;
+        if(isMulty&&!PV.IsMine) return;
         if(other.tag=="Laser"){
             
             hp = 0;
@@ -284,7 +296,12 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             return; 
         }
         if(other.gameObject.layer==14||other.gameObject.layer==15){
-            BulletMove bulletMove = other.transform.parent.GetComponent<BulletMove>();
+            BulletMove bulletMove;
+            if(other.gameObject.layer==14){
+                bulletMove = other.transform.parent.GetComponent<BulletMove>();
+            }else {
+                bulletMove = other.GetComponent<BulletMove>();
+            }
             bool isMultyBullet=other.gameObject.layer==15;
             if(damaged){
                 if(isMultyBullet){
@@ -298,7 +315,8 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                 bulletMove.DestroyBullet();
             }else
                 bulletMove.DespawnBullet();
-            hpBar.sethealth(hp,maxHp);
+            if(!isMulty)
+                hpBar.sethealth(hp,maxHp);
             if(hp <= 0){
                 StartCoroutine(DieManNONO());
                 return; 
@@ -308,12 +326,16 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
     }
     private IEnumerator DieManNONO(){
         if(isMulty){
+            PV.RPC("DIERPC",RpcTarget.All,0);
             Debug.Log("you lose");
-            
+            isdead=true;
             Time.timeScale = 0.1f;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.3f);
             Time.timeScale = 1f;
+
             
+            MultySpawn();
+            isdead=false;
         }
         else{
             if(backgroundMusic!=null)
@@ -352,26 +374,30 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
     private IEnumerator Hit(){
-        audioSource.clip = audioClip[0];
-        audioSource.time = 0;
-        audioSource.Play();
-        damaged = true;
-        //myHitBox.enabled = false;
-        playerCamera.startshake(0.2f,0.3f);
-        spriteRenderer.color = new Color(1f,1f,1f,1f);
-        DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,0.4849057f,0.4849057f,1f),0.1f);
-        //light2D.color = new Color(1f,0.4849057f,0.4849057f,1f);
-        yield return new WaitForSeconds(0.1f);
-        DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,1f,1f,1f),0.2f);
-        //light2D.color = new Color(1f,1f,1f,1f);
-        for(int i=0;i<10;i++){
-            SetColor(new Color(0.5f,0.5f,0.5f,1f));
-            yield return new WaitForSeconds(0.05f);
-            SetColor(new Color(1f,1f,1f,1f));
-            yield return new WaitForSeconds(0.05f);
+        if(!isMulty){
+            audioSource.clip = audioClip[0];
+            audioSource.time = 0;
+            audioSource.Play();
+            damaged = true;
+            //myHitBox.enabled = false;
+            playerCamera.startshake(0.2f,0.3f);
+            spriteRenderer.color = new Color(1f,1f,1f,1f);
+            DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,0.4849057f,0.4849057f,1f),0.1f);
+            //light2D.color = new Color(1f,0.4849057f,0.4849057f,1f);
+            yield return new WaitForSeconds(0.1f);
+            DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,1f,1f,1f),0.2f);
+            //light2D.color = new Color(1f,1f,1f,1f);
+            for(int i=0;i<10;i++){
+                SetColor(new Color(0.5f,0.5f,0.5f,1f));
+                yield return new WaitForSeconds(0.05f);
+                SetColor(new Color(1f,1f,1f,1f));
+                yield return new WaitForSeconds(0.05f);
+            }
+            damaged = false;
+            //myHitBox.enabled = true;
+        }else{
+            damaged = false;
         }
-        damaged = false;
-        //myHitBox.enabled = true;
     }
     private void SetColor(Color color){
         for(int i=0;i<childSpriteRenderers.Length;i++){
@@ -384,12 +410,19 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(Camera.main.ScreenToWorldPoint(Input.mousePosition)) ;
             stream.SendNext(transform.position);
             stream.SendNext(hp);
+            stream.SendNext(GunSet);
         }
         else{
             curTarget = (Vector3)stream.ReceiveNext();
             curPos = (Vector3)stream.ReceiveNext();
             hp = (int)stream.ReceiveNext();
+            GunSet = (int)stream.ReceiveNext();
+            
         }
+    }
+    void MultySpawn(){
+        hp = maxHp;
+        transform.position = new Vector3(Random.Range(2f,-2f),0f,0f);
     }
 
 }

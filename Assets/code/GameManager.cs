@@ -5,6 +5,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 
 public class GameManager : MonoBehaviour
@@ -79,8 +80,11 @@ public class GameManager : MonoBehaviour
     private Text endingText;
     private bool isBoss;
     
+    
     void Awake()
     {
+        
+        
         if(SceneManager.GetActiveScene().buildIndex==3){
 
 
@@ -99,7 +103,7 @@ public class GameManager : MonoBehaviour
         black = GameObject.Find("Canvas").transform.GetChild(0).gameObject;
         ESC = GameObject.Find("Canvas").transform.GetChild(1).gameObject;
         if(!menu){
-            mouse = FindObjectOfType<MousePointer>().gameObject;
+            //mouse = FindObjectOfType<MousePointer>().gameObject;
             StartCoroutine(Opening());
         }
         maxPos=new Vector2(9f,9f);
@@ -137,7 +141,7 @@ public class GameManager : MonoBehaviour
             gameTime+=Time.deltaTime;
             progressSlider.value = gameTime/clearTime;
             if(!isEnding)
-                playerLight.pointLightOuterRadius = 5.53f + (gameTime/clearTime)*9f;
+                playerLight.pointLightOuterRadius = 5.61f + (gameTime/clearTime);
             if(gameTime>BEST)
                 BEST = (int)gameTime;
             progressSliderBEST.value = (float)BEST/(float)clearTime;
@@ -216,6 +220,7 @@ public class GameManager : MonoBehaviour
         }
         drone = allPoolManager.GetPool(7);
         drone.transform.position = new Vector3(saveX,playerCamera.transform.position.y-4f,0f);
+        drone.transform.rotation = Quaternion.Euler(0f,0f,90f);
         drone.SetActive(true);
     }
     private IEnumerator LaserBbang(){
@@ -273,14 +278,15 @@ public class GameManager : MonoBehaviour
             ESC.SetActive(true);
             ESCON=true;
             Time.timeScale = 0f;
-            mouse.SetActive(false);
+            //mouse.SetActive(false);
         }
         else {
             ESC.SetActive(false);
             ESCON=false;
             Time.timeScale = timeSpeed;
             //showMouse=false;
-            mouse.SetActive(true);
+            //mouse.SetActive(true);
         }
     }
+    
 }

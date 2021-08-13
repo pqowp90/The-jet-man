@@ -898,7 +898,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6465b3d5ca18c4441bd8918299220a84, type: 3}
   - {fileID: 0}
   coolTime: 0
-  maxHp: 25
+  maxHp: 300
   hp: 0
   gunset: 0000000000000000
   gunDamage: 190000000f0000000a00000000000000000000000000000000000000000000000000000000000000
@@ -1413,9 +1413,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0045851395, y: 0.04814445}
+  m_Offset: {x: 0.0070186392, y: 0.10168232}
   serializedVersion: 2
-  m_Radius: 0.17215914
+  m_Radius: 0.43254843
 --- !u!1 &8571638591778749109
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
@@ -47,9 +48,12 @@ public class MenuManager : MonoBehaviour
     public StoreGuns[] gunNewThis;
     [SerializeField]
     private Text selectGun;
+    private AudioMixer mixer;
     void Awake()
     {
-
+        mixer = Resources.Load<AudioMixer>("mixer");
+        
+        Time.timeScale = 1f;
         Screen.orientation = ScreenOrientation.Portrait;
         if (FindObjectOfType<BackgroundMusic>()==null)
             backgroundMusic = Instantiate(backgroundMusicPrefab).GetComponent<BackgroundMusic>();
@@ -64,6 +68,17 @@ public class MenuManager : MonoBehaviour
         money = PlayerPrefs.GetInt("MONEY",1000);
         LoadGunSave();
         UpdateUI();
+        
+    }
+    void Start(){
+        StartVolumeSet();
+    }
+    private void StartVolumeSet(){
+        for(int i=0;i<scrollbarCode.Length;i++){
+            mixer.SetFloat(scrollbarCode[i].abc,Mathf.Log10(PlayerPrefs.GetFloat(scrollbarCode[i].abc))*20);
+            Debug.Log(scrollbarCode[i].abc);
+            Debug.Log(PlayerPrefs.GetFloat(scrollbarCode[i].abc));
+        }
     }
     public void LoadGunSave(){
         
@@ -141,6 +156,7 @@ public class MenuManager : MonoBehaviour
     }
     
     public void SelectGun(bool hi){
+        GoSound(Random.Range(5,7));
         int s1,s2;
         s1 = PlayerPrefs.GetInt("Select1",-1);
         s2 = PlayerPrefs.GetInt("Select2",-1);
@@ -166,7 +182,7 @@ public class MenuManager : MonoBehaviour
     }
     public void SelectClick(){
         storeAnimator.SetBool("Select",true);
-        
+        GoSound(7);
     }
     public void Change(){
         switch(sceneNum){
@@ -179,6 +195,8 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("main");
     }
     public void StartClick(){
+        GoSound(3);
+        audioSource.time = 0.15f;
         if(PlayerPrefs.GetInt("Select1",-1)>=0){
             PlayerPrefs.SetInt("S1UP",gunChk[PlayerPrefs.GetInt("Select1",-1),1]);
             if(PlayerPrefs.GetInt("Select2",-1)!=-1)
@@ -201,18 +219,29 @@ public class MenuManager : MonoBehaviour
         yield return new WaitForSeconds(2f); 
         DOTween.To(()=>selectGun.color,colorL=>selectGun.color=colorL,new Color(0.8207547f,0.8207547f,0.8207547f,0f),0.2f);
     }
+    public void GoSound(int num){
+        audioSource.time = 0f;
+        audioSource.clip = audioClip[num];
+        audioSource.Play();
+    }
     public void StoreClick(){
+        GoSound(3);
+        audioSource.time = 0.15f;
         LoadGunSave();
         maincamera.GetComponent<playercamera>().zoom=1.3f;
         sceneNum=1;
         UpdateMenu();
     }
-    public void SettingClick(){        
+    public void SettingClick(){      
+        GoSound(3);
+        audioSource.time = 0.15f;
         maincamera.GetComponent<playercamera>().zoom=3f;
         sceneNum=2;
         UpdateMenu();
     }
     public void Back(){
+        GoSound(7);
+        audioSource.time = 0.15f;
         storeAnimator.SetBool("Select",false);
         if(sceneNum==2){
             for(int i=0;i<3;i++){
@@ -224,6 +253,8 @@ public class MenuManager : MonoBehaviour
         UpdateMenu();
     }
     public void Quit(){
+        GoSound(7);
+        audioSource.time = 0.15f;
         Application.Quit();
     }
     private void UpdateMenu(){

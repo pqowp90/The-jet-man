@@ -13,7 +13,6 @@ public class BackgroundMusic : MonoBehaviour
     void Start()
     {
         audioSource=GetComponent<AudioSource>();
-        audioSource.volume = PlayerPrefs.GetFloat("MusicVolume",0.3f);
     }
     public void FaidOut(){
         StartCoroutine(Restart());
@@ -23,7 +22,6 @@ public class BackgroundMusic : MonoBehaviour
         yield return new WaitForSeconds(1.3f);
         audioSource.clip = audioClip[num];
         audioSource.time = 7.7f;
-        audioSource.volume = PlayerPrefs.GetFloat("MusicVolume",0.3f);
         MusicStart();
     }
     public void MusicStart(){

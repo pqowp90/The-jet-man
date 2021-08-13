@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class ScrollbarCode : MonoBehaviour
@@ -8,16 +9,18 @@ public class ScrollbarCode : MonoBehaviour
     [SerializeField]
     private float firstNum;
     [SerializeField]
-    private string abc;
+    public string abc;
     [SerializeField]
     private Text Num;
 
 
 
-    private Scrollbar scrollbar;
+    private Slider scrollbar;
+    private AudioMixer mixer;
     void Start()
     {
-        scrollbar = GetComponent<Scrollbar>();
+        mixer = Resources.Load<AudioMixer>("mixer");
+        scrollbar = GetComponent<Slider>();
         scrollbar.value = GameManager.instance.GetSaveFloat(abc,firstNum);
     }
 
@@ -27,5 +30,8 @@ public class ScrollbarCode : MonoBehaviour
     }
     public void Set(){
         GameManager.instance.SetSaveFloat(abc,scrollbar.value);
+    }
+    public void SoundVolume(float val){
+        mixer.SetFloat(abc,Mathf.Log10(val)*20);
     }
 }
