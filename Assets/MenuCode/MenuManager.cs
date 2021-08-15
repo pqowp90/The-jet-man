@@ -195,8 +195,6 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("main");
     }
     public void StartClick(){
-        GoSound(3);
-        audioSource.time = 0.15f;
         if(PlayerPrefs.GetInt("Select1",-1)>=0){
             PlayerPrefs.SetInt("S1UP",gunChk[PlayerPrefs.GetInt("Select1",-1),1]);
             if(PlayerPrefs.GetInt("Select2",-1)!=-1)

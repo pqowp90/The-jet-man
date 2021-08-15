@@ -140,8 +140,8 @@ public class GameManager : MonoBehaviour
         if(!menu){
             gameTime+=Time.deltaTime;
             progressSlider.value = gameTime/clearTime;
-            if(!isEnding)
-                playerLight.pointLightOuterRadius = 5.61f + (gameTime/clearTime);
+            // if(!isEnding)
+            //     playerLight.pointLightOuterRadius = 5.61f + (gameTime/clearTime);
             if(gameTime>BEST)
                 BEST = (int)gameTime;
             progressSliderBEST.value = (float)BEST/(float)clearTime;
@@ -239,8 +239,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timeSpeed;
         startWall.transform.DOMoveY(0.13f,3);
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-        yield return new WaitForSeconds(0.1f);
         playerCamera.GetComponent<playercamera>().hihi = null;
+        yield return new WaitForSeconds(0.1f);
         timeSpeed = 1f;
         Time.timeScale = timeSpeed;
         black.SetActive(false);

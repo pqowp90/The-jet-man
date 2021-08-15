@@ -22,7 +22,7 @@ public class GunCode : MonoBehaviour
     private void DdangSound(){
         audioSource.clip = audioClip[0];
         audioSource.pitch=0.8f;
-        audioSource.volume = 0.3f;
+        audioSource.volume = 0.4f;
         Play();
     }
     private void DadaSound(){

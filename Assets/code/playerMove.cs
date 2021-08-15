@@ -25,6 +25,8 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private GameObject barSsaPos;
     [SerializeField]
+    private GameObject gunFire;
+    [SerializeField]
     private AudioClip[] audioClip;
     private AudioSource audioSource;
     private float rotateDegree,headRotate,radian,x,y,goTime,wheelInput;
@@ -82,7 +84,6 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             backgroundMusic = FindObjectOfType<BackgroundMusic>().GetComponent<AudioSource>();
         GameManager.instance.isdead = false;
         audioSource = GetComponent<AudioSource>();
-        light2D = GetComponentInChildren<Light2D>();
         hpBar = transform.GetComponentInChildren<HpBar>();
         hp = maxHp;
         GameManager gameManager = GameManager.instance;
@@ -136,7 +137,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
         
-        //HeadRotation();
+        //HeadRotation();z
         radian = rotateDegree*Mathf.PI/180f;
         x = 80 * Mathf.Cos(radian);
         y = 200 * Mathf.Sin(radian);
@@ -227,6 +228,9 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         animator.enabled=false;
     }
     public void Shoting(float a){
+        gunFire.transform.position = barSsaPos.transform.position;
+        gunFire.GetComponent<Animator>().SetTrigger("Shot");
+        gunFire.GetComponent<Animator>().SetFloat("Blend",(float)GunSet);
         myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
         if(GunSet==2){
             for(int i=0;i<3;i++){
@@ -242,6 +246,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                             Itismine(sBullet.gameObject);
                     }
                     else {
+
                         sBullet.transform.position=barSsaPos.transform.position;
                         sBullet.transform.rotation = Quaternion.Euler(0,0,rotateDegree+Random.Range(-20+(13*i),-20+(13*(i+1))));
                         sBullet.bulletSet = 1;
@@ -382,10 +387,13 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             //myHitBox.enabled = false;
             playerCamera.startshake(0.2f,0.3f);
             spriteRenderer.color = new Color(1f,1f,1f,1f);
+            float outer = light2D.pointLightOuterRadius;
+            light2D.pointLightOuterRadius = 9f;
             DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,0.4849057f,0.4849057f,1f),0.1f);
             //light2D.color = new Color(1f,0.4849057f,0.4849057f,1f);
             yield return new WaitForSeconds(0.1f);
-            DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(1f,1f,1f,1f),0.2f);
+            light2D.pointLightOuterRadius = outer;
+            DOTween.To(()=>light2D.color,colorL=>light2D.color=colorL,new Color(0.9716981f,0.8263388f,0.4904325f,1f),0.2f);
             //light2D.color = new Color(1f,1f,1f,1f);
             for(int i=0;i<10;i++){
                 SetColor(new Color(0.5f,0.5f,0.5f,1f));
