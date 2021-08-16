@@ -46,7 +46,7 @@ public class StoreGuns : MonoBehaviour
         costText.text = string.Format("{0}",(menuManager.gunChk[myGunSet,0]==2)?0:gunCost[menuManager.gunChk[myGunSet,1]]);
 
         if(menuManager.gunChk[myGunSet,0]!=0)
-            upText.text = string.Format("+{0}",(menuManager.gunChk[myGunSet,0]==2)?9:(menuManager.gunChk[myGunSet,1]-1));
+            upText.text = string.Format("+{0}",(menuManager.gunChk[myGunSet,0]==2)?(menuManager.gunChk[myGunSet,1]):(menuManager.gunChk[myGunSet,1]-1));
 
         lockImage.SetActive(menuManager.gunChk[myGunSet,0]==0);
         buy.SetActive(menuManager.gunChk[myGunSet,0]==0);
@@ -56,11 +56,11 @@ public class StoreGuns : MonoBehaviour
             upgread.transform.GetChild(0).GetComponent<Text>().text="MAX";
         }
 
-        select.GetComponent<Image>().color = (menuManager.gunChk[myGunSet,0]==0)?new Color(0.6235294f,0.6235294f,0.6235294f,1f):new Color(0.2078431f,0.8039216f,0.2156863f,1f);
-        buy.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.7075472f,0.249644f,0.249644f,1f):new Color(0.2078431f,0.8039216f,0.2156863f,1f);
-        upgread.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.7075472f,0.249644f,0.249644f,1f):new Color(0.2078431f,0.8039216f,0.2156863f,1f);
+        select.GetComponent<Image>().color = (menuManager.gunChk[myGunSet,0]==0)?new Color(0.6235294f,0.6235294f,0.6235294f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
+        buy.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.5764706f,0.1377644f,0.1058823f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
+        upgread.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.5764706f,0.1377644f,0.1058823f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
         if(menuManager.gunChk[myGunSet,0]==2)
-            upgread.GetComponent<Image>().color = new Color(0.2078431f,0.8039216f,0.2156863f,1f);
+            upgread.GetComponent<Image>().color = new Color(0.1058651f,0.5754717f,0.13548f,1f);
     }
     public void selectGun(){
         if(menuManager.gunChk[myGunSet,0]==0)
