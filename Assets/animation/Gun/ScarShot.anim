@@ -319,7 +319,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.05
-    functionName: BarSsaChong
+    functionName: BarSsaChong2
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -333,7 +333,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.18333334
-    functionName: BarSsaChong
+    functionName: BarSsaChong2
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -22,6 +22,12 @@ public class GunCode : MonoBehaviour
     private void BarSsaChong(){
         playerMove.Shoting(2.6f);
     }
+    private void BarSsaChong2(){
+        playerMove.Shoting(2.8f);
+    }
+    private void BarSsaChong3(){
+        playerMove.Shoting(3.5f);
+    }
     private void DdangSound(){
         FindEmpty(0f,0.8f,0.4f,audioClip[0]);
     }
@@ -36,7 +42,10 @@ public class GunCode : MonoBehaviour
         FindEmpty(0f,1f,0.17f,audioClip[3]);
     }
     private void darararararara(){
-        FindEmpty(0f,1f,0.17f,audioClip[4]);
+        FindEmpty(0f,1.2f,0.17f,audioClip[4]);
+    }
+    private void BBBBBBaaaaaang(){
+        FindEmpty(0f,1f,0.17f,audioClip[5]);
     }
 
     private void FindEmpty(float time,float pitch,float volume,AudioClip clip){

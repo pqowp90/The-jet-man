@@ -46,7 +46,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private int[] gunStun = new int[10];
     [SerializeField]
-    private float[] rebound = new float[10];
+    private float[] lifetime = new float[10];
     private HpBar hpBar;
     [SerializeField]
     private Light2D light2D;
@@ -141,15 +141,18 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         
         //HeadRotation();z
         radian = rotateDegree*Mathf.PI/180f;
-        x = 80 * Mathf.Cos(radian)*rebound[GunSet];
-        y = 200 * Mathf.Sin(radian)*rebound[GunSet];
+        x = 80 * Mathf.Cos(radian);
+        y = 200 * Mathf.Sin(radian);
         if(y>0)y*=0.5f;
         
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
 
         if(Input.GetMouseButton(0)&&coolTime<=0f&&!EventSystem.current.IsPointerOverGameObject())
-            gunAnimator.SetBool("Shoting",true);
+            if(gunAnimator.GetBool("Shoting")==false){
+                gunAnimator.SetBool("Shoting",true);
+                gunAnimator.SetTrigger("Shot");
+            }
 
         if(Input.GetMouseButtonDown(0)&&!EventSystem.current.IsPointerOverGameObject()) {
             if(!EventSystem.current.IsPointerOverGameObject()&&coolTime<=0f){
@@ -167,6 +170,18 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                     break;
                     case 2:
                     Shoting(0.5f);
+                    coolTime = 0.7f;
+                    break;
+                    case 3:
+                    
+                    coolTime = 0.15f;
+                    break;
+                    case 4:
+                    Shoting(0.5f);
+                    coolTime = 0.7f;
+                    break;
+                    case 5:
+                    
                     coolTime = 0.7f;
                     break;
                 }
@@ -244,7 +259,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         gunFire.GetComponent<Animator>().SetTrigger("Shot");
         gunFire.GetComponent<Animator>().SetFloat("Blend",(float)GunSet);
         myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
-        if(GunSet==2){
+        if(GunSet==2||GunSet==4){
             for(int i=0;i<3;i++){
                 for(int j=0;j<2;j++){
                     var sBullet = ObjectPoolling.GetObject();
@@ -288,6 +303,9 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             bullet.bulletDagage = gunDamage[GunSet];
             bullet.stun = gunStun[GunSet];
             bullet.gameObject.SetActive(true);
+            ParticleSystem m_System = bullet.GetComponentInChildren<ParticleSystem>();
+            ParticleSystem.MainModule main = m_System.main;
+            main.startLifetimeMultiplier = lifetime[GunSet];
         }
         
     }
