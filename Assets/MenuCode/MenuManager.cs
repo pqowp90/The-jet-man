@@ -79,13 +79,11 @@ public class MenuManager : MonoBehaviour
     private void StartVolumeSet(){
         for(int i=0;i<scrollbarCode.Length;i++){
             mixer.SetFloat(scrollbarCode[i].abc,Mathf.Log10(PlayerPrefs.GetFloat(scrollbarCode[i].abc))*20);
-            Debug.Log(scrollbarCode[i].abc);
-            Debug.Log(PlayerPrefs.GetFloat(scrollbarCode[i].abc));
         }
     }
     public void LoadGunSave(){
         
-        gunYes = PlayerPrefs.GetString("GunSave","000000000000000");
+        gunYes = PlayerPrefs.GetString("GunSave","0000000000000000000000000");
         for(int i=0;i<gunCnt;i++){
             gunChk[i,0]=(gunYes[i]=='0')?0:((gunYes[i]=='1')?1:2);
         }

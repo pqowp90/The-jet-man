@@ -26,13 +26,11 @@ public class DisplayCode : MonoBehaviour
         if(hihihi == 0){
             if(!hicol[0].ohohoh)return;
             //Right
-            Debug.Log(hi.position.x);
             hi.DOLocalMoveX(hi.localPosition.x-600f,0.35f);
         }
         else{
             if(!hicol[1].ohohoh)return;
             //Left
-            Debug.Log(hi.position.x);
             hi.DOLocalMoveX(hi.localPosition.x+600f,0.35f);
         }
         coolTime = 0.5f;

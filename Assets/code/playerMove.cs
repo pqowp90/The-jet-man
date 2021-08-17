@@ -45,6 +45,8 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
 
     [SerializeField]
     private int[] gunStun = new int[10];
+    [SerializeField]
+    private float[] rebound = new float[10];
     private HpBar hpBar;
     [SerializeField]
     private Light2D light2D;
@@ -139,8 +141,8 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         
         //HeadRotation();z
         radian = rotateDegree*Mathf.PI/180f;
-        x = 80 * Mathf.Cos(radian);
-        y = 200 * Mathf.Sin(radian);
+        x = 80 * Mathf.Cos(radian)*rebound[GunSet];
+        y = 200 * Mathf.Sin(radian)*rebound[GunSet];
         if(y>0)y*=0.5f;
         
         
@@ -221,6 +223,15 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             break;
             case 2:
             barSsaPos = GameObject.Find("ShotGunShotingPos");
+            break;
+            case 3:
+            barSsaPos = GameObject.Find("ScarShotingPos");
+            break;
+            case 4:
+            barSsaPos = GameObject.Find("ShotGun2ShotingPos");
+            break;
+            case 5:
+            barSsaPos = GameObject.Find("VectorShotingPos");
             break;            
         }
     }
@@ -229,6 +240,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void Shoting(float a){
         gunFire.transform.position = barSsaPos.transform.position;
+        gunFire.transform.rotation = barSsaPos.transform.rotation;
         gunFire.GetComponent<Animator>().SetTrigger("Shot");
         gunFire.GetComponent<Animator>().SetFloat("Blend",(float)GunSet);
         myrigidbody.AddForce(new Vector3(-x/a,-y/a,0f));
