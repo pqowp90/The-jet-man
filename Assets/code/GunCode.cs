@@ -23,7 +23,7 @@ public class GunCode : MonoBehaviour
         playerMove.Shoting(2.6f);
     }
     private void DdangSound(){
-        FindEmpty(0f,1f,0.4f,audioClip[0]);
+        FindEmpty(0f,0.8f,0.4f,audioClip[0]);
     }
     private void DadaSound(){
         FindEmpty(0f,1f,0.6f,audioClip[1]);
@@ -36,7 +36,7 @@ public class GunCode : MonoBehaviour
         FindEmpty(0f,1f,0.17f,audioClip[3]);
     }
     private void darararararara(){
-        FindEmpty(0f,1.1f,0.17f,audioClip[4]);
+        FindEmpty(0f,1f,0.17f,audioClip[4]);
     }
 
     private void FindEmpty(float time,float pitch,float volume,AudioClip clip){
