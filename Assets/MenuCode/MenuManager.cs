@@ -33,7 +33,7 @@ public class MenuManager : MonoBehaviour
     private float nonotime;
     [SerializeField]
     private playercamera playerCamera;
-    private AudioSource audioSource;
+    public AudioSource audioSource;
     private bool nonono;
     private Vector3 mousePosed;//마우스포지션 였던것
     [SerializeField]
@@ -49,6 +49,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private Text selectGun;
     private AudioMixer mixer;
+    [SerializeField]
+    private SelectThis selectThis;
     void Awake()
     {
         mixer = Resources.Load<AudioMixer>("mixer");
@@ -157,6 +159,7 @@ public class MenuManager : MonoBehaviour
     }
     
     public void SelectGun(bool hi){
+        bool oneOrtwo = false;
         GoSound(Random.Range(5,7));
         int s1,s2;
         s1 = PlayerPrefs.GetInt("Select1",-1);
@@ -164,15 +167,20 @@ public class MenuManager : MonoBehaviour
         storeAnimator.SetBool("Select",false);
         if(hi){
             PlayerPrefs.SetInt("Select1",gunNewSelect);
-            if(s2==gunNewSelect)
+            oneOrtwo = true;
+            if(s2==gunNewSelect){
                 PlayerPrefs.SetInt("Select2",-1);//1번을 했는데 2번이랑 같은거면 2번지우고 1번으로
+            }
         }
         else{
             if(s1==gunNewSelect)//2번을 했는데 1번에 있으면 취소
                 return;
-            if(s1!=-1)//1번이 비어있지 않으면 넣어줌
+            if(s1!=-1){//1번이 비어있지 않으면 넣어줌
+                oneOrtwo = false;
                 PlayerPrefs.SetInt("Select2",gunNewSelect);
+            }
         }
+        selectThis.SelectSprite(oneOrtwo,gunNewSelect);
         ResetStore();
     }
     void ResetStore(){

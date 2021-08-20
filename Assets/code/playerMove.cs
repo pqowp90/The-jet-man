@@ -178,11 +178,11 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                     break;
                     case 4:
                     Shoting(0.5f);
-                    coolTime = 0.7f;
+                    coolTime = 0.2f;
                     break;
                     case 5:
                     
-                    coolTime = 0.7f;
+                    coolTime = 0.2f;
                     break;
                 }
                 

@@ -1854,7 +1854,7 @@ namespace Photon.Pun
             //    view.OwnerActorNr = sender.ID;
             //}
 
-            serializeStreamIn.SetReadStream(data, 3);
+            serializeStreamIn.SetReadStream(data, 2);
             PhotonMessageInfo info = new PhotonMessageInfo(sender, networkTime, view);
 
             view.DeserializeView(serializeStreamIn, info);

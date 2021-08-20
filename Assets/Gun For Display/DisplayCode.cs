@@ -21,7 +21,8 @@ public class DisplayCode : MonoBehaviour
         }
     }
     public void ButtenDowntownBaby(int hihihi){
-        
+        MenuManager.instance.GoSound(7);
+        MenuManager.instance.audioSource.time = 0.15f;
         if(coolTime>=0)return;
         if(hihihi == 0){
             if(!hicol[0].ohohoh)return;

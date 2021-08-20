@@ -26,7 +26,7 @@ public class GunCode : MonoBehaviour
         playerMove.Shoting(2.8f);
     }
     private void BarSsaChong3(){
-        playerMove.Shoting(3.5f);
+        playerMove.Shoting(3.7f);
     }
     private void DdangSound(){
         FindEmpty(0f,0.8f,0.4f,audioClip[0]);
