@@ -170,6 +170,7 @@ public class MenuManager : MonoBehaviour
             oneOrtwo = true;
             if(s2==gunNewSelect){
                 PlayerPrefs.SetInt("Select2",-1);//1번을 했는데 2번이랑 같은거면 2번지우고 1번으로
+                selectThis.SelectSprite(oneOrtwo,2);
             }
         }
         else{
@@ -232,23 +233,23 @@ public class MenuManager : MonoBehaviour
         audioSource.Play();
     }
     public void StoreClick(){
-        GoSound(3);
-        audioSource.time = 0.15f;
+        GoSound(7);
+        audioSource.time = 0f;
         LoadGunSave();
         maincamera.GetComponent<playercamera>().zoom=1.3f;
         sceneNum=1;
         UpdateMenu();
     }
     public void SettingClick(){      
-        GoSound(3);
-        audioSource.time = 0.15f;
+        GoSound(7);
+        audioSource.time = 0f;
         maincamera.GetComponent<playercamera>().zoom=3f;
         sceneNum=2;
         UpdateMenu();
     }
     public void Back(){
         GoSound(7);
-        audioSource.time = 0.15f;
+        audioSource.time = 0f;
         storeAnimator.SetBool("Select",false);
         if(sceneNum==2){
             for(int i=0;i<3;i++){
