@@ -45,6 +45,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField]
     private AudioClip[] audioClip;
     public int gunNewSelect=-1;
+    [SerializeField]
     public StoreGuns[] gunNewThis;
     [SerializeField]
     private Text selectGun;
@@ -170,7 +171,7 @@ public class MenuManager : MonoBehaviour
             oneOrtwo = true;
             if(s2==gunNewSelect){
                 PlayerPrefs.SetInt("Select2",-1);//1번을 했는데 2번이랑 같은거면 2번지우고 1번으로
-                selectThis.SelectSprite(oneOrtwo,2);
+                selectThis.SelectSprite(false,99);
             }
         }
         else{
@@ -186,11 +187,13 @@ public class MenuManager : MonoBehaviour
     }
     void ResetStore(){
         for(int i=0;i<gunCnt;i++){
-            gunNewThis[i].UpdateSelect();
             gunNewThis[i].UpdateButten();
         }
     }
     public void SelectClick(){
+        if(gunChk[gunNewSelect,0]==0){
+            return;
+        }
         storeAnimator.SetBool("Select",true);
         GoSound(7);
     }

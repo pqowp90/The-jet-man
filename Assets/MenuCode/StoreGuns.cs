@@ -8,11 +8,7 @@ public class StoreGuns : MonoBehaviour
     [SerializeField]
     private int myGunSet;
     [SerializeField]
-    private GameObject select;
-    [SerializeField]
     private GameObject buy;
-    [SerializeField]
-    private GameObject upgread;
     [SerializeField]
     private MenuManager menuManager;
     [SerializeField]
@@ -23,23 +19,12 @@ public class StoreGuns : MonoBehaviour
     private int max;
     [SerializeField]
     private Text costText,upText;
-    // Start is called before the first frame update
     void Start()
     {
         //Invoke("UpdateButten",0.5f);
         UpdateButten();
-        UpdateSelect();
     }
 
-    // Update is called once per frame
-    public void UpdateSelect(){
-        if(PlayerPrefs.GetInt("Select1",-1)==myGunSet)
-            select.transform.GetChild(0).GetComponent<Text>().text = "Selected 1";
-        else if(PlayerPrefs.GetInt("Select2",-1)==myGunSet)
-            select.transform.GetChild(0).GetComponent<Text>().text = "Selected 2";
-        else 
-            select.transform.GetChild(0).GetComponent<Text>().text = "Select";
-    }
     public void UpdateButten(){
         
 
@@ -48,26 +33,29 @@ public class StoreGuns : MonoBehaviour
         if(menuManager.gunChk[myGunSet,0]!=0)
             upText.text = string.Format("+{0}",(menuManager.gunChk[myGunSet,0]==2)?(menuManager.gunChk[myGunSet,1]):(menuManager.gunChk[myGunSet,1]-1));
 
-        lockImage.SetActive(menuManager.gunChk[myGunSet,0]==0);
-        buy.SetActive(menuManager.gunChk[myGunSet,0]==0);
-        upgread.SetActive(menuManager.gunChk[myGunSet,0]>0);
-
-        if(menuManager.gunChk[myGunSet,0]==2){
-            upgread.transform.GetChild(0).GetComponent<Text>().text="MAX";
+        //lockImage.SetActive(menuManager.gunChk[myGunSet,0]==0);
+        
+        // buy.SetActive(menuManager.gunChk[myGunSet,0]==0);
+        // upgread.SetActive(menuManager.gunChk[myGunSet,0]>0);
+        if(menuManager.gunChk[myGunSet,0]>0){
+            buy.transform.GetComponentInChildren<Text>().text="upgread";
+        }else{
+            buy.transform.GetComponentInChildren<Text>().text="buy";
         }
 
-        select.GetComponent<Image>().color = (menuManager.gunChk[myGunSet,0]==0)?new Color(0.6235294f,0.6235294f,0.6235294f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
-        buy.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.5764706f,0.1377644f,0.1058823f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
-        upgread.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.5764706f,0.1377644f,0.1058823f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
+        if(menuManager.gunChk[myGunSet,0]==2){
+            buy.transform.GetComponentInChildren<Text>().text="MAX";
+        }
+
+        buy.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.8490566f,0.2763439f,0.2763439f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
         if(menuManager.gunChk[myGunSet,0]==2)
-            upgread.GetComponent<Image>().color = new Color(0.1058651f,0.5754717f,0.13548f,1f);
+            buy.GetComponent<Image>().color = new Color(0.1058651f,0.5754717f,0.13548f,1f);
+        Debug.Log("씨발 왜안됨?"+menuManager.gunChk[myGunSet,0]);
     }
-    public void selectGun(){
-        if(menuManager.gunChk[myGunSet,0]==0)
-            return;
+    void OnEnable(){
         menuManager.gunNewSelect = myGunSet;
-        menuManager.SelectClick();
     }
+
     public void BuyGun(){
         //Debug.Log(menuManager.gunChk[myGunSet,1]);
         if(menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]]||menuManager.gunChk[myGunSet,0]==2){
