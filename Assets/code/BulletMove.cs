@@ -29,7 +29,6 @@ public class BulletMove : MonoBehaviour
     public void StartDeley(){
         CancelInvoke();
         Invoke("DestroyBullet",3f);
-        
     }
 
     protected virtual void Update()
@@ -67,6 +66,12 @@ public class BulletMove : MonoBehaviour
     }
     public void DespawnBullet(){
         DesEffect = GameManager.instance.allPoolManager.GetPool(5);
+        DesEffect.transform.position = transform.position;
+        DesEffect.SetActive(true);
+        allPooler.Despawn();
+    }
+    public void DespawnHealPack(){
+        DesEffect = GameManager.instance.allPoolManager.GetPool(9);
         DesEffect.transform.position = transform.position;
         DesEffect.SetActive(true);
         allPooler.Despawn();

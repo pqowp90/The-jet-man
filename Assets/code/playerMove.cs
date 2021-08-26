@@ -334,6 +334,9 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             BulletMove bulletMove;
             if(other.gameObject.layer==14){
                 bulletMove = other.transform.parent.GetComponent<BulletMove>();
+                if(bulletMove==null){
+                    bulletMove = other.GetComponent<BulletMove>();
+                }
             }else {
                 bulletMove = other.GetComponent<BulletMove>();
             }
@@ -346,13 +349,21 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                 return;
             }
             hp -= bulletMove.bulletDagage;
+            hp=Mathf.Clamp(hp,0,maxHp);
+            
             if(isMultyBullet){
-                bulletMove.DestroyBullet();
-            }else
-                bulletMove.DespawnBullet();
+                    bulletMove.DestroyBullet();
+            }else{
+                Debug.Log("아야");
+                if(bulletMove.bulletDagage>0)
+                    bulletMove.DespawnBullet();
+                else
+                    bulletMove.DespawnHealPack();
+            }
             if(!isMulty)
                 hpBar.sethealth(hp,maxHp);
-            if(hp <= 0){
+            if(bulletMove.bulletDagage<0)return;
+            if(hp <= 0){        
                 StartCoroutine(DieManNONO());
                 return; 
             }

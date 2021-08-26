@@ -160,8 +160,12 @@ public class MenuManager : MonoBehaviour
     }
     
     public void SelectGun(bool hi){
+        if(gunChk[gunNewSelect,0]==0) {
+            GoSound(1);
+            return;
+        }
         bool oneOrtwo = false;
-        GoSound(Random.Range(5,7));
+        GoSound(5);
         int s1,s2;
         s1 = PlayerPrefs.GetInt("Select1",-1);
         s2 = PlayerPrefs.GetInt("Select2",-1);
@@ -231,6 +235,7 @@ public class MenuManager : MonoBehaviour
         DOTween.To(()=>selectGun.color,colorL=>selectGun.color=colorL,new Color(0.8207547f,0.8207547f,0.8207547f,0f),0.2f);
     }
     public void GoSound(int num){
+        audioSource.volume = 0.7f;
         audioSource.time = 0f;
         audioSource.clip = audioClip[num];
         audioSource.Play();

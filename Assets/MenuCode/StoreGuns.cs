@@ -33,7 +33,7 @@ public class StoreGuns : MonoBehaviour
         if(menuManager.gunChk[myGunSet,0]!=0)
             upText.text = string.Format("+{0}",(menuManager.gunChk[myGunSet,0]==2)?(menuManager.gunChk[myGunSet,1]):(menuManager.gunChk[myGunSet,1]-1));
 
-        //lockImage.SetActive(menuManager.gunChk[myGunSet,0]==0);
+        lockImage.SetActive(menuManager.gunChk[myGunSet,0]==0);
         
         // buy.SetActive(menuManager.gunChk[myGunSet,0]==0);
         // upgread.SetActive(menuManager.gunChk[myGunSet,0]>0);
@@ -50,7 +50,6 @@ public class StoreGuns : MonoBehaviour
         buy.GetComponent<Image>().color = (menuManager.money<gunCost[menuManager.gunChk[myGunSet,1]])?new Color(0.8490566f,0.2763439f,0.2763439f,1f):new Color(0.1058651f,0.5754717f,0.13548f,1f);
         if(menuManager.gunChk[myGunSet,0]==2)
             buy.GetComponent<Image>().color = new Color(0.1058651f,0.5754717f,0.13548f,1f);
-        Debug.Log("씨발 왜안됨?"+menuManager.gunChk[myGunSet,0]);
     }
     void OnEnable(){
         menuManager.gunNewSelect = myGunSet;

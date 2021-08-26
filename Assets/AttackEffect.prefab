@@ -1439,16 +1439,16 @@ ParticleSystem:
           time: 0
           value: 0
           inSlope: 0
-          outSlope: 1
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 1
+          time: 0.6666666
           value: 1
           inSlope: 1
-          outSlope: 0
+          outSlope: 1
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -1542,7 +1542,27 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 21300000, guid: afc168cd6530b214f9699a547ff0c04a, type: 3}
+    - sprite: {fileID: -1049461823314036041, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -2480101461718692971, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -1250687572758538602, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 5854690309546303941, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 6503603955589506184, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -5501504206055355469, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -6835686178865105275, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 1014358986142382815, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 3341994831074886278, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -9216885738701653911, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 4452599035272694721, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 8645226743104283758, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 185500584975224922, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 5896130650416471175, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -5277492254135030604, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 6103207550115850556, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 5483277172415154086, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -2069963052451174754, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: 2484216652226600398, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -6873698666191634382, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -8688396243201725068, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -4878,7 +4898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d06e7677a54fc48bdf56503a3c8bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setIndex: 0
+  setIndex: 8
 --- !u!114 &1798351894324479879
 MonoBehaviour:
   m_ObjectHideFlags: 0

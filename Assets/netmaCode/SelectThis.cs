@@ -19,7 +19,7 @@ public class SelectThis : MonoBehaviour
     }
 
     public void SelectSprite(bool b , int a){
-        
+        if(a<0)return;
         if(b) one = guns[a];
         else two = (a==99)?null:guns[a];
         if(!zz){
@@ -27,6 +27,7 @@ public class SelectThis : MonoBehaviour
             hoho[0]=zz.GetChild(2).GetComponentInChildren<SpriteRenderer>();
             hoho[1]=zz.GetChild(3).GetComponentInChildren<SpriteRenderer>();
         }
+        
 
         hoho[0].sprite = one;
         hoho[1].sprite = two;
