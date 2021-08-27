@@ -233,11 +233,12 @@ MonoBehaviour:
   ps: {fileID: 0}
   isUdo: 0
   bulletSet: 0
-  bulletDagage: 10
+  bulletDagage: 8
   stun: 200
   enemy: 1
+  healPack: 0
   DesEffect: {fileID: 0}
-  misa: 1
+  misa: 0
 --- !u!114 &8484078328442190758
 MonoBehaviour:
   m_ObjectHideFlags: 0

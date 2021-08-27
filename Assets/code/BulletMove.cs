@@ -17,6 +17,8 @@ public class BulletMove : MonoBehaviour
     public float stun=200f;
     [SerializeField]
     private bool enemy;
+    [SerializeField]
+    private bool healPack;
     private AllPooler allPooler;
     [SerializeField]
     private GameObject DesEffect;
@@ -35,7 +37,7 @@ public class BulletMove : MonoBehaviour
     {
         if(GameManager.instance.isEnding)
             Destroy(gameObject);
-        if(!enemy){
+        if(!enemy&&!healPack){
             if(animator!=null)
             animator.SetInteger("BulletSet",bulletSet);
             if(ps!=null){//잔상회전

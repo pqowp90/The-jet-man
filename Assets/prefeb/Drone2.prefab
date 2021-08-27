@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bff7e6297474824385ec6efa409413b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
+  maxHp: 130
   hp: 0
   stunLess: 0.9
   cost: 50

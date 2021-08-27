@@ -11,7 +11,7 @@ public class SelectThis : MonoBehaviour
     public Sprite two;
     private Transform zz;
     private SpriteRenderer[] hoho = new SpriteRenderer[2];
-    void Start()
+    void Awake()
     {
         DontDestroyOnLoad(gameObject);
         SelectSprite(true,PlayerPrefs.GetInt("Select1",-1));

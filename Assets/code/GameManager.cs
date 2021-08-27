@@ -63,7 +63,8 @@ public class GameManager : MonoBehaviour
     public int chkEnemy=0;
     public int nowMoney;
     [SerializeField]
-    private Text moneyText;
+    private Text moneyText,M;
+    
     [SerializeField]
     private Slider progressSlider;
     [SerializeField]
@@ -121,7 +122,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        
+        M.text = string.Format("{0}M",(int)gameTime);
         if(SceneManager.GetActiveScene().buildIndex==3){
 
 
@@ -197,6 +198,14 @@ public class GameManager : MonoBehaviour
                 drone.transform.position = new Vector3(RandomX,RandomY,0f);
                 drone.SetActive(true);
             }
+            for(int i=0;i<5;i++){
+                if(Random.Range(0,4)==0){
+                    drone = allPoolManager.GetPool(8);
+                    drone.transform.position = new Vector3(Random.Range(spawnGoMin.position.x,spawnGoMax.position.x-1f),
+                        Random.Range(spawnGoMin.position.y,spawnGoMax.position.y)+10f,0f);
+                    drone.SetActive(true);
+                }
+            }
             if(Random.Range(0,2)==0&&gameTime>20f){
                 drone = allPoolManager.GetPool(6);
                 drone.transform.position = new Vector3(RandomX,RandomY,0f);
@@ -204,6 +213,14 @@ public class GameManager : MonoBehaviour
             }
             if(Random.Range(0,3)==0&&gameTime>60f){
                 StartCoroutine(MisailBarssa());
+            }
+            for(int i=0;i<3;i++){
+                if(Random.Range(0,4)==0&&gameTime>120f){
+                    yield return new WaitForSeconds(1f);
+                    drone = allPoolManager.GetPool(11);
+                    drone.transform.position = new Vector3(RandomX,RandomY,0f);
+                    drone.SetActive(true);
+                } 
             }
             yield return new WaitForSeconds(spawnDeley-gameTime/200f+((isBoss)?4f:0f));
         }

@@ -198,11 +198,13 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
             if(wheelInput>0){
                 GunSet=gunset[0];
                 gunAnimator.SetInteger("GunSet",gunset[0]);
+                gunAnimator.ResetTrigger("Shot");
                 coolTime = 0.1f;
             }
             else if(wheelInput<0&&gunset[1]!=-1){
                 GunSet=gunset[1];
                 gunAnimator.SetInteger("GunSet",gunset[1]);
+                gunAnimator.ResetTrigger("Shot");
                 coolTime = 0.1f;
             }
             if(wheelInput!=0){
@@ -216,6 +218,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         if(gunset[hi]>=0){
             GunSet=gunset[hi];
             gunAnimator.SetInteger("GunSet",gunset[hi]);
+            gunAnimator.ResetTrigger("Shot");
             shotPosSet();
         }
     }
@@ -333,14 +336,17 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         if(other.gameObject.layer==14||other.gameObject.layer==15){
             BulletMove bulletMove;
             if(other.gameObject.layer==14){
-                bulletMove = other.transform.parent.GetComponent<BulletMove>();
+                bulletMove = other.GetComponentInParent<BulletMove>();
                 if(bulletMove==null){
                     bulletMove = other.GetComponent<BulletMove>();
                 }
             }else {
                 bulletMove = other.GetComponent<BulletMove>();
             }
+            
             bool isMultyBullet=other.gameObject.layer==15;
+            hp -= bulletMove.bulletDagage;
+            hp=Mathf.Clamp(hp,0,maxHp);
             if(damaged){
                 if(isMultyBullet){
                     bulletMove.DestroyBullet();
@@ -348,13 +354,11 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
                     bulletMove.DespawnBullet(); 
                 return;
             }
-            hp -= bulletMove.bulletDagage;
-            hp=Mathf.Clamp(hp,0,maxHp);
+            
             
             if(isMultyBullet){
                     bulletMove.DestroyBullet();
             }else{
-                Debug.Log("아야");
                 if(bulletMove.bulletDagage>0)
                     bulletMove.DespawnBullet();
                 else

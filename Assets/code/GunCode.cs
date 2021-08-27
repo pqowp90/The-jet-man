@@ -23,7 +23,7 @@ public class GunCode : MonoBehaviour
         playerMove.Shoting(2.6f);
     }
     private void BarSsaChong2(){
-        playerMove.Shoting(2.8f);
+        playerMove.Shoting(3f);
     }
     private void BarSsaChong3(){
         playerMove.Shoting(3.7f);

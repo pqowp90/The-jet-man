@@ -222,7 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   URL: https://pastebin.com/raw/w324Mb2Q
   StoreURL: https://drive.google.com/file/d/1bc8kksHcRhWFKEvORKUYKSrxufQKv1Xw/view?usp=sharing
-  CurVersion: 0.1.1
+  CurVersion: 1.0.0
   newVersionAvailable: {fileID: 1592381936}
   loading: {fileID: 1656042293}
 --- !u!4 &539090612

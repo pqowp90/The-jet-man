@@ -14,9 +14,8 @@ GameObject:
   - component: {fileID: 6044680093713777943}
   - component: {fileID: 1798351894324479879}
   - component: {fileID: 7291612582280448582}
-  - component: {fileID: 517886870867687425}
   m_Layer: 0
-  m_Name: AttackEffect
+  m_Name: HealEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -172,7 +171,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 29.9
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -288,7 +287,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -610,7 +609,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: -0.05
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1542,27 +1541,9 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: -1049461823314036041, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -2480101461718692971, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -1250687572758538602, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 5854690309546303941, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 6503603955589506184, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -5501504206055355469, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -6835686178865105275, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 1014358986142382815, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 3341994831074886278, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -9216885738701653911, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 4452599035272694721, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 8645226743104283758, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 185500584975224922, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 5896130650416471175, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -5277492254135030604, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 6103207550115850556, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 5483277172415154086, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -2069963052451174754, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: 2484216652226600398, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -6873698666191634382, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
-    - sprite: {fileID: -8688396243201725068, guid: 4f0e193574719ff4e9d33c671f567783, type: 3}
+    - sprite: {fileID: -2237332784939120593, guid: 2e0ff448476ff4643ab6c3ba7cece229, type: 3}
+    - sprite: {fileID: 8163541354812715963, guid: 2e0ff448476ff4643ab6c3ba7cece229, type: 3}
+    - sprite: {fileID: -2453479219537291806, guid: 2e0ff448476ff4643ab6c3ba7cece229, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -4840,7 +4821,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4919,7 +4900,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5291952521372275973}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 6437789381954032918, guid: 03a2ced2031bc304fa75417a17ad7fe0, type: 2}
   m_audioClip: {fileID: 8300000, guid: 4a629f7bd1b98ee4ab6ea61504599db1, type: 3}
@@ -5008,16 +4989,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &517886870867687425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5291952521372275973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9230b6c181fd1d44c9b395741afa1110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveName: EffectVolume

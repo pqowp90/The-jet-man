@@ -17,8 +17,10 @@ public class Drone3Move : EnemyMove
     private AllPoolManager allPoolManager;
     [SerializeField]
     private float shotDeley=2f;
+    private Animator animator;
     void Start()
     {
+        animator = GetComponent<Animator>();
         allPoolManager = GameManager.instance.allPoolManager;
         playertransform = GameManager.instance.player.transform;
         myRigidbodyhi = GetComponent<Rigidbody2D>();
@@ -31,38 +33,28 @@ public class Drone3Move : EnemyMove
         if(myGun==null){
             myGun = transform.GetChild(0);
         }
-        GunAngle();
         aBarssaDeley();
     }
-    private void GunAngle(){
-        diff = playertransform.position - transform.position;
-        diff.Normalize();
-        rotationZ = Mathf.Atan2(diff.y,diff.x)*Mathf.Rad2Deg;
-        myGun.rotation = Quaternion.Euler(myGun.rotation.x,myGun.rotation.y,rotationZ);
-        gunRadian = rotationZ*Mathf.PI/180f;
-        gunX = 80 * Mathf.Cos(gunRadian);
-        gunY = 80 * Mathf.Sin(gunRadian);
-    }
+    
     private void aBarssaDeley(){
         shotingtime+=Time.deltaTime;
         if(shotingtime>shotDeley){
             shotingtime=0f;
-            Shoting();
+            animator.SetTrigger("Shot");
         }
     }
-    private void Shoting(){
-        if(Random.Range(0,2)==0)return;
+    
+    public void Shoting(){
         transform.DOKill();
-        var bullet = allPoolManager.GetPool(4).GetComponent<BulletMove>();
+        var bullet = allPoolManager.GetPool(10).GetComponent<BulletMove>();
         if(bullet==null)return;
         
         myRigidbodyhi.AddForce(new Vector3(-gunX,-gunY,0f));
         bullet.transform.position=barSsaPos.transform.position;
-        bullet.transform.rotation = Quaternion.Euler(0,0,rotationZ);
+        bullet.transform.rotation = Quaternion.Euler(0,0,90f);
         bullet.bulletSet = 0;
         bullet.bulletDagage = gunDamage;
         bullet.stun = gunStun;
         bullet.gameObject.SetActive(true);
-        bullet.GetComponent<Animator>().SetBool("Bolt",false);
     }
 }
