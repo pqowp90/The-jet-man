@@ -122,13 +122,14 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        M.text = string.Format("{0}M",(int)gameTime);
+        
         if(SceneManager.GetActiveScene().buildIndex==3){
 
 
             return;
         }
         if(goUp&&!menu){
+            M.text = string.Format("{0}M",(int)gameTime);
             playerCamera.GetComponent<playercamera>().maxPos.y += Time.deltaTime;
         }
         
