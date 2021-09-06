@@ -32,17 +32,17 @@ public class GunCode : MonoBehaviour
         FindEmpty(0f,0.8f,0.4f,audioClip[0]);
     }
     private void DadaSound(){
-        FindEmpty(0f,1f,0.6f,audioClip[1]);
+        FindEmpty(0f,1f,0.5f,audioClip[1]);
     }
     
     private void PpangSound(){
         FindEmpty(0f,1.2f,0.17f,audioClip[2]);
     }
     private void Dadadadadadadada(){
-        FindEmpty(0f,1f,0.17f,audioClip[3]);
+        FindEmpty(0f,1f,0.25f,audioClip[3]);
     }
     private void darararararara(){
-        FindEmpty(0f,1.2f,0.17f,audioClip[4]);
+        FindEmpty(0f,1f,0.17f,audioClip[4]);
     }
     private void BBBBBBaaaaaang(){
         FindEmpty(0f,1f,0.17f,audioClip[5]);

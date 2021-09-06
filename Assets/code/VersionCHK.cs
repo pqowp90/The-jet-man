@@ -27,7 +27,7 @@ public class VersionCHK : MonoBehaviour
         else
         {
             newVersionAvailable.SetActive(false);
-            SceneManager.LoadScene("Menu");
+            SceneManager.LoadScene("main1");
         }
         loading.SetActive(false);
         Debug.Log("Current Version" + CurVersion + "Lastest Version" + latsetVersion);

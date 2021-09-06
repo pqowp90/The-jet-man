@@ -14,7 +14,7 @@ public class ObjectPoolling : MonoBehaviour
     public static ObjectPoolling instance;
     private void Awake()
     {
-        isMulty = SceneManager.GetActiveScene().buildIndex==3;
+        isMulty = SceneManager.GetActiveScene().buildIndex==4;
         instance = this;
         //Instialize(10);
     }

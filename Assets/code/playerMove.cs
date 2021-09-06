@@ -70,7 +70,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         PV = GetComponent<PhotonView>();
         Time.timeScale = 1f;
         animator=gameObject.GetComponent<Animator>();
-        if(SceneManager.GetActiveScene().buildIndex==3){
+        if(SceneManager.GetActiveScene().buildIndex==4){
             MultySpawn();
             isMulty = true;
             animator.enabled = false;
@@ -124,7 +124,7 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
 
                 return;
             }
-        }else HeadRotation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }
         if(coolTime>0)
             coolTime-=Time.deltaTime;
         if(!isMulty){
@@ -144,10 +144,11 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         x = 80 * Mathf.Cos(radian);
         y = 200 * Mathf.Sin(radian);
         if(y>0)y*=0.5f;
-        
+        if(!(Time.timeScale==0f))
+            HeadRotation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
-
+        
         if(Input.GetMouseButton(0)&&coolTime<=0f&&!EventSystem.current.IsPointerOverGameObject())
             if(gunAnimator.GetBool("Shoting")==false){
                 gunAnimator.SetBool("Shoting",true);

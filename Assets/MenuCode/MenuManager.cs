@@ -78,6 +78,7 @@ public class MenuManager : MonoBehaviour
     }
     public void Chogihwa(){
         PlayerPrefs.DeleteAll();
+        Application.Quit();
     }
     private void StartVolumeSet(){
         for(int i=0;i<scrollbarCode.Length;i++){

@@ -6069,7 +6069,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 75cea6c4711642b468e1b28dcdb76648, type: 3}
   - {fileID: 8300000, guid: 23c0c92c383e3e34aa64b7b5b9583cf9, type: 3}
   - {fileID: 8300000, guid: 870b61e02f36ce241a5337698ad501e9, type: 3}
-  - {fileID: 8300000, guid: a9c032242a8953e44ba97165ce1118cb, type: 3}
+  - {fileID: 8300000, guid: e2c503ad8f9ae514dbbd8e2ad058ee21, type: 3}
   - {fileID: 8300000, guid: 23c0c92c383e3e34aa64b7b5b9583cf9, type: 3}
   playerMove: {fileID: 255676898}
   audioSources:

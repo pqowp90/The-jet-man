@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     {
         
         
-        if(SceneManager.GetActiveScene().buildIndex==3){
+        if(SceneManager.GetActiveScene().buildIndex==4){
 
 
             return;
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
-        if(SceneManager.GetActiveScene().buildIndex==3){
+        if(SceneManager.GetActiveScene().buildIndex==4){
 
 
             return;
