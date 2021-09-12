@@ -109,8 +109,16 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         if(gunset[1]!=-1)
             gunDamage[gunset[1]]+=PlayerPrefs.GetInt("S2UP")*3;
     }
+    void FixedUpdate(){
+        if(!(Time.timeScale==0f))
+            HeadRotation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        radian = rotateDegree*Mathf.PI/180f;
+        x = 80 * Mathf.Cos(radian);
+        y = 200 * Mathf.Sin(radian);
+    }
     void Update()
     {
+        
         if(isdead)return;
         if(isMulty){
             
@@ -140,12 +148,9 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         }
         
         //HeadRotation();z
-        radian = rotateDegree*Mathf.PI/180f;
-        x = 80 * Mathf.Cos(radian);
-        y = 200 * Mathf.Sin(radian);
+        
         if(y>0)y*=0.5f;
-        if(!(Time.timeScale==0f))
-            HeadRotation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        
         
         myrigidbody.velocity=new Vector2(Mathf.Clamp(myrigidbody.velocity.x,-20f,20f),Mathf.Clamp(myrigidbody.velocity.y,-20f,20f));
         
@@ -258,6 +263,10 @@ public class playerMove : MonoBehaviourPunCallbacks, IPunObservable
         animator.enabled=false;
     }
     public void Shoting(float a){
+        HeadRotation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        radian = rotateDegree*Mathf.PI/180f;
+        x = 80 * Mathf.Cos(radian);
+        y = 200 * Mathf.Sin(radian);
         gunFire.transform.position = barSsaPos.transform.position;
         gunFire.transform.rotation = barSsaPos.transform.rotation;
         gunFire.GetComponent<Animator>().SetTrigger("Shot");
